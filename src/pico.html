@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Binary Bot Trading</title>
+
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+    <link rel="stylesheet" href="../assets/Semantic-UI-CSS-master/semantic.min.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="../assets/moment.min.js"></script>
+    <script src="../assets/jquery.min.js"></script>
+    <script src="../assets/jquery.sparkline.js"></script>
+    <script src="../assets/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="../src/trading/placeTrade.js"></script>
+    <script src="../src/mktselector.js"></script>
+    <script src="../src/mktSelector/decide.js"></script>
+    <script src="../src/strategies/price_action.js"></script>
+    <script src="../src/strategies/bollinger_bands.js"></script>
+    <script src="../src/strategies/bb_ticks.js"></script>
+    <script src="../src/strategies/3ma_cross.js"></script>
+    <script src="../src/home/resetTrading.js"></script>
+    <script src="../src/home/sparkLine.js"></script>
+    <script src="../src/home/eventListeners.js"></script>
+    <script src="../src/home/imports.js"></script>
+    <script src="../src/home/updateDash.js"></script>
+    <script src="../src/home/botControls.js"></script>
+    <script src="../src/home/saveParameters.js"></script>
+    <script src="../src/home/strategySelect.js"></script>
+    <script src="../src/home/plotlyChart.js"></script>
+    <script src="../src/settings/settings.js"></script>
+
+
+
+
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+    <style>
+        html,
+        body {
+
+            overflow-y: hidden;
+            overflow-x: hidden;
+        }
+        .ui-inverted-segment{
+
+            margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 10px;
+  margin-left: 10px;
+
+        }
+
+       
+    </style>
+
+</head>
+
+<body class='Site'>
+    <!-- Side Bar for setting trading parameters !
+        -->
+
+
+    <main class="Site-content">
+        <div style="-webkit-app-region: drag" class="ui inverted top attached mini borderless menu"> 
+            <i id="closeMe" style="-webkit-app-region: no-drag" class="ui inverted times icon"></i>
+           
+        </div>
+        
+        <div class="ui center aligned grid">
+
+
+            <div class="ui inverted segment">
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span id="stake">...</span>
+                    </div>
+                    <div class="label">
+                        Stake
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span id="winRate">...</span>
+                    </div>
+                    <div class="label">
+                        W/R %
+                    </div>
+                </div>
+                <div class="ui right mini inverted statistic">
+                    <div class="value">
+                        <span id="profit">...</span>
+                    </div>
+                    <div class="label">
+                        Profit
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+
+
+</body>
+
+<script>
+
+
+</script>
+
+
+
+<script>
+    var reload = () => {
+        getCurrentWindow().reload()
+    }
+
+    globalShortcut.register('F5', reload);
+    globalShortcut.register('CommandOrControl+R', reload);
+    // here is the fix bug #3778, if you know alternative ways, please write them
+    window.addEventListener('beforeunload', () => {
+        globalShortcut.unregister('F5', reload);
+        globalShortcut.unregister('CommandOrControl+R', reload);
+    })
+
+
+
+    // Keep trading dash upto date
+
+    function updateDash() {
+
+       
+
+        document.getElementById('stake').textContent = settings.get('stake.stake');
+        document.getElementById('profit').textContent = settings.get('profit.profit');
+        document.getElementById('winRate').textContent = settings.get('winRate.winRate');
+
+        // set up styling for different values       
+        if (settings.get('profit.profit') >= 0) {
+            document.getElementById('profit').style.color = '#21ba45';
+        } else {
+            document.getElementById('profit').style.color = 'red';
+
+        }
+
+        // set up tri-color state for win rate
+        if (settings.get('winRate.winRate') >= 45 && settings.get('winRate.winRate') < 52) {
+            document.getElementById('winRate').style.color = '#fbbd08';
+        } else if (settings.get('winRate.winRate') >= 52) {
+            document.getElementById('winRate').style.color = '#21ba45';
+
+        } else {
+            document.getElementById('winRate').style.color = 'red';
+
+        }
+
+    }
+    updateDash()
+    setInterval(updateDash, 1000);
+
+    // sidebar set paramter logic
+
+
+    // ErrorCatching and printto notification windows -- rename and
+    //changein production to give awarngint o restartthe application after binary.com failure 
+
+    window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
+        alert("Binary.com error occured: " + errorMsg); //or any message
+        return false;
+    }
+
+
+    document.getElementById('closeMe').addEventListener('click', function (event) {
+
+
+        var windows = getCurrentWindow();
+        window.close()
+    });
+</script>
+
+
+</html>

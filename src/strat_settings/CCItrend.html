@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Advanced CCItrend Options</title>
+
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+    <link rel="stylesheet" href="../../assets/Semantic-UI-CSS-master/semantic.min.css">
+    <script src="../../assets/jquery.min.js"></script>
+    <script src="../../assets/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="../../src/settings/settings.js"></script>
+
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            background-color: rgb(236, 236, 232) !important;
+            overflow-y: hidden;
+
+
+
+        }
+
+        .trading {
+
+            display: flex;
+        }
+
+        #mainbody {
+
+            background-color: rgb(236, 236, 232) !important;
+
+        }
+    </style>
+
+</head>
+
+<body onload="passSettings()">
+    <div class="ui hidden divider"></div>
+    <div id="mainbody" class="ui padded center aligned container">
+        <h3 class="ui center aligned small icon header">
+            <i class="orange small settings icon"></i>
+            <div class="content">
+                CCItrend Settings
+                <div class="ui sub header">Fine tune and adjust your trading triggers</div>
+            </div>
+        </h3>
+        <div class="ui hidden divider"></div>
+
+        <div class="ui mini equal width center aligned form">
+
+            <p>In order to make a useful trigger for CCI we use a threshold e.g. 100, this is both the plus and minus
+                trigger. In order to determine
+                the direction we use a mean average of the last CCI figures as confirmation of direction. The longer
+                average period the more accurate the direction
+                , but also the slower the trigger reacts, this is known as indicator lag.
+            </p>
+            <div class="inline field">
+                <div class="fields">
+                    <div class="field">
+                        <label>CCI Period</label>
+                        <input id="CCItrendPeriod" placeholder="e.g. 14">
+                    </div>
+                    <div class="field">
+                        <label>CCI Trigger threshold (+/-)</label>
+                        <input id="CCItrendThreshold" placeholder="e.g. 100">
+                    </div>
+
+                    <div class="field">
+                        <label>Average Period</label>
+                        <input id="CCItrendAverage" placeholder="e.g. 5">
+                    </div>
+                    <!--
+                    <div class="field">
+                        <label>Variable Name</label>
+                        <input id="CCItrendVariable4" placeholder="Min. 0.1 - Max. 1">
+                    </div>
+                    -->
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+
+
+
+    <div class="ui right aligned container">
+
+
+        <div class="ui small button" id="closeBtn">Cancel</div>
+        <div class="ui small red button" id="resetDefaults">Default</div>
+
+        <div class="ui small green submit button" id="saveChanges">Save Changes</div>
+    </div>
+    </div>
+    </div>
+
+
+
+</body>
+
+
+<script>
+    const dialog = require('electron').remote.dialog;
+
+
+
+    const electron = require('electron')
+    const path = require('path')
+    const remote = electron.remote
+    const {
+        app,
+        BrowserWindow,
+        Menu
+    } = require('electron')
+    const shell = require('electron').shell
+    const settings = require('electron').remote.require('electron-settings');
+    const ws = require('ws');
+
+    const closeBtn = document.getElementById('closeBtn');
+    const saveChanges = document.getElementById('saveChanges');
+    const resetDefaults = document.getElementById('resetDefaults');
+
+    var LiveApi = require('binary-live-api').LiveApi;
+    var api = new LiveApi({
+        websocket: ws,
+        appId: 16261
+    });
+
+
+    // Jquery CCItrend functions
+
+
+
+    // $('#CandleOrTickdropdown') Candles only for CCI
+    //     .dropdown();
+
+
+    // endof Jquery CCItrend functions
+
+
+
+    function passSettings() {
+        //Important placeholder fo setting details can be used for all settings!!
+
+        if (settings.has('CCItrendPeriod.CCItrendPeriod')) {
+
+            document.getElementById("CCItrendPeriod").value = settings.get(
+                'CCItrendPeriod.CCItrendPeriod')
+
+        }
+        if (settings.has('CCItrendThreshold.CCItrendThreshold')) {
+
+            document.getElementById("CCItrendThreshold").value = settings.get(
+                'CCItrendThreshold.CCItrendThreshold')
+
+        }
+        if (settings.has('CCItrendAverage.CCItrendAverage')) {
+
+            document.getElementById("CCItrendAverage").value = settings.get(
+                'CCItrendAverage.CCItrendAverage')
+
+        }
+        /*
+        if (settings.has('CCItrendVariable4.CCItrendVariable4')) {
+
+            document.getElementById("CCItrendVariable4").value = settings.get(
+                'CCItrendVariable4.CCItrendVariable4')
+
+        }
+        */
+
+
+        // end of collect settings
+
+
+
+
+
+
+
+
+
+
+
+
+        //Save new settings
+
+        saveChanges.addEventListener('click', function (event) {
+
+            //add new event settings within this function
+
+            let CCItrendPeriodCollect = document.getElementById('CCItrendPeriod').value;
+
+
+            settings.set('CCItrendPeriod', {
+
+                CCItrendPeriod: CCItrendPeriodCollect
+
+
+
+            })
+            let CCItrendThresholdCollect = document.getElementById('CCItrendThreshold').value;
+
+
+            settings.set('CCItrendThreshold', {
+
+                CCItrendThreshold: CCItrendThresholdCollect
+
+
+
+            })
+            let CCItrendAverageCollect = document.getElementById('CCItrendAverage').value;
+
+
+            settings.set('CCItrendAverage', {
+
+                CCItrendAverage: CCItrendAverageCollect
+
+
+
+            })
+            /*
+              let CCItrendVariable4Collect = document.getElementById('CCItrendVariable4').value;
+
+
+              settings.set('CCItrendVariable4', {
+
+                  CCItrendVariable4: CCItrendVariable4Collect
+
+
+
+              })
+              */
+
+            console.log(settings.get('CCItrendDuration_unit.CCItrendDuration_unit'))
+
+
+            settings.set('message.message', 'Your CCI triggers have been saved. Build a strategy to use them.')
+            var windows = remote.getCurrentWindow();
+            window.close()
+        });
+
+
+
+
+        resetDefaults.addEventListener('click', function (event) {
+
+
+            //CCItrend defaults
+
+            settings.set('CCItrendPeriod.CCItrendPeriod', 9); // first variable
+            settings.set('CCItrendThreshold.CCItrendThreshold', 100); // second variable
+            settings.set('CCItrendAverage.CCItrendAverage', 4); // thirdvariable
+            //  settings.set('CCItrendVariable4.CCItrendVariable4', 0); // fourth variable
+            // end of CCItrend defaults
+
+            settings.set('message.message', 'CCItrend triggers all restored to default settings.')
+            passSettings()
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+        closeBtn.addEventListener('click', function (event) {
+
+            var windows = remote.getCurrentWindow();
+            window.close()
+        })
+    }
+</script>
+
+
+
+</html>

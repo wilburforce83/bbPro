@@ -1,0 +1,20 @@
+// get app details!
+
+{
+    "app_markup_details": 1,
+    "description": 1,
+    "date_from": "2019-06-18 00:00:00",
+    "date_to": "2019-06-19 23:59:59",
+    "app_id": 16261,
+    "limit": 1000,
+    "offset": 0,
+
+    "sort_fields": [
+        "app_id",
+        "client_loginid",
+        "transaction_time"
+    ],
+    "sort": "ASC",
+    "req_id": 3,
+    "passthrough": {}
+}

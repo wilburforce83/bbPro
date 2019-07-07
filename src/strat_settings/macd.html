@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+
+Change all occurances:
+
+macd
+fastPeriod
+slowPeriod
+signalPeriod
+Variable4
+
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Advanced macd Options</title>
+
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+    <link rel="stylesheet" href="../../assets/Semantic-UI-CSS-master/semantic.min.css">
+    <script src="../../assets/jquery.min.js"></script>
+    <script src="../../assets/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="../../src/settings/settings.js"></script>
+
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            background-color: rgb(236, 236, 232) !important;
+            overflow-y: hidden;
+
+
+
+        }
+
+        .trading {
+
+            display: flex;
+        }
+
+        #mainbody {
+
+            background-color: rgb(236, 236, 232) !important;
+
+        }
+    </style>
+
+</head>
+
+<body onload="passSettings()">
+    <div class="ui hidden divider"></div>
+    <div id="mainbody" class="ui padded center aligned container">
+        <h3 class="ui center aligned small icon header">
+            <i class="orange small settings icon"></i>
+            <div class="content">
+                macd Settings
+                <div class="ui sub header">Fine tune and adjust your trading signalPeriods</div>
+            </div>
+        </h3>
+        <div class="ui hidden divider"></div>
+
+        <div class="ui mini equal width center aligned form">
+
+            <p>Moving Average Convergence Divergence (MACD) is a trend-following momentum indicator that shows the
+                relationship between two moving averages of a price.</p>
+            <div class="inline field">
+                <div class="fields">
+                    <div class="field">
+                        <label>Fast Period </label>
+                        <input id="macdfastPeriod" placeholder="">
+                    </div>
+                    <div class="field">
+                        <label>Slow Period </label>
+                        <input id="macdslowPeriod" placeholder="">
+                    </div>
+
+                    <div class="field">
+                        <label>Signal Period</label>
+                        <input id="macdsignalPeriod" placeholder="">
+                    </div>
+                    <!--
+                    <div class="field">
+                        <label>Variable Name</label>
+                        <input id="macdVariable4" placeholder="Min. 0.1 - Max. 1">
+                    </div>
+                    -->
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+
+
+
+    <div class="ui right aligned container">
+
+
+        <div class="ui small button" id="closeBtn">Cancel</div>
+        <div class="ui small red button" id="resetDefaults">Default</div>
+
+        <div class="ui small green submit button" id="saveChanges">Save Changes</div>
+    </div>
+    </div>
+    </div>
+
+
+
+</body>
+
+
+<script>
+    const dialog = require('electron').remote.dialog;
+
+
+
+    const electron = require('electron')
+    const path = require('path')
+    const remote = electron.remote
+    const {
+        app,
+        BrowserWindow,
+        Menu
+    } = require('electron')
+    const shell = require('electron').shell
+    const settings = require('electron').remote.require('electron-settings');
+    const ws = require('ws');
+
+    const closeBtn = document.getElementById('closeBtn');
+    const saveChanges = document.getElementById('saveChanges');
+    const resetDefaults = document.getElementById('resetDefaults');
+
+    var LiveApi = require('binary-live-api').LiveApi;
+    var api = new LiveApi({
+        websocket: ws,
+        appId: 16261
+    });
+
+
+    // Jquery macd functions
+
+
+    // endof Jquery macd functions
+
+
+
+    function passSettings() {
+        //Important placeholder fo setting details can be used for all settings!!
+
+        if (settings.has('macdfastPeriod.macdfastPeriod')) {
+
+            document.getElementById("macdfastPeriod").value = settings.get(
+                'macdfastPeriod.macdfastPeriod')
+
+        }
+        if (settings.has('macdslowPeriod.macdslowPeriod')) {
+
+            document.getElementById("macdslowPeriod").value = settings.get(
+                'macdslowPeriod.macdslowPeriod')
+
+        }
+        if (settings.has('macdsignalPeriod.macdsignalPeriod')) {
+
+            document.getElementById("macdsignalPeriod").value = settings.get(
+                'macdsignalPeriod.macdsignalPeriod')
+
+        }
+        /*
+        if (settings.has('macdVariable4.macdVariable4')) {
+
+            document.getElementById("macdVariable4").value = settings.get(
+                'macdVariable4.macdVariable4')
+
+        }
+        */
+
+
+
+        // end of collect settings
+
+
+
+
+
+
+
+
+
+
+
+
+        //Save new settings
+
+        saveChanges.addEventListener('click', function (event) {
+
+            //add new event settings within this function
+
+            let macdfastPeriodCollect = document.getElementById('macdfastPeriod').value;
+
+
+            settings.set('macdfastPeriod', {
+
+                macdfastPeriod: macdfastPeriodCollect
+
+
+
+            })
+            let macdslowPeriodCollect = document.getElementById('macdslowPeriod').value;
+
+
+            settings.set('macdslowPeriod', {
+
+                macdslowPeriod: macdslowPeriodCollect
+
+
+
+            })
+            let macdsignalPeriodCollect = document.getElementById('macdsignalPeriod').value;
+
+
+            settings.set('macdsignalPeriod', {
+
+                macdsignalPeriod: macdsignalPeriodCollect
+
+
+
+            })
+            /*
+            let macdVariable4Collect = document.getElementById('macdVariable4').value;
+
+
+            settings.set('macdVariable4', {
+
+                macdVariable4: macdVariable4Collect
+
+
+
+            })
+            */
+
+
+            settings.set('message.message', 'Your MACD Triggers have been saved. Build a strategy to use.')
+            var windows = remote.getCurrentWindow();
+            window.close()
+        });
+
+
+
+
+        resetDefaults.addEventListener('click', function (event) {
+
+
+            //macd defaults
+
+            settings.set('macdfastPeriod.macdfastPeriod', 5); // first variable
+            settings.set('macdslowPeriod.macdslowPeriod', 8); // second variable
+            settings.set('macdsignalPeriod.macdsignalPeriod', 3); // thirdvariable
+            // settings.set('macdVariable4.macdVariable4', 0); // fourth variable
+            // end of macd defaults
+
+            settings.set('message.message', 'macd triggers restored to default settings.')
+            passSettings()
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+        closeBtn.addEventListener('click', function (event) {
+
+            var windows = remote.getCurrentWindow();
+            window.close()
+        })
+    }
+</script>
+
+
+
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Advanced priceAction Options</title>
+
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+    <link rel="stylesheet" href="../../assets/Semantic-UI-CSS-master/semantic.min.css">
+    <script src="../../assets/jquery.min.js"></script>
+    <script src="../../assets/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="../../src/settings/settings.js"></script>
+
+
+
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            background-color: rgb(236, 236, 232) !important;
+            overflow-y: hidden;
+
+
+
+        }
+
+        .trading {
+
+            display: flex;
+        }
+
+        #mainbody {
+
+            background-color: rgb(236, 236, 232) !important;
+
+        }
+    </style>
+
+</head>
+
+<body onload="passSettings()">
+    <div class="ui hidden divider"></div>
+    <div id="mainbody" class="ui padded center aligned container">
+        <h3 class="ui center aligned small icon header">
+            <i class="orange small settings icon"></i>
+            <div class="content">
+                priceAction Settings
+                <div class="ui sub header">Fine tune and adjust your trading triggers here.</div>
+            </div>
+        </h3>
+        <div class="ui hidden divider"></div>
+
+        <div class="ui mini equal width center aligned form">
+
+            <p>The price-action trigger is very simple, but effective.
+                If the current candle has a body to wick ratio of greater than x, place a trade in the direction of the
+                candle.
+                Default value is 0.7.</p>
+            <div class="inline field">
+                <div class="fields">
+                    <div class="field">
+                        <label>Candle Body Ratio</label>
+                        <input id="priceActionCandleBody" placeholder="Min. 0.1 - Max. 1">
+                    </div>
+
+
+
+                </div>
+            </div>
+
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+
+
+
+            <div class="ui right aligned container">
+
+
+                <div class="ui small button" id="closeBtn">Cancel</div>
+                <div class="ui small red button" id="resetDefaults">Default</div>
+
+                <div class="ui small green submit button" id="saveChanges">Save Changes</div>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+
+
+<script>
+    const dialog = require('electron').remote.dialog;
+
+
+
+    const electron = require('electron')
+    const path = require('path')
+    const remote = electron.remote
+    const {
+        app,
+        BrowserWindow,
+        Menu
+    } = require('electron')
+    const shell = require('electron').shell
+    const settings = require('electron').remote.require('electron-settings');
+    const ws = require('ws');
+
+    const closeBtn = document.getElementById('closeBtn');
+    const saveChanges = document.getElementById('saveChanges');
+    const resetDefaults = document.getElementById('resetDefaults');
+
+    var LiveApi = require('binary-live-api').LiveApi;
+    var api = new LiveApi({
+        websocket: ws,
+        appId: 16261
+    });
+
+
+    // Jquery priceAction functions
+
+    // endof Jquery priceAction functions
+
+
+
+    function passSettings() {
+        //Important placeholder fo setting details can be used for all settings!!
+
+        if (settings.has('priceActionCandleBody.priceActionCandleBody')) {
+
+            document.getElementById("priceActionCandleBody").value = settings.get(
+                'priceActionCandleBody.priceActionCandleBody')
+
+        }
+
+
+        // end of collect settings
+
+
+
+
+
+
+
+
+
+
+
+
+        //Save new settings
+
+        saveChanges.addEventListener('click', function (event) {
+
+            //add new event settings within this function
+
+            let priceActionCandleBodyCollect = document.getElementById('priceActionCandleBody').value;
+
+
+            settings.set('priceActionCandleBody', {
+
+                priceActionCandleBody: priceActionCandleBodyCollect
+
+
+
+            })
+
+            settings.set('message.message', 'Your Price Action trigger been saved. Build a strategy to use it')
+            var windows = remote.getCurrentWindow();
+            window.close()
+        });
+
+
+
+        // test token with authorise and and send alert
+
+        resetDefaults.addEventListener('click', function (event) {
+
+            //priceAction defaults
+            //priceAction defaults
+
+            settings.set('priceActionCandleBody.priceActionCandleBody', 0.7); // candle ratio
+            //priceAction defaults
+
+            settings.set('message.message', 'Strategy Triggers all restored to default settings.')
+            passSettings()
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+        closeBtn.addEventListener('click', function (event) {
+
+            var windows = remote.getCurrentWindow();
+            window.close()
+        })
+    }
+</script>
+
+
+
+</html>

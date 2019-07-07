@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+
+Change all occurances:
+
+stratName
+Variable1
+Variable2
+Variable3
+Variable4
+
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Advanced stratName Options</title>
+
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+    <link rel="stylesheet" href="../../assets/Semantic-UI-CSS-master/semantic.min.css">
+    <script src="../../assets/jquery.min.js"></script>
+    <script src="../../assets/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="../../src/settings/settings.js"></script>
+
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            background-color: rgb(236, 236, 232) !important;
+            overflow-y: hidden;
+
+
+
+        }
+
+        .trading {
+
+            display: flex;
+        }
+
+        #mainbody {
+
+            background-color: rgb(236, 236, 232) !important;
+
+        }
+    </style>
+
+</head>
+
+<body onload="passSettings()">
+    <div class="ui hidden divider"></div>
+    <div id="mainbody" class="ui padded center aligned container">
+        <h3 class="ui center aligned small icon header">
+            <i class="orange small settings icon"></i>
+            <div class="content">
+                stratName Settings
+                <div class="ui sub header">Fine tune and adjust your trading triggers</div>
+            </div>
+        </h3>
+        <div class="ui hidden divider"></div>
+
+        <div class="ui mini equal width center aligned form">
+
+            <p>A brief description here</p>
+            <div class="inline field">
+                <div class="fields">
+                    <div class="field">
+                        <label>Variable Name</label>
+                        <input id="stratNameVariable1" placeholder="Min. 0.1 - Max. 1">
+                    </div>
+                    <div class="field">
+                        <label>Variable Name</label>
+                        <input id="stratNameVariable2" placeholder="Min. 0.1 - Max. 1">
+                    </div>
+
+                    <div class="field">
+                        <label>Variable Name</label>
+                        <input id="stratNameVariable3" placeholder="Min. 0.1 - Max. 1">
+                    </div>
+
+                    <div class="field">
+                        <label>Variable Name</label>
+                        <input id="stratNameVariable4" placeholder="Min. 0.1 - Max. 1">
+                    </div>
+                </div>
+            </div>
+            <div class="inline field">
+                <div class="fields">
+                    <a class="field">
+                        <label>Trade Duration</label>
+                        <div class="ui small labeled input">
+                            <input id="stratNamedurationInt" placeholder="1-10 (t) | 15 + (s) | 1 + (m)">
+                            <div class="ui left dropdown label" id="stratNameTDdropdown">
+                                <div id="stratNamecurDuration" class="text">period</div>
+                                <i class="dropdown icon"></i>
+                                <div class="menu">
+                                    <div id="stratNamedurationT" class="item">ticks (t)</div>
+                                    <div id="stratNamedurationS" class="item">sec (s)</div>
+                                    <div id="stratNamedurationM" class="item">min (m)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </a>
+                    <a class="field">
+                        <label>Analyse Candles or Ticks</label>
+                        <div class="ui small labeled icon dropdown compact button" id="CandleOrTickdropdown">
+                            <input type="hidden" name="MS Style">
+                            <i class="chart line icon"></i>
+                            <div id="CandleOrTickselect" class="default text">Please Select</div>
+                            <div class="menu" id="CandleOrTick">
+                                <div class="item" id="Candles" value="candle">Candles</div>
+                                <div class="item" id="Ticks" value="tick">Ticks</div>
+
+
+                            </div>
+                        </div>
+                    </a>
+                    <a class="field">
+                        <label>Candle Length</label>
+                        <div class="ui small labeled icon dropdown compact button" id="CandleL">
+                            <input type="hidden" name="MS Style">
+                            <i class="hourglass icon"></i>
+                            <div id="CandleLselect" class="default text">Please Select</div>
+                            <div class="menu" id="currentCandleL">
+                                <div class="item" id="oneMinute" value="60">1 Minute</div>
+                                <div class="item" id="twoMinute" value="120">2 Minute</div>
+                                <div class="item" id="fiveMinute" value="300">5 Minute</div>
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+
+
+
+    <div class="ui right aligned container">
+
+
+        <div class="ui small button" id="closeBtn">Cancel</div>
+        <div class="ui small red button" id="resetDefaults">Default</div>
+
+        <div class="ui small green submit button" id="saveChanges">Save Changes</div>
+    </div>
+    </div>
+    </div>
+
+
+
+</body>
+
+
+<script>
+    const dialog = require('electron').remote.dialog;
+
+
+
+    const electron = require('electron')
+    const path = require('path')
+    const remote = electron.remote
+    const {
+        app,
+        BrowserWindow,
+        Menu
+    } = require('electron')
+    const shell = require('electron').shell
+    const settings = require('electron').remote.require('electron-settings');
+    const ws = require('ws');
+
+    const closeBtn = document.getElementById('closeBtn');
+    const saveChanges = document.getElementById('saveChanges');
+    const resetDefaults = document.getElementById('resetDefaults');
+
+    var LiveApi = require('binary-live-api').LiveApi;
+    var api = new LiveApi({
+        websocket: ws,
+        appId: 16261
+    });
+
+
+    // Jquery stratName functions
+
+    $('#stratNameTDdropdown')
+        .dropdown();
+
+
+    document.getElementById('stratNamedurationT').addEventListener('click', function (event) {
+        settings.set('stratNameDuration_unit.stratNameDuration_unit', 't');
+
+
+    });
+    document.getElementById('stratNamedurationS').addEventListener('click', function (event) {
+        settings.set('stratNameDuration_unit.stratNameDuration_unit', 's');
+
+    });
+    document.getElementById('stratNamedurationM').addEventListener('click', function (event) {
+        settings.set('stratNameDuration_unit.stratNameDuration_unit', 'm');
+
+    });
+
+    $('#CandleOrTickdropdown')
+        .dropdown();
+
+
+    document.getElementById('Candles').addEventListener('click', function (event) {
+        settings.set('stratNameCandleOrTick.stratNameCandleOrTick', 'candle');
+
+
+    });
+    document.getElementById('Ticks').addEventListener('click', function (event) {
+        settings.set('stratNameCandleOrTick.stratNameCandleOrTick', 'tick');
+
+    });
+
+    $('#CandleL')
+        .dropdown();
+
+
+    document.getElementById('oneMinute').addEventListener('click', function (event) {
+        settings.set('stratNameCandleL.stratNameCandleL', 60);
+
+
+    });
+    document.getElementById('twoMinute').addEventListener('click', function (event) {
+        settings.set('stratNameCandleL.stratNameCandleL', 120);
+
+    });
+    document.getElementById('fiveMinute').addEventListener('click', function (event) {
+        settings.set('stratNameCandleL.stratNameCandleL', 300);
+
+    });
+    // endof Jquery stratName functions
+
+
+
+    function passSettings() {
+        //Important placeholder fo setting details can be used for all settings!!
+
+        if (settings.has('stratNameVariable1.stratNameVariable1')) {
+
+            document.getElementById("stratNameVariable1").value = settings.get(
+                'stratNameVariable1.stratNameVariable1')
+
+        }
+        if (settings.has('stratNameVariable2.stratNameVariable2')) {
+
+            document.getElementById("stratNameVariable2").value = settings.get(
+                'stratNameVariable2.stratNameVariable2')
+
+        }
+        if (settings.has('stratNameVariable3.stratNameVariable3')) {
+
+            document.getElementById("stratNameVariable3").value = settings.get(
+                'stratNameVariable3.stratNameVariable3')
+
+        }
+        if (settings.has('stratNameVariable4.stratNameVariable4')) {
+
+            document.getElementById("stratNameVariable4").value = settings.get(
+                'stratNameVariable4.stratNameVariable4')
+
+        }
+        if (settings.has('stratNameDuration.stratNameDuration')) {
+
+            document.getElementById("stratNamedurationInt").value = settings.get(
+                'stratNameDuration.stratNameDuration')
+
+        }
+        if (settings.has('stratNameCandleL.stratNameCandleL')) {
+
+            document.getElementById("CandleLselect").innerHTML = settings.get(
+                'stratNameCandleL.stratNameCandleL') / 60 + ' minutes';
+
+        }
+
+        if (settings.has('stratNameDuration_unit.stratNameDuration_unit')) {
+
+            document.getElementById("stratNamecurDuration").innerHTML = settings.get(
+                'stratNameDuration_unit.stratNameDuration_unit')
+
+        }
+
+        if (settings.has('stratNameCandleOrTick.stratNameCandleOrTick')) {
+
+            document.getElementById("CandleOrTickselect").innerHTML = settings.get(
+                'stratNameCandleOrTick.stratNameCandleOrTick')
+
+        }
+
+
+        // end of collect settings
+
+
+
+
+
+
+
+
+
+
+
+
+        //Save new settings
+
+        saveChanges.addEventListener('click', function (event) {
+
+            //add new event settings within this function
+
+            let stratNameVariable1Collect = document.getElementById('stratNameVariable1').value;
+
+
+            settings.set('stratNameVariable1', {
+
+                stratNameVariable1: stratNameVariable1Collect
+
+
+
+            })
+            let stratNameVariable2Collect = document.getElementById('stratNameVariable2').value;
+
+
+            settings.set('stratNameVariable2', {
+
+                stratNameVariable2: stratNameVariable2Collect
+
+
+
+            })
+            let stratNameVariable3Collect = document.getElementById('stratNameVariable3').value;
+
+
+            settings.set('stratNameVariable3', {
+
+                stratNameVariable3: stratNameVariable3Collect
+
+
+
+            })
+            let stratNameVariable4Collect = document.getElementById('stratNameVariable4').value;
+
+
+            settings.set('stratNameVariable4', {
+
+                stratNameVariable4: stratNameVariable4Collect
+
+
+
+            })
+            let stratNameDurationCollect = document.getElementById('stratNamedurationInt').value;
+
+
+            settings.set('stratNameDuration', {
+
+                stratNameDuration: stratNameDurationCollect
+
+
+            })
+            console.log(settings.get('stratNameDuration_unit.stratNameDuration_unit'))
+
+
+            settings.set('message.message', 'Your strategy trigger changes have been saved.')
+            var windows = remote.getCurrentWindow();
+            window.close()
+        });
+
+
+
+
+        resetDefaults.addEventListener('click', function (event) {
+
+
+            //stratName defaults
+            settings.set('stratNameDuration.stratNameDuration', 7); //integer time period
+            settings.set('stratNameDuration_unit.stratNameDuration_unit', 't'); // 's', 'm'
+            settings.set('stratNameCandleOrTick.stratNameCandleOrTick',
+                'candle'); // candle only for this strategy
+            settings.set('stratNameCandleL.stratNameCandleL', 60); // 120, 180,300 candle duration
+            settings.set('stratNameVariable1.stratNameVariable1', 0.7); // first variable
+            settings.set('stratNameVariable2.stratNameVariable2', 0); // second variable
+            settings.set('stratNameVariable3.stratNameVariable3', 0); // thirdvariable
+            settings.set('stratNameVariable4.stratNameVariable4', 0); // fourth variable
+            // end of stratName defaults
+
+            settings.set('message.message', 'stratName triggers restored to default settings.')
+            passSettings()
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+        closeBtn.addEventListener('click', function (event) {
+
+            var windows = remote.getCurrentWindow();
+            window.close()
+        })
+    }
+</script>
+
+
+
+</html>

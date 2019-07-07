@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Welcome to Binary Bot Trader </title>
+
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+    <link rel="stylesheet" href="../assets/Semantic-UI-CSS-master/semantic.min.css">
+
+    <script src="../src/trading/placeTrade.js"></script>
+    <script src="../assets/jquery.min.js"></script>
+
+
+
+
+
+
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+
+        }
+
+        .trading {
+
+            display: flex;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="ui padded inverted segment">
+        <h3 class="ui inverted center aligned icon header">
+            <i class="orange settings icon"></i>
+            <div class="content">
+                Welcome to Binary Bot Trader
+                <div class="ui sub header">Terms of use and initial set up</div>
+            </div>
+        </h3>
+        <div class="ui hidden divider"></div>
+        <div class="ui hidden divider"></div>
+        <div class="ui hidden divider"></div>
+        <div class="ui mini equal width inverted form">
+            <h6 class="ui horizontal orange inverted divider">
+                Terms of Use
+            </h6>
+            <p>Binary Bot Trader is third party platform for trading on the binary.com network. The same risk warnings
+                apply to this platform. <BR><br>
+                By removing trading limits imposed by binary.com's regulators this platform does not conform to
+                regulations imposed by European Law.
+                For many, this is a huge benefit, you are still trading directly with a regulated trading network, so
+                all the regulatory protections apply
+                regarding the protection of your balance etc. <br><br>
+
+
+
+                The Binary Bot Trading Platform is free to use with a small developer fee of 1%. This is the same as
+                other third party trading software, and is low enough to not effect trading. If you have paid for this
+                software please contact
+                the seller and ask for refund. Please also contact me at wilbur@binarybottrading.eu to report it.
+
+                Binary trading is high risk, and the use of martingale techniques can result in large increases in stake
+                over short periods when not managed
+                using manual overrides, stop losses and resets. BinaryBotTrading accepts no responsibility for any
+                losses incurred using its platform. Binary Bot Trader is only a tool to help the user trade more
+                effectively using their own experience and
+                knowledge. It is not a silver bullet. If you plan on pressing play
+                and watching your balance go up, prepare to be disapointed. Please use our Discord channel and
+                documentation to learn more about trading using our platform.
+                Any questions, no matter how stupid will always be responded to with civility, so please just ask!
+                <br><br><br>
+                By using the platform you are agreeing to these terms, and understand the risks of binary trading.
+            </p>
+
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+            <!--This is a form entry block for advanced options, copy one of these block when you add a new strategy!-->
+            <h6 class="ui horizontal orange inverted divider">
+                Tokens
+            </h6>
+            <p>A virtual token from binary.com is required to use this software. In order to trade live you will also
+                need to add a token from
+                either your gaming or investment account. Adding a real account is optional, and can be done from the
+                spanner icon
+                found next to your balnace in the top right at any time.
+            </p>
+            <a href="#">
+                <h4 class="center aligned header" id="linkToken">Get your Tokens Here</h4>
+            </a>
+            <div class="fields">
+                <div class="field">
+                    <label>Virtual Token</label>
+                    <input id="virtToken" placeholder="VRTxxxxxx" type="text">
+                </div>
+
+
+
+
+            </div>
+            <div class="ui hidden divider"></div>
+
+            <!--End of example block!-->
+
+
+
+            <div class="ui inverted segment">
+
+
+
+
+                <div class="ui small green submit button" id="saveChanges">Agree & Save Tokens</div>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+
+
+<script>
+    // consts
+    const dialog = require('electron').remote.dialog;
+
+
+    const electron = require('electron')
+    const path = require('path')
+    const remote = electron.remote
+    const {
+        app,
+        BrowserWindow,
+        Menu
+    } = require('electron')
+    const shell = require('electron').shell
+    const settings = require('electron').remote.require('electron-settings');
+    const ws = require('ws');
+
+    const closeBtn = document.getElementById('closeBtn');
+    const saveTokens = document.getElementById('saveTokens');
+    const testBtn = document.getElementById('testBtn');
+
+    var LiveApi = require('binary-live-api').LiveApi;
+    var api = new LiveApi({
+        websocket: ws,
+        appId: 16261
+    });
+
+    //jquery crap
+    $('#linkToken').click(function () {
+        shell.openExternal('https://www.binary.com/en/user/security/api_tokenws.html')
+    });
+
+    saveChanges.addEventListener('click', function (event) {
+
+        //add new event settings within this function
+
+
+
+        let virtToken = document.getElementById('virtToken').value;
+
+
+
+        settings.set('virtualToken.virtualToken', virtToken);
+
+        settings.set('tokenToBeUsed.tokenToBeUsed', virtToken);
+
+
+
+        settings.set('message.message',
+            'Terms have been agreed. Token(s) saved. You may need to restart your app in order for the Token changes to be accepted.'
+        )
+        var windows = remote.getCurrentWindow();
+
+
+        window.close()
+
+
+    })
+</script>
+
+
+
+</html>

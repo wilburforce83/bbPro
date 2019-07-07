@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+
+Change all occurances:
+
+TRIX
+Period
+Variable2
+Variable3
+Variable4
+
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Advanced TRIX Options</title>
+
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+    <link rel="stylesheet" href="../../assets/Semantic-UI-CSS-master/semantic.min.css">
+    <script src="../../assets/jquery.min.js"></script>
+    <script src="../../assets/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="../../src/settings/settings.js"></script>
+
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            background-color: rgb(236, 236, 232) !important;
+            overflow-y: hidden;
+
+
+
+        }
+
+        .trading {
+
+            display: flex;
+        }
+
+        #mainbody {
+
+            background-color: rgb(236, 236, 232) !important;
+
+        }
+    </style>
+
+</head>
+
+<body onload="passSettings()">
+    <div class="ui hidden divider"></div>
+    <div id="mainbody" class="ui padded center aligned container">
+        <h3 class="ui center aligned small icon header">
+            <i class="orange small settings icon"></i>
+            <div class="content">
+                TRIX Settings
+                <div class="ui sub header">Fine tune and adjust your trading triggers</div>
+            </div>
+        </h3>
+        <div class="ui hidden divider"></div>
+
+        <div class="ui mini equal width center aligned form">
+
+            <p>The TRIX indicator smooths price data and then looks at the daily (or whatever time frame is being used)
+                percentage movement of that smoothed price data. This filters out much of the price noise that’s seen on
+                the price chart. The strategy triggers on a zero-line cross</p>
+            <div class="inline field">
+                <div class="fields">
+                    <div class="field">
+                        <label>Period</label>
+                        <input id="TRIXPeriod" placeholder="e.g. 12">
+                    </div>
+
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+
+
+
+    <div class="ui right aligned container">
+
+
+        <div class="ui small button" id="closeBtn">Cancel</div>
+        <div class="ui small red button" id="resetDefaults">Default</div>
+
+        <div class="ui small green submit button" id="saveChanges">Save Changes</div>
+    </div>
+    </div>
+    </div>
+
+
+
+</body>
+
+
+<script>
+    const dialog = require('electron').remote.dialog;
+
+
+
+    const electron = require('electron')
+    const path = require('path')
+    const remote = electron.remote
+    const {
+        app,
+        BrowserWindow,
+        Menu
+    } = require('electron')
+    const shell = require('electron').shell
+    const settings = require('electron').remote.require('electron-settings');
+    const ws = require('ws');
+
+    const closeBtn = document.getElementById('closeBtn');
+    const saveChanges = document.getElementById('saveChanges');
+    const resetDefaults = document.getElementById('resetDefaults');
+
+    var LiveApi = require('binary-live-api').LiveApi;
+    var api = new LiveApi({
+        websocket: ws,
+        appId: 16261
+    });
+
+
+    // Jquery TRIX functions
+
+
+
+
+    function passSettings() {
+        //Important placeholder fo setting details can be used for all settings!!
+
+        if (settings.has('TRIXPeriod.TRIXPeriod')) {
+
+            document.getElementById("TRIXPeriod").value = settings.get(
+                'TRIXPeriod.TRIXPeriod')
+
+        }
+        /*
+        if (settings.has('TRIXVariable2.TRIXVariable2')) {
+
+            document.getElementById("TRIXVariable2").value = settings.get(
+                'TRIXVariable2.TRIXVariable2')
+
+        }
+        if (settings.has('TRIXVariable3.TRIXVariable3')) {
+
+            document.getElementById("TRIXVariable3").value = settings.get(
+                'TRIXVariable3.TRIXVariable3')
+
+        }
+        if (settings.has('TRIXVariable4.TRIXVariable4')) {
+
+            document.getElementById("TRIXVariable4").value = settings.get(
+                'TRIXVariable4.TRIXVariable4')
+
+        }
+        */
+
+
+
+        // end of collect settings
+
+
+
+
+
+
+
+
+
+
+
+
+        //Save new settings
+
+        saveChanges.addEventListener('click', function (event) {
+
+            //add new event settings within this function
+
+            let TRIXPeriodCollect = document.getElementById('TRIXPeriod').value;
+
+
+            settings.set('TRIXPeriod', {
+
+                TRIXPeriod: TRIXPeriodCollect
+
+
+
+            })
+            /*
+            let TRIXVariable2Collect = document.getElementById('TRIXVariable2').value;
+
+
+            settings.set('TRIXVariable2', {
+
+                TRIXVariable2: TRIXVariable2Collect
+
+
+
+            })
+            let TRIXVariable3Collect = document.getElementById('TRIXVariable3').value;
+
+
+            settings.set('TRIXVariable3', {
+
+                TRIXVariable3: TRIXVariable3Collect
+
+
+
+            })
+            let TRIXVariable4Collect = document.getElementById('TRIXVariable4').value;
+
+
+            settings.set('TRIXVariable4', {
+
+                TRIXVariable4: TRIXVariable4Collect
+
+
+
+            })
+            */
+
+
+            settings.set('message.message', 'Your TRIX triggers have been saved.')
+            var windows = remote.getCurrentWindow();
+            window.close()
+        });
+
+
+
+
+        resetDefaults.addEventListener('click', function (event) {
+
+
+            //TRIX defaults
+
+            settings.set('TRIXPeriod.TRIXPeriod', 12); // first variable
+            // settings.set('TRIXVariable2.TRIXVariable2', 0); // second variable
+            //settings.set('TRIXVariable3.TRIXVariable3', 0); // thirdvariable
+            //settings.set('TRIXVariable4.TRIXVariable4', 0); // fourth variable
+            // end of TRIX defaults
+
+            settings.set('message.message', 'TRIX triggers restored to default settings.')
+            passSettings()
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+        closeBtn.addEventListener('click', function (event) {
+
+            var windows = remote.getCurrentWindow();
+            window.close()
+        })
+    }
+</script>
+
+
+
+</html>

@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+    <script src="./signals.js"></script>
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Binary Bot Trader Signals</title>
+    <link rel="stylesheet" href="../assets/Semantic-UI-CSS-master/semantic.min.css">
+
+    <style>
+        html,
+        body {
+
+            overflow-y: hidden;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div class="ui internally celled center aligned grid">
+        <div class="two wide column">
+
+
+            <div class="ui inverted center aligned segment">
+
+                <h5 class="ui centered header">
+                    Volatility Index 10
+                </h5>
+            </div>
+        </div>
+        <div class="fourteen wide column">
+            <div class="center aligned row">
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r10-macd"></span>
+                    </div>
+                    <div class="label">
+                        MACD (12-26-9)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r10-bb"></span>
+                    </div>
+                    <div class="label">
+                        B Bands (14-2)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r10-rsi"></span>
+                    </div>
+                    <div class="label">
+                        RSI (14)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r10-cci"></span>
+                    </div>
+                    <div class="label">
+                        CCI (20)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r10-sma"></span>
+                    </div>
+                    <div class="label">
+                        3SMA (4,12,50)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="two wide column">
+
+
+            <div class="ui inverted center aligned segment">
+
+                <h5 class="ui centered header">
+                    Volatility Index 25
+                </h5>
+            </div>
+        </div>
+        <div class="fourteen wide column">
+            <div class="center aligned row">
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r25-macd"></span>
+                    </div>
+                    <div class="label">
+                        MACD (12-26-9)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r25-bb"></span>
+                    </div>
+                    <div class="label">
+                        B Bands (14-2)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r25-rsi"></span>
+                    </div>
+                    <div class="label">
+                        RSI (14)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r25-cci"></span>
+                    </div>
+                    <div class="label">
+                        CCI (20)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r25-sma"></span>
+                    </div>
+                    <div class="label">
+                        3SMA (4,12,50)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="two wide column">
+
+
+            <div class="ui inverted center aligned segment">
+
+                <h5 class="ui centered header">
+                    Volatility Index 50
+                </h5>
+            </div>
+        </div>
+        <div class="fourteen wide column">
+            <div class="center aligned row">
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r50-macd"></span>
+                    </div>
+                    <div class="label">
+                        MACD (12-26-9)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r50-bb"></span>
+                    </div>
+                    <div class="label">
+                        B Bands (14-2)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r50-rsi"></span>
+                    </div>
+                    <div class="label">
+                        RSI (14)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r50-cci"></span>
+                    </div>
+                    <div class="label">
+                        CCI (20)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r50-sma"></span>
+                    </div>
+                    <div class="label">
+                        3SMA (4,12,50)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="two wide column">
+
+
+            <div class="ui inverted center aligned segment">
+
+                <h5 class="ui centered header">
+                    Volatility Index 75
+                </h5>
+            </div>
+        </div>
+        <div class="fourteen wide column">
+            <div class="center aligned row">
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r75-macd"></span>
+                    </div>
+                    <div class="label">
+                        MACD (12-26-9)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r75-bb"></span>
+                    </div>
+                    <div class="label">
+                        B Bands (14-2)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r75-rsi"></span>
+                    </div>
+                    <div class="label">
+                        RSI (14)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r75-cci"></span>
+                    </div>
+                    <div class="label">
+                        CCI (20)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r75-sma"></span>
+                    </div>
+                    <div class="label">
+                        3SMA (4,12,50)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="two wide column">
+
+
+            <div class="ui inverted center aligned segment">
+
+                <h5 class="ui centered header">
+                    Volatility Index 100
+                </h5>
+            </div>
+        </div>
+        <div class="fourteen wide column">
+            <div class="center aligned row">
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r100-macd"></span>
+                    </div>
+                    <div class="label">
+                        MACD (12-26-9)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r100-bb"></span>
+                    </div>
+                    <div class="label">
+                        B Bands (14-2)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r100-rsi"></span>
+                    </div>
+                    <div class="label">
+                        RSI (14)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r100-cci"></span>
+                    </div>
+                    <div class="label">
+                        CCI (20)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="r100-sma"></span>
+                    </div>
+                    <div class="label">
+                        3SMA (4,12,50)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="two wide column">
+
+
+            <div class="ui inverted center aligned segment">
+
+                <h5 class="ui centered header">
+                    Daily Bear Index
+                </h5>
+            </div>
+        </div>
+        <div class="fourteen wide column">
+            <div class="center aligned row">
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="rdBEAR-macd"></span>
+                    </div>
+                    <div class="label">
+                        MACD (12-26-9)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="rdBEAR-bb"></span>
+                    </div>
+                    <div class="label">
+                        B Bands (14-2)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="rdBEAR-rsi"></span>
+                    </div>
+                    <div class="label">
+                        RSI (14)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="rdBEAR-cci"></span>
+                    </div>
+                    <div class="label">
+                        CCI (20)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="rdBEAR-sma"></span>
+                    </div>
+                    <div class="label">
+                        3SMA (4,12,50)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="two wide column">
+
+
+            <div class="ui inverted center aligned segment">
+
+                <h5 class="ui centered header">
+                    Daily Bull Index
+                </h5>
+            </div>
+        </div>
+        <div class="fourteen wide column">
+            <div class="center aligned row">
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="rdBULL-macd"></span>
+                    </div>
+                    <div class="label">
+                        MACD (12-26-9)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="rdBULL-bb"></span>
+                    </div>
+                    <div class="label">
+                        B Bands (14-2)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="rdBULL-rsi"></span>
+                    </div>
+                    <div class="label">
+                        RSI (14)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="rdBULL-cci"></span>
+                    </div>
+                    <div class="label">
+                        CCI (20)
+                    </div>
+                </div>
+                <div class="ui mini inverted statistic">
+                    <div class="value">
+                        <span style='font-size: medium;' id="rdBULL-sma"></span>
+                    </div>
+                    <div class="label">
+                        3SMA (4,12,50)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r10-macd"></span>
+        <p>MACD (12-26-9)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r25-macd"></span>
+        <p>MACD (12-26-9)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r50-macd"></span>
+        <p>MACD (12-26-9)</p>
+
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r75-macd"></span>
+        <p>MACD (12-26-9)l</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r100-macd"></span>
+        <p>MACD (12-26-9)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="rdBEAR-macd"></span>
+        <p>MACD (12-26-9)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="rdBULL-macd"></span>
+        <p>MACD (12-26-9)</p>
+    </div>
+
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r25-bb"></span>
+        <p>B Bands (14-2)</p>
+    </div>
+
+
+
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r50-bb"></span>
+        <p>B Bands (14-2)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r75-bb"></span>
+        <p>B Bands (14-2)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r100-bb"></span>
+        <p>B Bands (14-2)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="rdBEAR-bb"></span>
+        <p>B Bands (14-2)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="rdBULL-bb"></span>
+        <p>B Bands (14-2)</p>
+    </div>
+
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r25-rsi"></span>
+        <p>RSI (14)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r50-rsi"></span>
+        <p>RSI (14)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r75-rsi"></span>
+        <p>RSI (14)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r100-rsi"></span>
+        <p>RSI (14)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="rdBEAR-rsi"></span>
+        <p>RSI (14)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="rdBULL-rsi"></span>
+        <p>RSI (14)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r10-cci"></span>
+        <p>CCI (20)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r25-cci"></span>
+        <p>CCI (20)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' style='font-size: medium;' id="r50-cci"></span>
+        <p>CCI (20)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r75-cci"></span>
+        <p>CCI (20)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r100-cci"></span>
+        <p>CCI (20)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="rdBEAR-cci"></span>
+        <p>CCI (20)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="rdBULL-cci"></span>
+        <p>CCI (20)</p>
+    </div>
+
+
+
+
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r10-sma"></span>
+        <p>3SMA (4,12,50)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r25-sma"></span>
+        <p>3SMA (4,12,50)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r50-sma"></span>
+        <p>3SMA (4,12,50)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r75-sma"></span>
+        <p>3SMA (4,12,50)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="r100-sma"></span>
+        <p>3SMA (4,12,50)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="rdBEAR-sma"></span>
+        <p>3SMA (4,12,50)</p>
+    </div>
+    <div class="grid-data">
+        <span style='font-size: medium;' id="rdBULL-sma"></span>
+        <p>3SMA (4,12,50)</p>
+    </div>
+
+
+    </div>
+
+    <script>
+        r10()
+        setInterval(r10, 15000);
+
+        r25()
+        setInterval(r25, 15000);
+
+        r50()
+        setInterval(r50, 15000);
+
+        r75()
+        setInterval(r75, 15000);
+
+        r100()
+        setInterval(r100, 15000);
+
+        rdBEAR()
+        setInterval(rdBEAR, 15000);
+
+        rdBULL()
+        setInterval(rdBULL, 15000);
+    </script>
+</body>
+
+</html>

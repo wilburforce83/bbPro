@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Binary Bot Trading</title>
+    <link rel="stylesheet" href="../assets/Semantic-UI-CSS-master/semantic.min.css">
+
+    <style>
+        html,
+        body {
+
+            overflow-y: hidden;
+        }
+
+        #callput {
+
+            flex: 1;
+            height: 100%;
+
+
+        }
+    </style>
+
+</head>
+
+<body class='Site' onload=" checkDefaults(); authorise(); ">
+    <!-- Side Bar for setting trading parameters !
+        -->
+
+
+    <main class="Site-content">
+        <div style="-webkit-app-region: drag" class="ui inverted top attached right aligned borderless menu">
+            <i id="closeMe" style="-webkit-app-region: no-drag" class="ui inverted right aligned times icon"></i>
+        </div>
+
+        <div class="ui mini compact fluid buttons">
+
+
+            <button id="startBot" class="ui black icon button">
+                <i class="play icon"></i>
+
+            </button>
+            <button id="pauseBot" class="ui black icon button">
+                <i class="pause icon"></i>
+
+            </button>
+
+            <button id="resetBot" class="ui orange labeled icon button">
+                Reset
+                <i class="undo icon"></i>
+            </button>
+        </div>
+        <div style="height: 1px" class="ui hidden divider"></div>
+        <div class="ui center aligned compact grid">
+            <div class="two mini ui compact buttons">
+
+                <button id="setVirt" class="ui left attached button">Virtual Account</button>
+                <button id="setLive" class="right attached ui button">Live Account</button>
+
+            </div>
+            <div class="ten wide black column">
+
+
+                <div style="min-height: 60px" class="ui mini inverted centered fluid message">
+                    <div class="header">
+
+                    </div>
+                    <p><span id='notifyme'></span></p>
+                </div>
+            </div>
+
+            <div class="six wide black column">
+
+                <div class="ui inverted segment">
+                    <div class="ui mini inverted statistic">
+                        <div class="value">
+                            <span id="stake">...</span>
+                        </div>
+                        <div class="label">
+                            Stake
+                        </div>
+                    </div>
+                    <div class="ui mini inverted statistic">
+                        <div class="value">
+                            <span id="winRate">...</span>
+                        </div>
+                        <div class="label">
+                            W/R %
+                        </div>
+                    </div>
+                    <div class="ui right mini inverted statistic">
+                        <div class="value">
+                            <span id="profit">...</span>
+                        </div>
+                        <div class="label">
+                            Profit
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div style="margin: 0" style="padding:0" class="ui center aligned">
+
+                <button id="setFX" class="ui left attached compact small button">FX</button>
+                <button id="setVIX" class="ui right attached compact small button">VIX</button>
+
+
+                <div id="symbolclass" class="ui mini compact buttons">
+                    <button id="autosym" class="ui button">AUTO</button>
+                    <button id="10sym" class="ui button">R_10</button>
+                    <button id="25sym" class="ui button">R_25</button>
+                    <button id="50sym" class="ui button">R_50</button>
+                    <button id="75sym" class="ui button">R_75</button>
+                    <button id="100sym" class="ui button">R_100</button>
+                    <button id="bullsym" class="ui button">RDBULL</button>
+                    <button id="bearsym" class="ui button">RDBEAR</button>
+
+                </div>
+                <div style="display: none" id="symbolclassFX" class="ui mini compact buttons">
+                    <button id="autosymFX" class="ui button">AUTO</button>
+                    <button id="eurusd" class="ui button">EURUSD</button>
+                    <button id="usdjpy" class="ui button">USDJPY</button>
+                    <button id="gbpusd" class="ui button">GBPUSD</button>
+                    <button id="audusd" class="ui button">AUDUSD</button>
+                    <button id="usdchf" class="ui button">USDCHF</button>
+                    <button id="nzdusd" class="ui button">NZDUSD</button>
+                    <button id="usdcad" class="ui button">USDCAD</button>
+                </div>
+
+
+
+            </div>
+
+            <div style="height: 2px" class="ui hidden divider"></div>
+
+
+            <div style="height: 2px" class="ui hidden divider"></div>
+            <div class="ui mini compact fluid buttons">
+                <button id="callTrade" class="ui positive button">Call</button>
+                <div class="or"></div>
+                <button id="putTrade" class="ui negative button">Put</button>
+                <div style="height: 15px" class="ui hidden divider"></div>
+
+            </div>
+        </div>
+
+    </main>
+
+    </div>
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+
+    <!-- technical indicators pattern detection requirements  -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.13.0"></script>
+
+
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="../assets/moment.min.js"></script>
+    <script src="../assets/jquery.min.js"></script>
+    <script src="../assets/jquery.sparkline.js"></script>
+    <script src="../assets/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="../src/trading/placeTrade.js"></script>
+    <script src="../src/mktselector.js"></script>
+    <script src="../src/mktSelector/decideVIX.js"></script>
+    <script src="../src/mktSelector/decideFX.js"></script>
+    <script src="../src/mktSelector/decide.js"></script>
+    <script src="../assets/jquery.drawsvg.js"></script>
+
+    <!--  Strategy Files Kept here -->
+    <script src="../src/strategies/data.js"></script>
+    <script src="../src/strategies/priceAction.js"></script>
+    <script src="../src/strategies/supportResist.js"></script>
+    <script src="../src/strategies/CCItrend.js"></script>
+    <script src="../src/strategies/BBands.js"></script>
+    <script src="../src/strategies/tripleEMA.js"></script>
+    <script src="../src/strategies/macd.js"></script>
+    <script src="../src/strategies/customMA.js"></script>
+    <script src="../src/strategies/TRIX.js"></script>
+    <script src="../src/strategies/multi.js"></script>
+    <script src="../src/strategies/williamsR.js"></script>
+    <script src="../src/strategies/candlePattern.js"></script>
+
+    <!--    End of Strategy Files    -->
+
+    <script src="../src/home/imports.js"></script>
+    <script src="../src/home/dataLogger.js"></script>
+    <script src="../src/home/startup.js"></script>
+    <script src="../src/home/LiveorVirt.js"></script>
+    <script src="../src/home/symbolBtns.js"></script>
+    <script src="../src/home/FXorVIX.js"></script>
+    <script src="../src/home/resetTrading.js"></script>
+    <script src="../src/home/sparkLine.js"></script>
+    <script src="../src/home/botControls.js"></script>
+    <script src="../src/home/saveParameters.js"></script>
+    <script src="../src/home/strategySelect.js"></script>
+    <script src="../src/home/plotlyChart.js"></script>
+    <script src="../src/settings/settings.js"></script>
+
+
+
+
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
+
+</body>
+
+<script>
+
+
+</script>
+
+
+
+<script>
+    var reload = () => {
+        getCurrentWindow().reload()
+    }
+
+    globalShortcut.register('F5', reload);
+    globalShortcut.register('CommandOrControl+R', reload);
+    // here is the fix bug #3778, if you know alternative ways, please write them
+    window.addEventListener('beforeunload', () => {
+        globalShortcut.unregister('F5', reload);
+        globalShortcut.unregister('CommandOrControl+R', reload);
+    })
+
+
+    // listen for system reset, and set all trading back to 0
+
+    document.getElementById('resetBot').addEventListener('click', function (event) {
+
+        resetTradingOnClick()
+
+    });
+
+    //manage market selection
+
+    $('#autosym').click(function () {
+
+        settings.set('changesymAuto.changesymAuto', true);
+        autoSelect()
+
+    });
+    $('#autosymFX').click(function () {
+
+        settings.set('changesymAuto.changesymAuto', true);
+        autoSelect()
+
+    });
+
+    $('#10sym').click(function () {
+
+        settings.set('symbol.symbol', 'R_10');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#25sym').click(function () {
+
+        settings.set('symbol.symbol', 'R_25');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#50sym').click(function () {
+
+        settings.set('symbol.symbol', 'R_50');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#75sym').click(function () {
+
+        settings.set('symbol.symbol', 'R_75');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#100sym').click(function () {
+
+        settings.set('symbol.symbol', 'R_100');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#bullsym').click(function () {
+
+        settings.set('symbol.symbol', 'RDBULL');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#bearsym').click(function () {
+
+        settings.set('symbol.symbol', 'RDBEAR');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+
+    // FOREX 
+
+
+    $('#usdchf').click(function () {
+
+        settings.set('symbol.symbol', 'frxUSDCHF');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#eurusd').click(function () {
+
+        settings.set('symbol.symbol', 'frxEURUSD');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#usdjpy').click(function () {
+
+        settings.set('symbol.symbol', 'frxUSDJPY');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#gbpusd').click(function () {
+
+        settings.set('symbol.symbol', 'frxGBPUSD');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#audusd').click(function () {
+
+        settings.set('symbol.symbol', 'frxAUDUSD');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#nzdusd').click(function () {
+
+        settings.set('symbol.symbol', 'frxNZDUSD');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#usdcad').click(function () {
+
+        settings.set('symbol.symbol', 'frxUSDCAD');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+
+    $('#setVirt').click(function () {
+
+
+    });
+
+    $('#setLive').click(function () {
+
+    });
+
+    $('#setFX').click(function () {
+        settings.set('forex.forex', true);
+
+    });
+    $('#setVIX').click(function () {
+
+        settings.set('forex.forex', false);
+    });
+
+
+
+    // set settings conditions for trading from buttons
+
+
+    document.getElementById('startBot').addEventListener('click', function (event) {
+
+        startBot()
+        authorise();
+
+    });
+
+    document.getElementById('pauseBot').addEventListener('click', function (event) {
+
+        pauseBot()
+        authorise();
+
+
+    });
+
+
+    document.getElementById('setVirt').addEventListener('click', function (event) {
+
+        settings.set('tokenToBeUsed.tokenToBeUsed', settings.get('virtualToken.virtualToken'));
+
+
+        authorise();
+    })
+
+
+
+    document.getElementById('setLive').addEventListener('click', function (event) {
+
+        settings.set('tokenToBeUsed.tokenToBeUsed', settings.get('liveToken.liveToken'));
+
+        authorise();
+    })
+
+
+
+
+
+    // Manual trading buttons event listeners with conditions for when auto trading is on REMOVE comment on tradeinprogress true, once placetrades has been written
+
+    document.getElementById('callTrade').addEventListener('click', function (event) {
+
+
+        manualCall()
+    });
+
+
+
+    document.getElementById('putTrade').addEventListener('click', function (event) {
+
+
+        manualPut()
+    });
+
+
+
+    // Keep trading dash upto date
+
+    function updateDash() {
+
+        setMarketBtn()
+        symbolBtns()
+        setAccountBtn()
+
+        document.getElementById('stake').textContent = settings.get('stake.stake');
+        document.getElementById('profit').textContent = settings.get('profit.profit');
+        document.getElementById('winRate').textContent = settings.get('winRate.winRate');
+
+        // set up styling for different values       
+        if (settings.get('profit.profit') >= 0) {
+            document.getElementById('profit').style.color = '#21ba45';
+        } else {
+            document.getElementById('profit').style.color = 'red';
+
+        }
+
+        // set up tri-color state for win rate
+        if (settings.get('winRate.winRate') >= 45 && settings.get('winRate.winRate') < 52) {
+            document.getElementById('winRate').style.color = '#fbbd08';
+        } else if (settings.get('winRate.winRate') >= 52) {
+            document.getElementById('winRate').style.color = '#21ba45';
+
+        } else {
+            document.getElementById('winRate').style.color = 'red';
+
+        }
+
+        // set upauto limits if set
+        if (settings.get('autothresh.autothresh') > 0) {
+
+
+            settings.set('autolimit.autolimit', true);
+
+        }
+
+        //messages
+        document.getElementById('notifyme').textContent = settings.get('message.message');
+
+
+        //Stats etc
+
+
+
+
+
+
+
+        // control button functions while trading!
+
+        if (settings.get('tradeInProgress.tradeInProgress', true) || (settings.get('autoTrade.autoTrade', true) &&
+                settings.get('run.run', true))) {
+
+            document.getElementById("callTrade").disabled = true;
+            document.getElementById("putTrade").disabled = true;
+
+        } else {
+
+            document.getElementById("callTrade").disabled = false;
+            document.getElementById("putTrade").disabled = false;
+
+        }
+
+        if (settings.get('run.run', true)) {
+
+            document.getElementById("startBot").disabled = true;
+        } else {
+
+            document.getElementById("startBot").disabled = false;
+        }
+
+        if (settings.get('liveToken.liveToken') === settings.get('tokenToBeUsed.tokenToBeUsed')) {
+
+            $('#setLive').addClass('disabled');
+            $('#setLive').addClass('green');
+            $('#setVirt').removeClass('disabled');
+            $('#setVirt').removeClass('green');
+
+        } else {
+
+            $('#setVirt').addClass('disabled');
+            $('#setVirt').addClass('green');
+            $('#setLive').removeClass('disabled');
+            $('#setLive').removeClass('green');
+
+        }
+        if (settings.get('changesymAuto.changesymAuto')) {
+
+            $('#autosym').addClass('disabled');
+            $('#autosym').addClass('orange');
+            $('#10sym, #25sym, #50sym, #75sym, #100sym, #bullsym, #bearsym').removeClass('disabled');
+            $('#10sym, #25sym, #50sym, #75sym, #100sym, #bullsym, #bearsym').removeClass('green');
+
+        }
+
+        if (settings.get('changesymAuto.changesymAuto') === false) {
+
+            $('#autosym').removeClass('orange');
+        }
+
+        if (settings.get('symbol.symbol') === 'R_10') {
+            $('#10sym').addClass('disabled');
+            $('#10sym').addClass('green');
+            $('#autosym, #25sym, #50sym, #75sym, #100sym, #bullsym, #bearsym').removeClass('disabled');
+            $('#autosym, #25sym, #50sym, #75sym, #100sym, #bullsym, #bearsym').removeClass('green');
+
+        }
+        if (settings.get('symbol.symbol') === 'R_25') {
+            $('#25sym').addClass('disabled');
+            $('#25sym').addClass('green');
+            $('#10sym, #autosym, #50sym, #75sym, #100sym, #bullsym, #bearsym').removeClass('disabled');
+            $('#10sym, #autosym, #50sym, #75sym, #100sym, #bullsym, #bearsym').removeClass('green');
+        }
+
+        if (settings.get('symbol.symbol') === 'R_50') {
+            $('#50sym').addClass('disabled');
+            $('#50sym').addClass('green');
+            $('#10sym, #25sym, #autosym, #75sym, #100sym, #bullsym, #bearsym').removeClass('disabled');
+            $('#10sym, #25sym, #autosym, #75sym, #100sym, #bullsym, #bearsym').removeClass('green');
+        }
+        if (settings.get('symbol.symbol') === 'R_75') {
+            $('#75sym').addClass('disabled');
+            $('#75sym').addClass('green');
+            $('#10sym, #25sym, #50sym, #autosym, #100sym, #bullsym, #bearsym').removeClass('disabled');
+            $('#10sym, #25sym, #50sym, #autosym, #100sym, #bullsym, #bearsym').removeClass('green');
+        }
+        if (settings.get('symbol.symbol') === 'R_100') {
+            $('#100sym').addClass('disabled');
+            $('#100sym').addClass('green');
+            $('#10sym, #25sym, #50sym, #75sym, #autosym, #bullsym, #bearsym').removeClass('disabled');
+            $('#10sym, #25sym, #50sym, #75sym, #autosym, #bullsym, #bearsym').removeClass('green');
+        }
+        if (settings.get('symbol.symbol') === 'RDBULL') {
+            $('#bullsym').addClass('disabled');
+            $('#bullsym').addClass('green');
+            $('#10sym, #25sym, #50sym, #75sym, #100sym, #autosym, #bearsym').removeClass('disabled');
+            $('#10sym, #25sym, #50sym, #75sym, #100sym, #autosym, #bearsym').removeClass('green');
+        }
+        if (settings.get('symbol.symbol') === 'RDBEAR') {
+            $('#bearsym').addClass('disabled');
+            $('#bearsym').addClass('green');
+            $('#10sym, #25sym, #50sym, #75sym, #100sym, #bullsym, #autosym').removeClass('disabled');
+            $('#10sym, #25sym, #50sym, #75sym, #100sym, #bullsym, #autosym').removeClass('green');
+        }
+
+
+
+    }
+
+
+    updateDash()
+    setInterval(updateDash, 1000);
+
+    // sidebar set paramter logic
+
+
+    // ErrorCatching and printto notification windows -- rename and
+    //changein production to give awarngint o restartthe application after binary.com failure 
+
+    window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
+        alert("Binary.com error occured: " + errorMsg); //or any message
+        return false;
+    }
+
+
+    document.getElementById('closeMe').addEventListener('click', function (event) {
+
+
+        var windows = getCurrentWindow();
+        window.close()
+    });
+</script>
+
+
+</html>

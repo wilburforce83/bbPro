@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Binary Bot Trading</title>
+    <link rel="stylesheet" href="../assets/Semantic-UI-CSS-master/semantic.min.css">
+
+
+
+    <style>
+        html,
+
+
+        body {
+            height: 100%;
+            overflow-y: hidden;
+            overflow-x: hidden;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0%;
+            width: 100%;
+            z-index: 10000;
+        }
+
+        .pusher {
+            display: flex !important;
+            min-height: 100vh;
+
+            flex-direction: column !important;
+
+
+
+
+        }
+
+        .Site-content {
+            display: flex !important;
+            flex-direction: column;
+            margin: 0;
+            padding: 5;
+
+        }
+
+        #sidebar {
+
+
+            z-index: 10010;
+        }
+
+        .js-plotly-plot,
+        .plot-container {
+            height: 74vh;
+            margin-left: -30px;
+            margin-right: 10px;
+        }
+
+        .iframe-area {
+            display: flex !important;
+            flex-direction: row;
+            height: 74vh;
+            margin-left: -30px;
+            margin-right: 10px;
+
+
+            margin-top: 15px;
+        }
+
+        .ui.button {
+
+            border-radius: 0;
+        }
+
+        .ui-mini-inverted-card {
+
+            margin: 0;
+            overflow-y: auto;
+            max-height: 75px;
+
+
+
+
+        }
+
+        #tickChart {
+
+            height: 20vh;
+        }
+
+        #loading {
+            margin: 0;
+            position: fixed;
+
+            width: 100%;
+            height: 100vh;
+
+            background: rgb(4, 1, 36) url('../assets/images/spinner5.gif') no-repeat center center;
+            ;
+            z-index: 150000;
+        }
+
+        #loadingfooter {
+            position: absolute;
+            bottom: 0%;
+            width: 100%;
+            z-index: 160000;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 10%;
+            /* position the top  edge of the element at the middle of the parent */
+            left: 80%;
+            /* position the left edge of the element at the middle of the parent */
+
+
+
+            z-index: 1000;
+
+            /*dim the background*/
+        }
+    </style>
+
+</head>
+
+<body class='Site' onload="startup()">
+
+
+    <div id="loading">
+
+        <div id="loadingfooter">
+            <img class="ui centered small image" src="../assets/images/logo.png">
+            <h5 class="ui center aligned grey header">
+
+                <div class="content">
+                    binarybottrading.eu (2019)| V2.0.5 Release Candidate | The ultimate binary trading platform.
+                    <div class="grey sub header"></div>
+                </div>
+            </h5>
+            <div class="ui hidden divider"></div>
+        </div>
+
+
+
+    </div>
+    <!-- Side Bar for setting trading parameters !
+        -->
+
+
+    <div id="sidebar" context="main" class="ui borderless left sidebar inverted vertical menu">
+
+        <div class="ui hidden divider"></div>
+        <a class="item">
+            <div class="ui mini fluid labeled input">
+                <div class="ui label">
+                    Stake
+                </div>
+                <input id="setStake" type="text" placeholder=" e.g. 0.35">
+            </div>
+        </a>
+        <a class="item">
+            <div class="ui mini fluid labeled input">
+                <div class="ui label">
+                    Stop Loss
+                </div>
+                <input id="setStopLoss" type="text" placeholder=" e.g. 300">
+            </div>
+        </a>
+        <a class="item">
+            <div class="ui mini fluid labeled input">
+                <div class="ui label">
+                    Trailing Stop
+                </div>
+                <input id="setTrailingStop" type="text" placeholder=" e.g. 25">
+            </div>
+        </a>
+        <a class="item">
+            <div class="ui mini fluid labeled input">
+                <div class="ui label">
+                    Take Profit
+                </div>
+                <input id="setTakeProfit" type="text" placeholder=" e.g. 50">
+            </div>
+        </a>
+
+        <h5 class="ui  inverted horizontal divider header">
+            Martingale Style
+        </h5>
+
+        <a class="item">
+            <div class="ui mini fluid selection dropdown" id="MMdropdown">
+                <input name="MM Style" id="MMdataset">
+                <i class="dropdown icon"></i>
+                <div id="dropDownDefault" class="default text">Please Select</div>
+                <div class="menu" id="currentMM">
+                    <div class="item" id="MGbasic" value="Classic">Classic</div>
+                    <div class="item" id="MGcum" value="Cum. Loss">Cum. Loss</div>
+                    <div class="item" id="MGladder" value="Ladder">Ladder</div>
+                    <div class="item" id="MGcompound" value="Compound">Compound</div>
+                    <div class="item" id="MGoscar" value="Oscar">Oscar's Grind</div>
+                    <div class="item" id="MGDAlembert" value="DAlembert">D'Alembert</div>
+                    <div class="item" id="MGLabouchere" value="Labouchere">Labouchere</div>
+                    <div class="item" id="MGnone" value="None">None (bad idea)</div>
+                </div>
+            </div>
+        </a>
+        <a class="item">
+            <div class="ui mini fluid labeled input">
+                <div class="ui label">
+                    Manual Override after
+                </div>
+                <input id="setautolimit" type="text" placeholder=" e.g. 5">
+            </div>
+        </a>
+        <a class="item">
+            <div class="ui mini fluid labeled input">
+                <div class="ui label">
+                    MG/Compound Reset
+                </div>
+                <input id="mgreset" type="text" placeholder=" e.g. 7">
+            </div>
+        </a>
+
+        <h5 class="ui  inverted horizontal divider header">
+            Manual Trading
+        </h5>
+        <a class="item">
+            <div class="ui mini fluid labeled input">
+                <input id="durationInt" type="number" placeholder="1-10 (t) | 15 + (s)">
+                <div class="ui left dropdown label" id="TDdropdown">
+                    <div id="curDuration" class="text">period</div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div id="durationT" class="item">ticks (t)</div>
+                        <div id="durationS" class="item">sec (s)</div>
+                        <div id="durationM" class="item">min (m)</div>
+                    </div>
+                </div>
+            </div>
+            <h6 class="ui inverted compact header">Note: this is for manual trading only. For strategy durations go to
+                advanced settings.
+            </h6>
+        </a>
+
+
+
+
+
+
+
+
+        <a class="item">
+            <div class="ui mini fluid green submit button" id="saveParameters">Save Parameters</div>
+        </a>
+    </div>
+    <div class="pusher">
+        <!-- Site content !-->
+
+
+
+        <main class="Site-content">
+            <div style="-webkit-app-region: drag;" class="ui borderless inverted top attached menu">
+
+                <div class="ui small image">
+                    <svg width="150" height="50">
+                        <image xlink:href="../assets/images/logo.svg" x="0" y="10" width="100%" height="80%"></image>
+                    </svg>
+                </div>
+
+
+
+
+                <div class="right menu">
+
+                    <div style="-webkit-app-region: no-drag" class="ui icon dropdown item" id="saveFile"
+                        data-tooltip="Save your current strategy as a .strat file" data-inverted="">
+                        <i class="save icon"></i>
+                    </div>
+                    <div style="-webkit-app-region: no-drag" class="ui icon dropdown item" id="loadFile">
+                        <i class="folder open icon"></i>
+                    </div>
+                    <div style="-webkit-app-region: no-drag" class="ui dropdown icon item" id="prefDropdown">
+                        <i class="wrench icon"></i>
+                        <div class="menu">
+                            <div class="item">
+                                <i class="dropdown icon"></i>
+                                <span class="text">Set API Tokens</span>
+                                <div class="menu">
+                                    <div class="item">
+                                        <span class="text" id="virtualtokenId">Set Virtual Token</span>
+                                    </div>
+                                    <div class="item">
+                                        <span class="text" id="tokenId">Set Live Token</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="divider"></div>
+                            <div id="linktoken" class="item">
+                                Get Tokens
+                            </div>
+                            <div class="divider"></div>
+                            <div id="topUpVirtual" class="item">
+                                Top Up Virtual Account
+                            </div>
+                            <div class="divider"></div>
+                            <div class="header">
+                                Careful...
+                            </div>
+                            <div id="removeTokens" class="item">
+                                Remove my Tokens
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="ui vertically fitted inverted text menu">
+                        <div class="vertically fitted item"><span id="clock"></span></span></div>
+                    </div>
+                    <div class="ui vertically fitted inverted text menu">
+                        <div class="vertically fitted item"><span id="account"></span>&nbsp;|&nbsp;<span
+                                id="currency"></span>&nbsp;|&nbsp;<span id="balance">Please Choose
+                                Account</span></div>
+                    </div>
+
+
+        </main>
+        <div class="trading">
+
+            <div class="ui fluid padded grid">
+                <div class="five wide inverted column">
+
+
+
+                    <div class="ui small compact fluid buttons">
+                        <button id="setParameters" class="ui button">Parameters & Money Management</button>
+                    </div>
+                    <div class="ui fluid card">
+
+                        <h6 class="ui inverted horizontal divider header">
+
+                            <span style="color: white" id="sparklineSym"> Symbol</span>
+                        </h6>
+                        <div>
+
+                            <div class="ui mini left aligned labels">
+
+                                <div id="entryL" class="ui label">
+                                    Entry Point:
+                                    <div id="entryC" class="detail">waiting</div>
+                                </div>
+                                <div id="closeL" class="ui label">
+                                    Current:
+                                    <div id="closeC" class="detail">loading </div>
+                                </div>
+                                <a id="sell" class=" ui label">
+
+                                    Sell
+                                    <div id="contractProfit" class="detail">
+                                        N/A
+                                    </div>
+                                </a>
+
+                            </div>
+                        </div>
+                        <div id="tickChart" class="ui centered">
+                            <div class="overlay" id="expiryTime"></div>
+                            <span id="sparkline" class="sparklines">
+
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+                    <h6 class="ui inverted horizontal divider header">
+                        Trading Controls
+                    </h6>
+
+
+                    <div class="two mini ui fluid buttons">
+
+                        <button id="setVirt" class="ui left attached button">Virtual Account</button>
+                        <button id="setLive" class="right attached ui button">Live Account</button>
+                    </div>
+
+
+                    <p>
+
+                    </p>
+
+                    <div class="ui mini fluid buttons">
+                        <button id="startBot" class="ui black icon button">
+                            <i class="play icon"></i>
+
+                        </button>
+                        <button id="pauseBot" class="ui black icon button">
+                            <i class="pause icon"></i>
+
+                        </button>
+
+                        <button id="resetBot" class="ui orange labeled icon button">
+                            Reset
+                            <i class="undo icon"></i>
+                        </button>
+                    </div>
+
+                    <p>
+
+                    </p>
+
+                    <div class="ui large fluid buttons">
+                        <button id="callTrade" class="ui positive button">Call</button>
+                        <div class="or"></div>
+                        <button id="putTrade" class="ui negative button">Put</button>
+                    </div>
+                    <div class="ui hidden divider"></div>
+                    <div class="stretched row">
+                        <h6 class="ui inverted horizontal divider header">
+                            Trading Notifications
+                        </h6>
+                        <div class="ui mini fluid card">
+
+                            <p style="color:grey;overflow-y: auto;
+                            max-height: 20vh;"><span id='notifyme'></span></p>
+                        </div>
+                    </div>
+                    <div class="ui hidden divider"></div>
+                    <p>
+
+                    </p>
+                </div>
+
+
+
+
+
+
+
+
+
+
+                <div class="eleven wide center aligned column">
+                    <div id="chartcolumn" class="column">
+                        <div class="three ui right aligned columns">
+                            <button id="setFX" class="ui left attached compact small button">FX</button>
+                            <button id="setVIX" class="ui right attached compact small button">VIX</button>
+                            <div id="symbolclass" class="ui mini compact buttons">
+                                <button id="autosym" class="ui button">AUTO</button>
+                                <button id="10sym" class="ui button">R_10</button>
+                                <button id="25sym" class="ui button">R_25</button>
+                                <button id="50sym" class="ui button">R_50</button>
+                                <button id="75sym" class="ui button">R_75</button>
+                                <button id="100sym" class="ui button">R_100</button>
+                                <button id="bullsym" class="ui button">RDBULL</button>
+                                <button id="bearsym" class="ui button">RDBEAR</button>
+
+                            </div>
+                            <div style="display: none" id="symbolclassFX" class="ui mini compact buttons">
+                                <button id="autosymFX" class="ui button">AUTO</button>
+                                <button id="eurusd" class="ui button">EURUSD</button>
+                                <button id="usdjpy" class="ui button">USDJPY</button>
+                                <button id="gbpusd" class="ui button">GBPUSD</button>
+                                <button id="audusd" class="ui button">AUDUSD</button>
+                                <button id="usdchf" class="ui button">USDCHF</button>
+                                <button id="nzdusd" class="ui button">NZDUSD</button>
+                                <button id="usdcad" class="ui button">USDCAD</button>
+                            </div>
+
+                            <a class="item">
+                                <div class="ui small right aligned labeled icon dropdown compact button"
+                                    id="MSdropdown">
+                                    <input type="hidden" name="MS Style" id="MSelect">
+                                    <i class="cog icon"></i>
+                                    <div id="dropDownMarket" class="default text">Please Select</div>
+                                    <div class="menu" id="currentMS">
+                                        <div class="item" id="candleBody" value="Candle Body">Candle body %</div>
+                                        <div class="item" id="stdDev" value="Std Dev">Std Deviation</div>
+                                        <div class="item" id="combined" value="combined">StdD + PA</div>
+
+                                    </div>
+                                </div>
+                            </a>
+                            <a class="item">
+                                <div class="ui small right aligned labeled icon dropdown compact button"
+                                    id="CLdropdown">
+                                    <input type="hidden" name="CL Style" id="CLelect">
+                                    <i class="cog icon"></i>
+                                    <div id="dropDownChart" class="default text">No. of Candles</div>
+                                    <div class="menu" id="currentMS">
+                                        <div class="item" id="TwentyCl" value="20">20 Candles</div>
+                                        <div class="item" id="FourtyCl" value="40">40 Candles</div>
+                                        <div class="item" id="SixtyCl" value="60">60 Candles</div>
+                                        <div class="item" id="EightyCl" value="80">80 Candles</div>
+                                        <div class="item" id="HundredCl" value="100">100 Candles</div>
+                                        <div class="item" id="HundredFiftyCl" value="150">150 Candles</div>
+                                        <div class="item" id="ThreeHundredCl" value="300">300 Candles</div>
+
+                                    </div>
+                                </div>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                    <div id="chart" class="ui stretched row">
+                        <div id="plotly-div" style="margin-bottom:0px"></div>
+                    </div>
+
+
+
+
+                </div>
+                <p></p>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer>
+
+        <div style="width:100%;" class="ui black sticky">
+
+            <div class="ui center aligned grid">
+                <div class="two wide black column">
+
+
+                    <div class="ui inverted segment">
+
+                        <div class="ui mini inverted statistic">
+                            <div class="value">
+                                <span id="stake">...</span>
+                            </div>
+                            <div class="label">
+                                Stake
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="twelve wide black column">
+
+
+
+
+                    <div class="ui inverted segment">
+
+                        <div id='hidemgstep' class="ui red mini inverted statistic">
+                            <div class="value">
+                                <span id="mgStep">...</span>
+                            </div>
+                            <div class="label">
+                                MG Step
+                            </div>
+                        </div>
+
+
+
+                        <div class="ui mini inverted statistic">
+                            <div class="value">
+                                <span id="winRate">...</span>
+                            </div>
+                            <div class="label">
+                                W/R %
+                            </div>
+                        </div>
+
+                        <div class="ui mini inverted statistic">
+                            <div class="value">
+                                <span id="noTrades">...</span>
+                            </div>
+                            <div class="label">
+                                No. Trades
+                            </div>
+                        </div>
+                        <div class="ui mini inverted statistic">
+                            <div class="value">
+                                <span id="stopLoss">...</span>
+                            </div>
+                            <div class="label">
+                                Stop Loss
+                            </div>
+                        </div>
+                        <div class="ui green mini inverted statistic">
+                            <div class="value">
+                                <span id="MGstyle">...</span>
+                            </div>
+                            <div class="label">
+                                MG Style
+                            </div>
+                        </div>
+                        <div class="ui green mini inverted statistic">
+                            <div class="value">
+                                <span id="strategy">...</span>
+                            </div>
+                            <div class="label">
+                                Strategy
+                            </div>
+                        </div>
+
+                        <div class="ui orange mini inverted statistic">
+                            <div class="value">
+                                <span id="peakStake">...</span>
+                            </div>
+                            <div class="label">
+                                Peak Stake
+                            </div>
+                        </div>
+                        <div class="ui orange mini inverted statistic">
+                            <div class="value">
+                                <span id="maxloss">...</span>
+                            </div>
+                            <div class="label">
+                                Max.Loss C
+                            </div>
+                        </div>
+
+                        <div class="ui green mini inverted statistic">
+                            <div class="value">
+                                <span id="maxwin">...</span>
+                            </div>
+                            <div class="label">
+                                Max.Win C
+                            </div>
+                        </div>
+                        <div id="hidecumloss" class="ui green mini inverted statistic">
+                            <div class="value">
+                                <span id="cumlosses">...</span>
+                            </div>
+                            <div class="label">
+                                cum. losses
+                            </div>
+                        </div>
+                        <div id="hideladderprofit" class="ui green mini inverted statistic">
+                            <div class="value">
+                                <span id="ladderprofit">...</span>
+                            </div>
+                            <div class="label">
+                                Ladder Profit
+                            </div>
+                        </div>
+                        <div id="hideladderscomplete" class="ui green mini inverted statistic">
+                            <div class="value">
+                                <span id="ladderscomplete">...</span>
+                            </div>
+                            <div class="label">
+                                Ladders Complete
+                            </div>
+                        </div>
+                        <div class="ui green mini inverted statistic">
+                            <div class="value">
+                                <span id="takeProfit">...</span>
+                            </div>
+                            <div class="label">
+                                Take Profit
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+
+                <div class="two wide black column">
+
+
+
+                    <div class="ui inverted segment">
+                        <div class="ui right mini inverted statistic">
+                            <div class="value">
+                                <span id="profit">...</span>
+                            </div>
+                            <div class="label">
+                                Session Profit
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+        </div>
+
+    </footer>
+
+    </div>
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+
+    <!-- technical indicators pattern detection requirements  -->
+
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"> </script> -->
+
+
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <script src="../assets/moment.min.js"></script>
+    <script src="../assets/jquery.min.js"></script>
+    <script src="../assets/jquery.sparkline.js"></script>
+    <script src="../assets/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="../src/trading/placeTrade.js"></script>
+    <script src="../src/mktselector.js"></script>
+    <script src="../src/mktSelector/decideVIX.js"></script>
+    <script src="../src/mktSelector/decideFX.js"></script>
+    <script src="../src/mktSelector/decide.js"></script>
+    <script src="../assets/jquery.drawsvg.js"></script>
+
+    <!--  Strategy Files Kept here -->
+    <script src="../src/strategies/data.js"></script>
+    <script src="../src/strategies/priceAction.js"></script>
+    <script src="../src/strategies/supportResist.js"></script>
+    <script src="../src/strategies/CCItrend.js"></script>
+    <script src="../src/strategies/BBands.js"></script>
+    <script src="../src/strategies/tripleEMA.js"></script>
+    <script src="../src/strategies/macd.js"></script>
+    <script src="../src/strategies/customMA.js"></script>
+    <script src="../src/strategies/TRIX.js"></script>
+    <script src="../src/strategies/multi.js"></script>
+    <script src="../src/strategies/williamsR.js"></script>
+    <script src="../src/strategies/candlePattern.js"></script>
+    <script src="../src/strategies/HeikenAshi.js"></script>
+
+    <!--    End of Strategy Files    -->
+
+    <script src="../src/home/imports.js"></script>
+    <script src="../src/home/dataLogger.js"></script>
+    <script src="../src/home/startup.js"></script>
+    <script src="../src/home/LiveorVirt.js"></script>
+    <script src="../src/home/symbolBtns.js"></script>
+    <script src="../src/home/FXorVIX.js"></script>
+    <script src="../src/home/resetTrading.js"></script>
+
+    <script src="../src/home/botControls.js"></script>
+    <script src="../src/home/saveParameters.js"></script>
+    <script src="../src/home/strategySelect.js"></script>
+
+    <script src="../src/settings/settings.js"></script>
+    <script src="../parseStrats.js"></script>
+
+
+
+
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
+    <script>
+        //Jquery loading!!!
+        /*
+                $(window).load(function () {
+                    var mySVG = $('#svg8').drawsvg({
+                        duration: 2000,
+                        easing: 'linear'
+                    });
+                    // document.getElementById('#svgdiv').removeClass('hidden');
+                    mySVG.drawsvg('animate');
+
+                })
+                */
+        $(document).ready(function () {
+
+
+
+            $('#loading').delay(4000).fadeOut(1000);
+        });
+    </script>
+</body>
+
+
+<script>
+    var reload = () => {
+        getCurrentWindow().reload()
+    }
+
+    globalShortcut.register('F5', reload);
+    globalShortcut.register('CommandOrControl+R', reload);
+    // here is the fix bug #3778, if you know alternative ways, please write them
+    window.addEventListener('beforeunload', () => {
+        globalShortcut.unregister('F5', reload);
+        globalShortcut.unregister('CommandOrControl+R', reload);
+    })
+
+
+    // listen for system reset, and set all trading back to 0
+
+    document.getElementById('resetBot').addEventListener('click', function (event) {
+
+        resetTradingOnClick()
+
+    });
+
+
+    // save file
+
+    document.getElementById('saveFile').addEventListener('click', function (event) {
+
+        saveYourStrategy()
+
+    });
+
+    document.getElementById('loadFile').addEventListener('click', function (event) {
+
+        document.getElementById('notifyme').insertAdjacentHTML("afterbegin", '<p>' +
+            ' Building Strategy Files......Please Wait. </p>');
+
+        loadYourStrategy()
+
+    });
+
+
+    //Jquery stuff
+
+    $('.menu .item')
+        .tab();
+
+    $('#MMdropdown')
+        .dropdown();
+
+    $('#TDdropdown')
+        .dropdown();
+
+
+    $('#MSdropdown')
+        .dropdown();
+
+    $('#CLdropdown')
+        .dropdown();
+
+
+    $('#quitDropdown')
+        .dropdown();
+
+    $('#prefDropdown')
+        .dropdown();
+    $('#chartDropdown')
+        .dropdown();
+    $('#botBuildDropdown')
+        .dropdown();
+
+    $('#sell').click(function () {
+
+        sellContractEarly();
+
+    });
+
+    $('.message .close')
+        .on('click', function () {
+            $(this)
+                .closest('.message')
+                .transition('fade');
+        });
+
+
+
+    //manage market selection
+
+    $('#autosym').click(function () {
+
+        settings.set('changesymAuto.changesymAuto', true);
+        autoSelect()
+
+    });
+    $('#autosymFX').click(function () {
+
+        settings.set('changesymAuto.changesymAuto', true);
+        autoSelect()
+
+    });
+
+    $('#10sym').click(function () {
+
+        settings.set('symbol.symbol', 'R_10');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#25sym').click(function () {
+
+        settings.set('symbol.symbol', 'R_25');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#50sym').click(function () {
+
+        settings.set('symbol.symbol', 'R_50');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#75sym').click(function () {
+
+        settings.set('symbol.symbol', 'R_75');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#100sym').click(function () {
+
+        settings.set('symbol.symbol', 'R_100');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#bullsym').click(function () {
+
+        settings.set('symbol.symbol', 'RDBULL');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#bearsym').click(function () {
+
+        settings.set('symbol.symbol', 'RDBEAR');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+
+    // FOREX 
+
+
+    $('#usdchf').click(function () {
+
+        settings.set('symbol.symbol', 'frxUSDCHF');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#eurusd').click(function () {
+
+        settings.set('symbol.symbol', 'frxEURUSD');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#usdjpy').click(function () {
+
+        settings.set('symbol.symbol', 'frxUSDJPY');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#gbpusd').click(function () {
+
+        settings.set('symbol.symbol', 'frxGBPUSD');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#audusd').click(function () {
+
+        settings.set('symbol.symbol', 'frxAUDUSD');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#nzdusd').click(function () {
+
+        settings.set('symbol.symbol', 'frxNZDUSD');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+    $('#usdcad').click(function () {
+
+        settings.set('symbol.symbol', 'frxUSDCAD');
+        settings.set('changesymAuto.changesymAuto', false);
+    });
+
+
+    // Manage sidebar actions
+
+    $('#setParameters').click(function () {
+
+
+        document.getElementById('curDuration').innerHTML = settings.get(
+            'manualDuration_unit.manualDuration_unit');
+        document.getElementById('durationInt').value = settings.get('manualDuration.manualDuration');
+    });
+
+    $('#setParameters')
+        .removeClass('disabled');
+
+    $('.ui.sidebar').first()
+        .sidebar('attach events', '#setParameters')
+        .sidebar('setting', 'transition', 'overlay');
+
+
+    $('.ui.sidebar').first()
+        .sidebar('attach events', '#saveParameters')
+        .sidebar('setting', 'transition', 'overlay', 'toggle');
+
+
+
+    $('#setVirt').click(function () {
+
+
+    });
+
+    $('#setLive').click(function () {
+
+    });
+
+    $('#setFX').click(function () {
+        settings.set('forex.forex', true);
+
+    });
+    $('#setVIX').click(function () {
+
+        settings.set('forex.forex', false);
+    });
+
+    $('#linktoken').click(function () {
+        shell.openExternal('https://www.binary.com/en/user/security/api_tokenws.html')
+    });
+
+
+
+    // save trading parameters
+
+    let savePar = document.getElementById('saveParameters');
+
+    savePar.addEventListener('click', function (event) {
+
+        saveParametersOnClick()
+
+
+    });
+
+
+
+
+    // martingale style selector - long hand as I can't fucking work it out!!!
+    document.getElementById('MGbasic').addEventListener('click', function (event) {
+        settings.set('MGstyle.MGstyle', document.getElementById('MGbasic').innerHTML);
+        settings.set('cumLoss.cumLoss', 0)
+        console.log(settings.get('MGstyle.MGstyle'));
+    });
+
+    document.getElementById('MGDAlembert').addEventListener('click', function (event) {
+        settings.set('MGstyle.MGstyle', 'DAlembert');
+        settings.set('cumLoss.cumLoss', 0)
+        console.log(settings.get('MGstyle.MGstyle'));
+    });
+
+    document.getElementById('MGLabouchere').addEventListener('click', function (event) {
+        settings.set('MGstyle.MGstyle', 'Labouchere');
+        settings.set('cumLoss.cumLoss', 0)
+        console.log(settings.get('MGstyle.MGstyle'));
+    });
+    document.getElementById('MGcompound').addEventListener('click', function (event) {
+        settings.set('MGstyle.MGstyle', document.getElementById('MGcompound').innerHTML);
+        console.log(settings.get('MGstyle.MGstyle'));
+    });
+    document.getElementById('MGcum').addEventListener('click', function (event) {
+        settings.set('MGstyle.MGstyle', document.getElementById('MGcum').innerHTML);
+        settings.set('cumLoss.cumLoss', 0)
+        console.log(settings.get('MGstyle.MGstyle'));
+    });
+    document.getElementById('MGladder').addEventListener('click', function (event) {
+        settings.set('MGstyle.MGstyle', document.getElementById('MGladder').innerHTML);
+        settings.set('cumLoss.cumLoss', 0)
+        console.log(settings.get('MGstyle.MGstyle'));
+    });
+    document.getElementById('MGoscar').addEventListener('click', function (event) {
+        settings.set('MGstyle.MGstyle', 'Oscar');
+        settings.set('cumLoss.cumLoss', 0)
+        console.log(settings.get('MGstyle.MGstyle'));
+    });
+    document.getElementById('MGnone').addEventListener('click', function (event) {
+        settings.set('MGstyle.MGstyle', document.getElementById('MGnone').innerHTML);
+        settings.set('cumLoss.cumLoss', 0)
+        console.log(settings.get('MGstyle.MGstyle'));
+    });
+
+    //trade Duration selector
+
+
+    document.getElementById('durationT').addEventListener('click', function (event) {
+        settings.set('manualDuration_unit.manualDuration_unit', 't');
+
+    });
+    document.getElementById('durationS').addEventListener('click', function (event) {
+        settings.set('manualDuration_unit.manualDuration_unit', 's');
+
+    });
+    document.getElementById('durationM').addEventListener('click', function (event) {
+        settings.set('manualDuration_unit.manualDuration_unit', 'm');
+
+    });
+
+
+    // Market Selector Options
+
+    document.getElementById('candleBody').addEventListener('click', function (event) {
+        settings.set('MSstyle.MSstyle', document.getElementById('candleBody').innerHTML);
+        console.log(settings.get('MSstyle.MSstyle'));
+        settings.set('message.message', 'Market Selector set to ' + settings.get('MSstyle.MSstyle'));
+    });
+    document.getElementById('stdDev').addEventListener('click', function (event) {
+        settings.set('MSstyle.MSstyle', document.getElementById('stdDev').innerHTML);
+        console.log(settings.get('MSstyle.MSstyle'));
+        settings.set('message.message', 'Market Selector set to ' + settings.get('MSstyle.MSstyle'));
+    });
+    document.getElementById('combined').addEventListener('click', function (event) {
+        settings.set('MSstyle.MSstyle', document.getElementById('combined').innerHTML);
+        console.log(settings.get('MSstyle.MSstyle'));
+        settings.set('message.message', 'Market Selector set to ' + settings.get('MSstyle.MSstyle'));
+    });
+
+
+    // Chart Length Selector Options
+
+
+    document.getElementById('TwentyCl').addEventListener('click', function (event) {
+        settings.set('candlesOnChart.candlesOnChart', 20);
+        console.log(settings.get('candlesOnChart.candlesOnChart'));
+        settings.set('message.message', 'Candle Chart Length set to 20');
+    });
+
+    document.getElementById('FourtyCl').addEventListener('click', function (event) {
+        settings.set('candlesOnChart.candlesOnChart', 40);
+        console.log(settings.get('candlesOnChart.candlesOnChart'));
+        settings.set('message.message', 'Candle Chart Length set to 40');
+    });
+    document.getElementById('SixtyCl').addEventListener('click', function (event) {
+        settings.set('candlesOnChart.candlesOnChart', 60);
+        console.log(settings.get('candlesOnChart.candlesOnChart'));
+        settings.set('message.message', 'Candle Chart Length set to 60');
+    });
+    document.getElementById('EightyCl').addEventListener('click', function (event) {
+        settings.set('candlesOnChart.candlesOnChart', 80);
+        console.log(settings.get('candlesOnChart.candlesOnChart'));
+        settings.set('message.message', 'Candle Chart Length set to 80');
+    });
+    document.getElementById('HundredCl').addEventListener('click', function (event) {
+        settings.set('candlesOnChart.candlesOnChart', 100);
+        console.log(settings.get('candlesOnChart.candlesOnChart'));
+        settings.set('message.message', 'Candle Chart Length set to 100');
+    });
+
+    document.getElementById('HundredFiftyCl').addEventListener('click', function (event) {
+        settings.set('candlesOnChart.candlesOnChart', 150);
+        console.log(settings.get('candlesOnChart.candlesOnChart'));
+        settings.set('message.message', 'Candle Chart Length set to 150 ');
+    });
+    document.getElementById('ThreeHundredCl').addEventListener('click', function (event) {
+        settings.set('candlesOnChart.candlesOnChart', 300);
+        console.log(settings.get('candlesOnChart.candlesOnChart'));
+        settings.set('message.message', 'Candle Chart Length set to 300');
+    });
+
+
+
+
+
+
+    // load previous settings
+
+    document.getElementById('curDuration').innerHTML = settings.get('manualDuration_unit.manualDuration_unit');
+    document.getElementById('durationInt').value = settings.get('manualDuration.manualDuration');
+
+
+    if (settings.has('initialStake.initialStake')) {
+
+        document.getElementById("setStake").value = settings.get('initialStake.initialStake')
+
+    }
+    if (settings.has('trailingStop.trailingStop')) {
+
+        document.getElementById("setTrailingStop").value = settings.get('trailingStop.trailingStop')
+
+    }
+    if (settings.has('takeProfit.takeProfit')) {
+
+        document.getElementById("setTakeProfit").value = settings.get('takeProfit.takeProfit')
+
+    }
+    if (settings.has('stopLoss.stopLoss')) {
+
+        document.getElementById("setStopLoss").value = settings.get('stopLoss.stopLoss')
+
+    }
+    if (settings.has('mgreset.mgreset')) {
+
+        document.getElementById("mgreset").value = settings.get('mgreset.mgreset')
+
+    }
+    if (settings.has('autothresh.autothresh')) {
+
+        document.getElementById("setautolimit").value = settings.get('autothresh.autothresh')
+
+    }
+    if (settings.has('tradeDuration.tradeDuration')) {
+        document.getElementById('curDuration').innerHTML = settings.get('manualDuration_unit.manualDuration_unit');
+        document.getElementById('durationInt').value = settings.get('manualDuration.manualDuration');
+    }
+
+
+    // set settings conditions fo trading from buttons
+
+
+    // Token tests and saves
+
+    //Live token
+    document.getElementById('tokenId').addEventListener('click', function (event) {
+
+        const modalPath1 = path.join('file://', __dirname, 'liveToken.html')
+        let livetoken = new BrowserWindow({
+            width: 330,
+            height: 255,
+            frame: false,
+            alwaysOnTop: true
+        })
+        livetoken.on('close', function () {
+            livetoken = null
+        })
+        livetoken.loadURL(modalPath1)
+        livetoken.once('ready-to-show', () => {
+            livetoken.show()
+        })
+
+        // tokens.webContents.openDevTools()
+
+
+    });
+
+    // top up virtual account
+
+    document.getElementById('topUpVirtual').addEventListener('click', function (event) {
+
+        if (settings.get('tokenToBeUsed.tokenToBeUsed') == settings.get('virtualToken.virtualToken')) {
+            let token = settings.get('tokenToBeUsed.tokenToBeUsed');
+
+            api.authorize(token).then(function resolve(resp) {
+                api.topUpVirtualAccount().then(function (response) {
+                    document.getElementById('notifyme').insertAdjacentHTML("afterbegin",
+                        '<p style="color:#8c01a0">Virtual Account Topped Up</p>');
+                    authorise();
+
+                }).catch(function (error) {
+
+                    let string = error.message;
+                    let position = string.indexOf(`{`);
+                    let message = string.slice(0, position - 1);
+                    //var pos = string.indexOf('{')-1
+                    // var message = string.substring(0,pos);
+                    console.log(message);
+                    // console.log(position);
+                    document.getElementById('notifyme').insertAdjacentHTML("afterbegin",
+                        '<p style="color:#755505">' + message + '</p>');
+
+                })
+
+            });
+        };
+    });
+
+
+
+    //virtual token
+    document.getElementById('virtualtokenId').addEventListener('click', function (event) {
+
+        const modalPath2 = path.join('file://', __dirname, 'virtualToken.html')
+        let virtualtoken = new BrowserWindow({
+            width: 330,
+            height: 255,
+            frame: false,
+            alwaysOnTop: true
+        })
+        virtualtoken.on('close', function () {
+            virtualtoken = null
+        })
+        virtualtoken.loadURL(modalPath2)
+        virtualtoken.once('ready-to-show', () => {
+            virtualtoken.show()
+        })
+        // tokens.webContents.openDevTools()
+
+
+    });
+
+
+    // welcome window
+
+
+
+
+    let terms
+
+
+    function createTermsWindow() {
+        // Create the browser window.
+
+
+        terms = new BrowserWindow({
+            show: false,
+            modal: true,
+            frame: true,
+            minWidth: 500,
+            minHeight: 500,
+            maximizable: false,
+            alwaysOnTop: true,
+            icon: __dirname + '/Icon/icon.ico'
+        })
+        terms.setMenu(null)
+
+        terms.loadFile('src/terms.html')
+
+        terms.once('ready-to-show', () => {
+            terms.show()
+        })
+        // Open the DevTools.
+        // terms.webContents.openDevTools()
+
+
+
+        // Emitted when the window is closed.
+        terms.on('closed', () => {
+            authorise();
+            checkDefaults();
+            app.relaunch();
+
+
+            settings.set('run', {
+                run: false
+            });
+            settings.set('lockauto', {
+                lockauto: 0,
+            })
+            settings.set('tradeInProgress', {
+                tradeInProgress: false
+            });
+            settings.set('autoTrade', {
+                autoTrade: true
+            });
+
+            terms = null
+            app.quit(); //or any message
+        })
+    }
+
+    // remove Tokens at user request!
+
+    document.getElementById('removeTokens').addEventListener('click', function (event) {
+
+        settings.set('virtualToken.virtualToken', null);
+        settings.set('liveToken.liveToken', null);
+        settings.set('message.message',
+            'Tokens have been removed, you will need to add new tokens before being able to trade. The platform will not work properly without a virtual token.'
+        )
+    })
+
+
+    // set settings conditions for trading from buttons
+
+
+    document.getElementById('startBot').addEventListener('click', function (event) {
+
+        startBot();
+        authorise();
+
+    });
+
+    document.getElementById('pauseBot').addEventListener('click', function (event) {
+
+        pauseBot();
+        authorise();
+
+
+    });
+
+
+
+
+
+
+
+
+    // Manual trading buttons event listeners with conditions for when auto trading is on REMOVE comment on tradeinprogress true, once placetrades has been written
+
+    document.getElementById('callTrade').addEventListener('click', function (event) {
+
+
+        manualCall()
+    });
+
+
+
+    document.getElementById('putTrade').addEventListener('click', function (event) {
+
+
+        manualPut()
+    });
+
+
+
+    // Keep trading dash upto date
+
+    function updateDash() {
+
+        setMarketBtn()
+
+
+
+        //  changeDurations();
+
+        document.getElementById('stake').textContent = settings.get('stake.stake');
+        document.getElementById('profit').textContent = settings.get('profit.profit');
+        document.getElementById('contractProfit').textContent = settings.get('sellprofit.sellprofit');
+        document.getElementById('dropDownDefault').innerHTML = settings.get('MGstyle.MGstyle');
+        document.getElementById('dropDownMarket').innerHTML = settings.get('MSstyle.MSstyle');
+
+
+
+
+        // set up styling for different values       
+        if (settings.get('profit.profit') >= 0) {
+            document.getElementById('profit').style.color = '#21ba45';
+        } else {
+            document.getElementById('profit').style.color = 'red';
+
+        }
+
+        // set up tri-color state for win rate
+        if (settings.get('winRate.winRate') >= 45 && settings.get('winRate.winRate') < 52) {
+            document.getElementById('winRate').style.color = '#fbbd08';
+        } else if (settings.get('winRate.winRate') >= 52) {
+            document.getElementById('winRate').style.color = '#21ba45';
+
+        } else {
+            document.getElementById('winRate').style.color = 'red';
+
+        }
+
+        // set upauto limits if set
+        if (settings.get('autothresh.autothresh') > 0) {
+
+
+            settings.set('autolimit.autolimit', true);
+
+        }
+
+        //messages
+
+
+
+        // document.getElementById('notifyme').textContent = settings.get('message.message');
+        if (settings.has('previous.message')) {
+
+            if (settings.get('previous.message') != settings.get('message.message')) {
+
+                document.getElementById('notifyme').insertAdjacentHTML("afterbegin", '<p>' + settings
+                    .get(
+                        'message.message') + '</p>');
+
+                // document.getElementById('notifyme').insertAdjacentHTML("afterbegin", settings.get('message.message')+'<br>');
+                settings.set('previous.message', settings.get('message.message'));
+
+            }
+
+        } else {
+
+            settings.set('previous.message', 'Welcome to Binary Bot Trader!')
+            settings.set('message.message', 'Welcome to Binary Bot Trader!')
+            document.getElementById('notifyme').insertAdjacentHTML("afterbegin", '<p>' + settings.get(
+                'message.message') + '</p>');
+        }
+
+        // Live Feed data vs open trade
+        var strat;
+
+        if (settings.get('strat.strat') !== 'multi') {
+            strat = settings.get('strat.strat');
+        } else {
+            strat = settings.get('multistratName.multistratName')
+        }
+
+
+
+
+        //Stats etc
+
+        document.getElementById('strategy').textContent = strat
+
+        document.getElementById('stopLoss').textContent = settings.get('stopLoss.stopLoss');
+        document.getElementById('peakStake').textContent = settings.get('peakStake.peakStake');
+        document.getElementById('MGstyle').textContent = settings.get('MGstyle.MGstyle');
+        document.getElementById('winRate').textContent = settings.get('winRate.winRate');
+        document.getElementById('takeProfit').textContent = settings.get('takeProfit.takeProfit');
+        document.getElementById('noTrades').textContent = settings.get('wins.wins') + settings.get(
+            'losses.losses');
+
+        document.getElementById('maxwin').textContent = settings.get('maxConWins.maxConWins');
+        document.getElementById('maxloss').textContent = settings.get('maxConLosses.maxConLosses');
+        document.getElementById('mgStep').textContent = settings.get(
+            'consecutiveLosses.consecutiveLosses');
+        document.getElementById('cumlosses').textContent = settings.get('cumLoss.cumLoss');
+        document.getElementById('ladderprofit').textContent = settings.get('ladderProfit.ladderProfit');
+        document.getElementById('ladderscomplete').textContent = settings.get(
+            'laddersCompleted.laddersCompleted');
+
+
+        document.getElementById('balance').textContent = settings.get('balance.balance');
+        document.getElementById('account').textContent = settings.get('loginid.loginid');
+        document.getElementById('currency').textContent = settings.get('currency.currency');
+        document.getElementById('sparklineSym').textContent = settings.get('symbol.symbol');
+
+        // control button functions while trading!
+
+        if (settings.get('tradeInProgress.tradeInProgress', true) || (settings.get(
+                    'autoTrade.autoTrade',
+                    true) &&
+                settings.get('run.run', true))) {
+
+            document.getElementById("callTrade").disabled = true;
+            document.getElementById("putTrade").disabled = true;
+
+        } else {
+
+            document.getElementById("callTrade").disabled = false;
+            document.getElementById("putTrade").disabled = false;
+
+        }
+
+        if (settings.get('run.run', true)) {
+
+            document.getElementById("startBot").disabled = true;
+        } else {
+
+            document.getElementById("startBot").disabled = false;
+        }
+
+        setAccountBtn()
+
+        symbolBtns()
+
+        //keep bottom statistics in line with MM strategy
+
+        if (settings.get('MGstyle.MGstyle') === "Ladder") {
+
+            document.getElementById("hideladderscomplete").style.display = '';
+            document.getElementById("hideladderprofit").style.display = '';
+            document.getElementById("hidecumloss").style.display = 'none';
+
+            document.getElementById("hidemgstep").style.display = 'none';
+
+        } else if (settings.get('MGstyle.MGstyle') === "Cum. Loss") {
+
+
+            document.getElementById("hideladderscomplete").style.display = 'none';
+            document.getElementById("hideladderprofit").style.display = 'none';
+            document.getElementById("hidecumloss").style.display = '';
+
+            document.getElementById("hidemgstep").style.display = '';
+
+
+        } else if (settings.get('MGstyle.MGstyle') === "Classic") {
+
+
+            document.getElementById("hideladderscomplete").style.display = 'none';
+            document.getElementById("hideladderprofit").style.display = 'none';
+
+            document.getElementById("hidemgstep").style.display = '';
+            document.getElementById("hidecumloss").style.display = '';
+
+
+        }
+
+
+    }
+
+
+    updateDash()
+    setInterval(updateDash, 1000);
+
+    // sidebar set paramter logic
+
+    if (settings.has('initialStake.initialStake')) {
+
+        document.getElementById("setStake").value = settings.get('initialStake.initialStake')
+
+    }
+
+
+
+    strategySelect()
+    setInterval(strategySelect, 2000);
+
+    autoSelect()
+    setInterval(autoSelect, 30000);
+
+
+    decide()
+    setInterval(decide, 2000);
+
+    serverTime()
+    setInterval(serverTime, 250);
+
+    function serverTime() {
+
+        api.getServerTime().then(function (response) {
+
+
+            let clock = moment(response.time * 1000).format('LTS')
+
+            document.getElementById('clock').textContent = 'Server Time : ' + clock + '    ';
+            // console.log(clock)
+        })
+    }
+
+
+
+
+
+
+    // ErrorCatching and printto notification windows -- rename and
+    //changein production to give awarngint o restartthe application after binary.com failure 
+
+    window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
+
+        //   document.getElementById('notifyme').insertAdjacentHTML("afterbegin",
+        //     '<p style="color:#8c01a0">' +
+        //   errorMsg + '</p>');
+        console.log(errorMsg)
+
+        return false;
+
+    }
+</script>
+
+
+</html>

@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Advanced Settings</title>
+
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+    <link rel="stylesheet" href="../../assets/Semantic-UI-CSS-master/semantic.min.css">
+    <script src="../../assets/jquery.min.js"></script>
+    <script src="../../assets/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="../../src/settings/settings.js"></script>
+
+
+
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            background-color: rgb(236, 236, 232) !important;
+
+
+
+        }
+
+        .trading {
+
+            display: flex;
+        }
+
+        #mainbody {
+
+            background-color: rgb(236, 236, 232) !important;
+
+        }
+    </style>
+
+</head>
+
+<body onload="passSettings()">
+    <div class="ui hidden divider"></div>
+    <div id="mainbody" class="ui padded center aligned container">
+        <h3 class="ui center aligned icon header">
+            <i class="orange settings icon"></i>
+            <div class="content">
+                Advanced Settings
+                <div class="ui sub header">Please be careful. Changing multipliers can have drastic effects!</div>
+            </div>
+        </h3>
+        <div class="ui hidden divider"></div>
+        <div class="ui hidden divider"></div>
+        <div class="ui hidden divider"></div>
+
+
+
+
+
+        <h6 class="ui horizontal orange divider">
+            Barrier Offset Settings
+        </h6>
+        <p>Barrier offset allows you to increase or decrease the return on a trade by moving the target price above or
+            below the entry point. If you
+            place a <b>call</b> trade lowering the barrier (default) makes it more likely to be ITM, but lowers the
+            return. selecting <b>inverse</b> increases the barriers making it harder
+            but increases the return.
+            <br><br>
+            <b style="color: red;">NOTE: barrier limits vary, do not use barriers with auto-market selection. Be
+                warned!</b>
+        </p>
+        <div class="ui center aligned container">
+            <div class="inline field">
+                <div class="fields">
+                    <div class="field">
+                        <div class="ui labeled input">
+                            <div class="ui label">
+                                Barrier
+                            </div>
+                            <input id="tradeBarrier" type="number" placeholder="default is 0">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <a class="item">
+                            <div class="ui label">
+                                Style
+                            </div>
+                            <div class="ui mini labeled selection dropdown" id="BRdropdown">
+
+                                <input name="BR Style" id="BRdataset">
+                                <i class="dropdown icon"></i>
+                                <div id="dropDownDefault" class="default text">Please Select</div>
+                                <div class="menu" id="currentBR">
+                                    <div class="item" id="BRdefault" value="Normal">Normal</div>
+                                    <div class="item" id="BRinverse" value="Inverse">Inverse</div>
+
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="ui hidden divider"></div>
+        <div class="ui hidden divider"></div>
+        <div class="ui hidden divider"></div>
+
+
+        <div class="ui mini equal width center aligned form">
+            <!--This is a form entry block for advanced options, copy one of these block when you add a new strategy!-->
+            <h6 class="ui horizontal orange divider">
+                Forex Settings
+            </h6>
+            <p>The binary.com forex markets have variable trading durations based on locality and market volume. By
+                default
+                Binary Bot Trader limits auto
+                selection of forex markets to markets which have a 5 tick minimum trade duration. To override this,
+                please
+                change the settings below.
+            </p>
+            <div class="ui center aligned container">
+
+                <button id="enableFX" class="ui left attached compact small button">Enable Long Trades</button>
+                <button id="disableFX" class="ui right attached compact small button">Disable Long Trades</button>
+
+
+            </div>
+
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+
+            <!--This is a form entry block for advanced options, copy one of these block when you add a new strategy!-->
+            <h6 class="ui horizontal orange divider">
+                Chart Settings
+            </h6>
+            <p>The default BBtrader charting changes and updates automatically based on the market conditions and
+                settings. If you prefer to use Trading View, please select it below.
+            </p>
+            <b style="color: red;">WARNING: only BBtrader default charting change automatically. If using trading view
+                PLEASE make sure you are on the correct chart, AND auto market selection is off! </b>
+            <div class="ui center aligned container">
+
+                <button id="enablebbtrader" class="ui left attached compact small button">Default Charting</button>
+                <button id="enabletradingview" class="ui right attached compact small button">Trading View</button>
+
+
+            </div>
+
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+
+            <h6 class="ui horizontal orange divider">
+                Classic Martingale Settings
+            </h6>
+            <p>Classic Martingale multiplies the last stake by 2 on a loss. As our return is less than 100% we need to
+                account for the difference. The general rule in Binary trading is 2.36. Please change with caution.
+            </p>
+            <div class="ui center aligned container">
+                <div class="inline field">
+                    <div class="fields">
+                        <div class="field">
+                            <div class="ui labeled input">
+                                <div class="ui label">
+                                    Multiply last stake by
+                                </div>
+                                <input id="martingaleMultiplier" type="number" placeholder="default is 2.36">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+
+            <h6 class="ui horizontal orange divider">
+                Cumulative Loss Martingale Settings
+            </h6>
+            <p>Cumulative Loss Martingale is something I came up with (possibly already out there somewhere too), to try
+                and combat the exponential loss growth with classic martingale. It is still exponential, but less
+                agressive. Instead of simply multiplying the last stake,
+                it takes the total cumulative losses since the last winning trade + the initial stake, divided by the
+                multiplier below. Default is 0.9. <br><br>
+                <b>NOTE: smaller number is a bigger multiplier.</b>
+            </p>
+            <div class="ui center aligned container">
+                <div class="inline field">
+                    <div class="fields">
+                        <div class="field">
+                            <div class="ui labeled input">
+                                <div class="ui label">
+                                    Divide Initial Stake + Cum. Loss by
+                                </div>
+                                <input id="cumLossMultiplier" type="number" placeholder="default is 0.9">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+
+            <h6 class="ui horizontal orange divider">
+                Compound Trading Settings
+            </h6>
+            <p>Compound Trading multiplies the last stake by a scaling factor on a <b>win<b>. The idea is that you can
+                        compound your winnings when you get a good streak
+                        helping to mitigate losses.
+            </p>
+            <div class="ui center aligned container">
+                <div class="inline field">
+                    <div class="fields">
+                        <div class="field">
+                            <div class="ui labeled input">
+                                <div class="ui label">
+                                    Multiply last stake by
+                                </div>
+                                <input id="compoundMultiplier" type="number" placeholder="default is 2">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+
+
+            <h6 class="ui horizontal orange divider">
+                Labouchere Settings
+            </h6>
+            <p>Labouchere is a fairly complex cancellation system whereby you make a list of numbers, your stake is
+                equal to the sum of the first and last number in the list. If your trade windowsthe last
+                number is taken off the list, if the trade loses, the value of the loss is added to the list of numbers.
+                This continues until the list has been cleared, and it starts over again.
+                <br><br>
+                <b>NOTE: Your stake is used to scale this list i.e. 0.50 stake will mean all numbers in the list are
+                    halved.</b>
+
+            </p>
+            <div class="ui center aligned container">
+                <div class="inline field">
+                    <div class="fields">
+                        <div class="field">
+                            <div class="ui labeled input">
+                                <div class="ui label">
+                                    Seperate your list with commas ","
+                                </div>
+                                <input id="labouchereList" type="text" placeholder="e.g. 1,2,3,4,4,5">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <h6 class="ui horizontal orange divider">
+                Ladder Profit Settings
+            </h6>
+            <p>Not to be confused with gambling's <i>Stepladder betting system</i>, the Ladder profit system is designed
+                to remove the exponential losses faced with all Martingale type systems.
+                The idea is that your stake will increase by a fixed multipler regardless of win or loss, until a fixed
+                profit has been hit. Once the profit level is hit, the ladder is completed and the stake is reset to the
+                intital stake and the process starts over again.
+                To prevent excessive losses in a terrible market where you win rate drops very low, there is an
+                additional multiplier used to calculate the maximum allowed stake. If the maximum stake ammount is hit
+                the ladder <i>fails</i> and starts back at the initial stake again.
+                It has proven to be quite robust in high frequency auto-trading where the win rate stays above 52%
+                regularly.
+                <br><br>
+                <b>NOTE: bigger numbers mean bigger multipliers</b>
+            </p>
+            <div class="ui center aligned container">
+
+
+                <div class="inline field">
+                    <div class="fields">
+                        <div class="field">
+                            <div class="ui labeled input">
+                                <div class="ui label">
+                                    Ladder target is Stake multiplied by
+                                </div>
+                                <input id="ladderProfitMultiplier" type="number" placeholder="default is 0.9">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui labeled input">
+                                <div class="ui label">
+                                    Multiply stake after every trade by
+                                </div>
+                                <input id="ladderStakeMultiplier" type="number" placeholder="default is 1.1">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="inline field">
+                    <div class="fields">
+                        <div class="field">
+                            <div class="ui labeled input">
+                                <div class="ui label">
+                                    Reset failed ladder when stake is greater than stake multiplied by
+                                </div>
+                                <input id="ladderMaxMultiplier" type="number" placeholder="default is 50">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+
+
+
+
+            <div class="ui right aligned container">
+
+
+                <div class="ui small button" id="closeBtn">Cancel</div>
+                <div class="ui small red button" id="resetDefaults">Reset All</div>
+
+                <div class="ui small green submit button" id="saveChanges">Save Changes</div>
+            </div>
+        </div>
+    </div>
+    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+
+
+
+</body>
+
+
+<script>
+    const dialog = require('electron').remote.dialog;
+
+
+
+    const electron = require('electron')
+    const path = require('path')
+    const remote = electron.remote
+    const {
+        app,
+        BrowserWindow,
+        Menu
+    } = require('electron')
+    const shell = require('electron').shell
+    const settings = require('electron').remote.require('electron-settings');
+    const ws = require('ws');
+
+    const closeBtn = document.getElementById('closeBtn');
+    const saveChanges = document.getElementById('saveChanges');
+    const resetDefaults = document.getElementById('resetDefaults');
+
+    var LiveApi = require('binary-live-api').LiveApi;
+    var api = new LiveApi({
+        websocket: ws,
+        appId: 16261
+    });
+
+    // Forex Jquery
+
+
+    $('#BRdropdown')
+        .dropdown();
+
+
+
+    $('#enablebbtrader').click(function () {
+
+        settings.set('useBBtrader.useBBtrader', true)
+        $('#enablebbtrader').addClass('disabled');
+        $('#enablebbtrader').addClass('green');
+        $('#enabletradingview').removeClass('disabled');
+        $('#enabletradingview').removeClass('green');
+        settings.set('message.message', 'Default Charting Selected! ')
+
+
+    });
+    $('#enabletradingview').click(function () {
+
+        settings.set('useBBtrader.useBBtrader', false)
+        $('#enabletradingview').addClass('disabled');
+        $('#enabletradingview').addClass('green');
+        $('#enablebbtrader').removeClass('disabled');
+        $('#enablebbtrader').removeClass('green');
+        settings.set('message.message',
+            'Trading View Charting Selected, please ensure AUTO market is off, and you are trading the correct market! '
+        )
+
+
+
+    });
+    // on load Jquery for toggle buttons
+    if (settings.get('useBBtrader.useBBtrader')) {
+
+        $('#enablebbtrader').addClass('disabled');
+        $('#enablebbtrader').addClass('green');
+        $('#enabletradingview').removeClass('disabled');
+        $('#enabletradingview').removeClass('green');
+
+
+
+    } else {
+
+        $('#enabletradingview').addClass('disabled');
+        $('#enabletradingview').addClass('green');
+        $('#enablebbtrader').removeClass('disabled');
+        $('#enablebbtrader').removeClass('green');
+
+
+    }
+
+    $('#enableFX').click(function () {
+
+        settings.set('onlyTradeTicks.onlyTradeTicks', false)
+        $('#enableFX').addClass('disabled');
+        $('#enableFX').addClass('green');
+        $('#disableFX').removeClass('disabled');
+        $('#disableFX').removeClass('green');
+        settings.set('message.message', 'Please ensure your strategy is set for up to 5 minute trades! ')
+
+
+    });
+    $('#disableFX').click(function () {
+
+        settings.set('onlyTradeTicks.onlyTradeTicks', true)
+        $('#disableFX').addClass('disabled');
+        $('#disableFX').addClass('green');
+        $('#enableFX').removeClass('disabled');
+        $('#enableFX').removeClass('green');
+
+
+
+    });
+    // on load Jquery for toggle buttons
+    if (settings.get('onlyTradeTicks.onlyTradeTicks')) {
+
+        $('#disableFX').addClass('disabled');
+        $('#disableFX').addClass('green');
+        $('#enableFX').removeClass('disabled');
+        $('#enableFX').removeClass('green');
+
+
+
+    } else {
+
+        $('#enableFX').addClass('disabled');
+        $('#enableFX').addClass('green');
+        $('#disableFX').removeClass('disabled');
+        $('#disableFX').removeClass('green');
+
+    }
+
+    // drop down for barrier settings
+
+    document.getElementById('BRdefault').addEventListener('click', function (event) {
+        settings.set('inverseBarrier.inverseBarrier', document.getElementById('BRdefault').innerHTML);
+
+        console.log(settings.get('inverseBarrier.inverseBarrier'));
+    });
+
+    document.getElementById('BRinverse').addEventListener('click', function (event) {
+        settings.set('inverseBarrier.inverseBarrier', document.getElementById('BRinverse').innerHTML);
+
+        console.log(settings.get('inverseBarrier.inverseBarrier'));
+    });
+
+    // endof on load Jquery for buttons
+
+
+
+
+    // end of collect settings
+    function passSettings() {
+        //Important placeholder fo setting details can be used for all settings!!
+
+        if (settings.has('ladderProfitMultiplier.ladderProfitMultiplier')) {
+
+            document.getElementById("ladderProfitMultiplier").value = settings.get(
+                'ladderProfitMultiplier.ladderProfitMultiplier')
+
+        }
+        if (settings.has('ladderMaxMultiplier.ladderMaxMultiplier')) {
+
+            document.getElementById("ladderMaxMultiplier").value = settings.get(
+                'ladderMaxMultiplier.ladderMaxMultiplier')
+
+        }
+
+        if (settings.has('ladderStakeMultiplier.ladderStakeMultiplier')) {
+
+            document.getElementById("ladderStakeMultiplier").value = settings.get(
+                'ladderStakeMultiplier.ladderStakeMultiplier')
+
+        }
+        if (settings.has('martingaleMultiplier.martingaleMultiplier')) {
+
+            document.getElementById("martingaleMultiplier").value = settings.get(
+                'martingaleMultiplier.martingaleMultiplier')
+
+        }
+        if (settings.has('cumLossMultiplier.cumLossMultiplier')) {
+
+            document.getElementById("cumLossMultiplier").value = settings.get(
+                'cumLossMultiplier.cumLossMultiplier')
+
+        }
+        if (settings.has('compoundMultiplier.compoundMultiplier')) {
+
+            document.getElementById("compoundMultiplier").value = settings.get(
+                'compoundMultiplier.compoundMultiplier')
+
+        }
+
+        if (settings.has('initialLabouchere.initialLabouchere')) {
+
+            document.getElementById("labouchereList").value = JSON.stringify(settings.get(
+                'initialLabouchere.initialLabouchere')).slice(1, -1)
+
+        }
+
+
+
+        labouchereList
+
+
+
+
+        if (settings.has('inverseBarrier.inverseBarrier')) {
+
+            document.getElementById("dropDownDefault").innerHTML = settings.get(
+                'inverseBarrier.inverseBarrier')
+
+        }
+        if (settings.has('tradeBarrier.tradeBarrier')) {
+
+            document.getElementById("tradeBarrier").value = settings.get(
+                'tradeBarrier.tradeBarrier')
+
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+    //Save new settings
+
+    saveChanges.addEventListener('click', function (event) {
+
+        let ladderProfitMultiplierCollect = document.getElementById('ladderProfitMultiplier').value;
+
+
+        settings.set('ladderProfitMultiplier', {
+
+            ladderProfitMultiplier: ladderProfitMultiplierCollect
+
+
+
+        })
+        let tradeBarrierCollect = document.getElementById('tradeBarrier').value;
+
+
+        settings.set('tradeBarrier', {
+
+            tradeBarrier: tradeBarrierCollect
+
+
+
+        })
+
+
+        let ladderMaxMultiplierCollect = document.getElementById('ladderMaxMultiplier').value;
+
+
+        settings.set('ladderMaxMultiplier', {
+
+            ladderMaxMultiplier: ladderMaxMultiplierCollect
+
+
+
+        })
+        let ladderStakeMultiplierCollect = document.getElementById('ladderStakeMultiplier').value;
+
+
+        settings.set('ladderStakeMultiplier', {
+
+            ladderStakeMultiplier: ladderStakeMultiplierCollect
+
+
+
+        })
+        let martingaleMultiplierCollect = document.getElementById('martingaleMultiplier').value;
+
+
+        settings.set('martingaleMultiplier', {
+
+            martingaleMultiplier: martingaleMultiplierCollect
+
+
+
+        })
+        let cumLossMultiplierCollect = document.getElementById('cumLossMultiplier').value;
+
+
+        settings.set('cumLossMultiplier', {
+
+            cumLossMultiplier: cumLossMultiplierCollect
+
+
+
+        })
+        let compoundMultiplierCollect = document.getElementById('compoundMultiplier').value;
+
+
+        settings.set('compoundMultiplier', {
+
+            compoundMultiplier: compoundMultiplierCollect
+
+
+
+        })
+
+        let labouchereCollect = document.getElementById('labouchereList').value;
+
+
+        settings.set('initialLabouchere', {
+
+            initialLabouchere: JSON.parse("[" + labouchereCollect + "]")
+
+
+
+        })
+
+
+
+
+
+
+
+
+
+
+        settings.set('message.message', 'Your Advanced Settings have been saved.')
+        var windows = remote.getCurrentWindow();
+        window.close()
+    });
+
+
+
+    // test token with authorise and and send alert
+
+    resetDefaults.addEventListener('click', function (event) {
+
+
+        settings.set('ladderProfitMultiplier.ladderProfitMultiplier', 0.9)
+        settings.set('ladderMaxMultiplier.ladderMaxMultiplier', 50)
+        settings.set('ladderStakeMultiplier.ladderStakeMultiplier', 1.1)
+        settings.set('martingaleMultiplier.martingaleMultiplier', 2.36)
+        settings.set('cumLossMultiplier.cumLossMultiplier', 0.9)
+        settings.set('compoundMultiplier.compoundMultiplier', 2)
+        settings.set('onlyTradeTicks.onlyTradeTicks', true)
+        settings.set('inverseBarrier.inverseBarrier', 'Normal')
+        settings.set('tradeBarrier.tradeBarrier', 0)
+        settings.set('useBBtrader.useBBtrader', true)
+        passSettings()
+
+
+
+
+        settings.set('message.message', 'Advanced Settings has been restored to default settings.')
+
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+    closeBtn.addEventListener('click', function (event) {
+
+        var windows = remote.getCurrentWindow();
+        window.close()
+    })
+</script>
+
+
+
+</html>

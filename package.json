@@ -1,0 +1,42 @@
+{
+  "name": "bbtrader",
+  "version": "2.1.0",
+  "description": "Binary Bot Trading Application for Binary.com",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=Icon/mac/icon.icns --prune=true --out=release-builds",
+    "package-win": "electron-packager . bbtrader --overwrite --asar=true --platform=win32 --arch=ia32 --icon=Icon/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Binary Bot Trader\"",
+    "package-linux": "electron-packager . bbtrader --overwrite --asar=true --platform=linux --arch=x64 --icon=Icon/icon.png --prune=true --out=release-builds"
+  },
+  "author": "Wilbur Shearer",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "4.1.4",
+    "electron-builder": "^20.39.0",
+    "electron-packager": "^13.1.1",
+    "grunt-include-source": "^1.1.0"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "binary-live-api": "^29.0.0",
+    "canvas": "^2.5.0",
+    "electron-localshortcut": "^3.1.0",
+    "electron-settings": "^3.2.0",
+    "install-peers": "^1.0.3",
+    "jquery": "^3.4.0",
+    "jsdom": "^14.0.0",
+    "json2csv": "^4.5.1",
+    "moment": "^2.24.0",
+    "nedb": "^1.8.0",
+    "stats-lite": "^2.2.0",
+    "techan": "^0.8.0",
+    "technicalindicators": "^1.1.13",
+    "trendyways": "^0.5.1",
+    "ws": "^6.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "\u0016https://github.com/wilburforce83/BBtrader.git"
+  }
+}

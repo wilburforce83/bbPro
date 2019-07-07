@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+
+Change all occurances:
+
+tripleEMA
+Long
+Short
+Trigger
+Variable4
+
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Advanced tripleEMA Options</title>
+
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+    <link rel="stylesheet" href="../../assets/Semantic-UI-CSS-master/semantic.min.css">
+    <script src="../../assets/jquery.min.js"></script>
+    <script src="../../assets/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="../../src/settings/settings.js"></script>
+
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            background-color: rgb(236, 236, 232) !important;
+            overflow-y: hidden;
+
+
+
+        }
+
+        .trading {
+
+            display: flex;
+        }
+
+        #mainbody {
+
+            background-color: rgb(236, 236, 232) !important;
+
+        }
+    </style>
+
+</head>
+
+<body onload="passSettings()">
+    <div class="ui hidden divider"></div>
+    <div id="mainbody" class="ui padded center aligned container">
+        <h3 class="ui center aligned small icon header">
+            <i class="orange small settings icon"></i>
+            <div class="content">
+                tripleEMA Settings
+                <div class="ui sub header">Fine tune and adjust your trading triggers</div>
+            </div>
+        </h3>
+        <div class="ui hidden divider"></div>
+
+        <div class="ui mini equal width center aligned form">
+
+            <p>This strategy uses 3 exponential moving averages, the triggers are created on the cross of the Short and
+                Trigger periods. The long period is used to dictate trend and prevents trades in the direction opposite
+                to the trend.</p>
+            <div class="inline field">
+                <div class="fields">
+                    <div class="field">
+                        <label>Long Period</label>
+                        <input id="tripleEMALong" placeholder="Min. 0.1 - Max. 1">
+                    </div>
+                    <div class="field">
+                        <label>Short Period</label>
+                        <input id="tripleEMAShort" placeholder="Min. 0.1 - Max. 1">
+                    </div>
+
+                    <div class="field">
+                        <label>Trigger Period</label>
+                        <input id="tripleEMATrigger" placeholder="Min. 0.1 - Max. 1">
+                    </div>
+                    <!--
+                    <div class="field">
+                        <label>Variable Name</label>
+                        <input id="tripleEMAVariable4" placeholder="Min. 0.1 - Max. 1">
+                    </div>
+                    -->
+                </div>
+            </div>
+
+        </div>
+
+        <div class="ui hidden divider"></div>
+        <div class="ui hidden divider"></div>
+
+
+
+        <div class="ui right aligned container">
+
+
+            <div class="ui small button" id="closeBtn">Cancel</div>
+            <div class="ui small red button" id="resetDefaults">Default</div>
+
+            <div class="ui small green submit button" id="saveChanges">Save Changes</div>
+        </div>
+    </div>
+    </div>
+
+
+
+</body>
+
+
+<script>
+    const dialog = require('electron').remote.dialog;
+
+
+
+    const electron = require('electron')
+    const path = require('path')
+    const remote = electron.remote
+    const {
+        app,
+        BrowserWindow,
+        Menu
+    } = require('electron')
+    const shell = require('electron').shell
+    const settings = require('electron').remote.require('electron-settings');
+    const ws = require('ws');
+
+    const closeBtn = document.getElementById('closeBtn');
+    const saveChanges = document.getElementById('saveChanges');
+    const resetDefaults = document.getElementById('resetDefaults');
+
+    var LiveApi = require('binary-live-api').LiveApi;
+    var api = new LiveApi({
+        websocket: ws,
+        appId: 16261
+    });
+
+
+    // Jquery tripleEMA functions
+
+
+
+
+    function passSettings() {
+        //Important placeholder fo setting details can be used for all settings!!
+
+        if (settings.has('tripleEMALong.tripleEMALong')) {
+
+            document.getElementById("tripleEMALong").value = settings.get(
+                'tripleEMALong.tripleEMALong')
+
+        }
+        if (settings.has('tripleEMAShort.tripleEMAShort')) {
+
+            document.getElementById("tripleEMAShort").value = settings.get(
+                'tripleEMAShort.tripleEMAShort')
+
+        }
+        if (settings.has('tripleEMATrigger.tripleEMATrigger')) {
+
+            document.getElementById("tripleEMATrigger").value = settings.get(
+                'tripleEMATrigger.tripleEMATrigger')
+
+        }
+        /*
+        if (settings.has('tripleEMAVariable4.tripleEMAVariable4')) {
+
+            document.getElementById("tripleEMAVariable4").value = settings.get(
+                'tripleEMAVariable4.tripleEMAVariable4')
+
+        }
+        */
+
+
+
+        // end of collect settings
+
+
+
+
+
+
+
+
+
+
+
+
+        //Save new settings
+
+        saveChanges.addEventListener('click', function (event) {
+
+            //add new event settings within this function
+
+            let tripleEMALongCollect = document.getElementById('tripleEMALong').value;
+
+
+            settings.set('tripleEMALong', {
+
+                tripleEMALong: tripleEMALongCollect
+
+
+
+            })
+            let tripleEMAShortCollect = document.getElementById('tripleEMAShort').value;
+
+
+            settings.set('tripleEMAShort', {
+
+                tripleEMAShort: tripleEMAShortCollect
+
+
+
+            })
+            let tripleEMATriggerCollect = document.getElementById('tripleEMATrigger').value;
+
+
+            settings.set('tripleEMATrigger', {
+
+                tripleEMATrigger: tripleEMATriggerCollect
+
+
+
+            })
+            /*
+            let tripleEMAVariable4Collect = document.getElementById('tripleEMAVariable4').value;
+
+
+            settings.set('tripleEMAVariable4', {
+
+                tripleEMAVariable4: tripleEMAVariable4Collect
+
+
+
+            })
+            */
+
+
+            settings.set('message.message', 'Your strategy trigger changes have been saved.')
+            var windows = remote.getCurrentWindow();
+            window.close()
+        });
+
+
+
+
+        resetDefaults.addEventListener('click', function (event) {
+
+
+            //tripleEMA defaults
+
+            settings.set('tripleEMALong.tripleEMALong', 0.7); // first variable
+            settings.set('tripleEMAShort.tripleEMAShort', 0); // second variable
+            settings.set('tripleEMATrigger.tripleEMATrigger', 0); // thirdvariable
+            // settings.set('tripleEMAVariable4.tripleEMAVariable4', 0); // fourth variable
+            // end of tripleEMA defaults
+
+            settings.set('message.message', 'tripleEMA triggers restored to default settings.')
+            passSettings()
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+        closeBtn.addEventListener('click', function (event) {
+
+            var windows = remote.getCurrentWindow();
+            window.close()
+        })
+    }
+</script>
+
+
+
+</html>

@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+
+Change all occurances:
+
+customMA
+Long
+Short
+Trigger
+Variable4
+
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Advanced Custom MA Options</title>
+
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+    <link rel="stylesheet" href="../../assets/Semantic-UI-CSS-master/semantic.min.css">
+    <script src="../../assets/jquery.min.js"></script>
+    <script src="../../assets/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="../../src/settings/settings.js"></script>
+
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            background-color: rgb(236, 236, 232) !important;
+            overflow-y: hidden;
+
+
+
+        }
+
+        .trading {
+
+            display: flex;
+        }
+
+        #mainbody {
+
+            background-color: rgb(236, 236, 232) !important;
+
+        }
+    </style>
+
+</head>
+
+<body onload="passSettings()">
+    <div class="ui hidden divider"></div>
+    <div id="mainbody" class="ui padded center aligned container">
+        <h3 class="ui center aligned small icon header">
+            <i class="orange small settings icon"></i>
+            <div class="content">
+                Custom Moving Average Settings
+                <div class="ui sub header">Fine tune and adjust your trading triggers</div>
+            </div>
+        </h3>
+        <div class="ui hidden divider"></div>
+
+        <div class="ui mini equal width center aligned form">
+
+            <p>This strategy uses 3 fully customisable moving averages, the triggers are created on the cross of the
+                Short and
+                Trigger periods. The long period is used to dictate trend and prevents trades in the direction opposite
+                to the trend.<br><br>
+                NOTE: IF YOU WISH TO TRADE ONLY TWO AVERAGES, SET LONG AND SHORT TO THE SAME PERIOD.</p>
+            <div class="inline field">
+                <div class="fields">
+                    <a class="field">
+                        <label>Long Moving Average</label>
+                        <div class="ui small labeled input">
+                            <input id="customMALong" placeholder="e.g. 50">
+                            <div class="ui left dropdown label" id="customMALongdropdown">
+                                <div id="customMALongcurType" class="text">period</div>
+                                <i class="dropdown icon"></i>
+                                <div class="menu">
+                                    <div id="customMALongTypeSMA" class="item">SMA</div>
+                                    <div id="customMALongTypeEMA" class="item">EMA</div>
+
+                                    <div id="customMALongTypeWEMA" class="item">WEMA</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </a>
+                    <a class="field">
+                        <label>Short Moving Average</label>
+                        <div class="ui small labeled input">
+                            <input id="customMAShort" placeholder="e.g. 15">
+                            <div class="ui left dropdown label" id="customMAShortdropdown">
+                                <div id="customMAShortcurType" class="text">period</div>
+                                <i class="dropdown icon"></i>
+                                <div class="menu">
+                                    <div id="customMAShortTypeSMA" class="item">SMA</div>
+                                    <div id="customMAShortTypeEMA" class="item">EMA</div>
+
+                                    <div id="customMAShortTypeWEMA" class="item">WEMA</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </a>
+                    <a class="field">
+                        <label>Trigger Moving Average</label>
+                        <div class="ui small labeled input">
+                            <input id="customMATrigger" placeholder="e.g. 5">
+                            <div class="ui left dropdown label" id="customMATriggerdropdown">
+                                <div id="customMATriggercurType" class="text">period</div>
+                                <i class="dropdown icon"></i>
+                                <div class="menu">
+                                    <div id="customMATriggerTypeSMA" class="item">SMA</div>
+                                    <div id="customMATriggerTypeEMA" class="item">EMA</div>
+
+                                    <div id="customMATriggerTypeWEMA" class="item">WEMA</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </a>
+                    <!--
+                    <div class="field">
+                        <label>Variable Name</label>
+                        <input id="customMAVariable4" placeholder="Min. 0.1 - Max. 1">
+                    </div>
+                    -->
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+
+
+
+    <div class="ui right aligned container">
+
+
+        <div class="ui small button" id="closeBtn">Cancel</div>
+        <div class="ui small red button" id="resetDefaults">Default</div>
+
+        <div class="ui small green submit button" id="saveChanges">Save Changes</div>
+    </div>
+    </div>
+    </div>
+
+
+
+</body>
+
+
+<script>
+    const dialog = require('electron').remote.dialog;
+
+
+
+    const electron = require('electron')
+    const path = require('path')
+    const remote = electron.remote
+    const {
+        app,
+        BrowserWindow,
+        Menu
+    } = require('electron')
+    const shell = require('electron').shell
+    const settings = require('electron').remote.require('electron-settings');
+    const ws = require('ws');
+
+    const closeBtn = document.getElementById('closeBtn');
+    const saveChanges = document.getElementById('saveChanges');
+    const resetDefaults = document.getElementById('resetDefaults');
+
+    var LiveApi = require('binary-live-api').LiveApi;
+    var api = new LiveApi({
+        websocket: ws,
+        appId: 16261
+    });
+
+
+    // Jquery customMA functions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // MOVING AVERAGES DROP DWNS
+
+
+    $('#customMALongdropdown')
+        .dropdown();
+
+
+    document.getElementById('customMALongTypeSMA').addEventListener('click', function (event) {
+        settings.set('customMALongType.customMALongType', 'SMA');
+    })
+
+    document.getElementById('customMALongTypeEMA').addEventListener('click', function (event) {
+        settings.set('customMALongType.customMALongType', 'EMA');
+
+    })
+
+    document.getElementById('customMALongTypeWEMA').addEventListener('click', function (event) {
+        settings.set('customMALongType.customMALongType', 'WEMA');
+
+    })
+
+    $('#customMAShortdropdown')
+        .dropdown();
+
+
+    document.getElementById('customMAShortTypeSMA').addEventListener('click', function (event) {
+        settings.set('customMAShortType.customMAShortType', 'SMA');
+    })
+
+    document.getElementById('customMAShortTypeEMA').addEventListener('click', function (event) {
+        settings.set('customMAShortType.customMAShortType', 'EMA');
+
+    })
+
+    document.getElementById('customMAShortTypeWEMA').addEventListener('click', function (event) {
+        settings.set('customMAShortType.customMAShortType', 'WEMA');
+
+    })
+
+    $('#customMATriggerdropdown')
+        .dropdown();
+
+
+    document.getElementById('customMATriggerTypeSMA').addEventListener('click', function (event) {
+        settings.set('customMATriggerType.customMATriggerType', 'SMA');
+    })
+
+    document.getElementById('customMATriggerTypeEMA').addEventListener('click', function (event) {
+        settings.set('customMATriggerType.customMATriggerType', 'EMA');
+
+    })
+
+    document.getElementById('customMATriggerTypeWEMA').addEventListener('click', function (event) {
+        settings.set('customMATriggerType.customMATriggerType', 'WEMA');
+
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ///customMA functions
+
+
+
+    function passSettings() {
+        //Important placeholder fo setting details can be used for all settings!!
+
+        if (settings.has('customMALong.customMALong')) {
+
+            document.getElementById("customMALong").value = settings.get(
+                'customMALong.customMALong')
+
+        }
+        if (settings.has('customMAShort.customMAShort')) {
+
+            document.getElementById("customMAShort").value = settings.get(
+                'customMAShort.customMAShort')
+
+        }
+        if (settings.has('customMATrigger.customMATrigger')) {
+
+            document.getElementById("customMATrigger").value = settings.get(
+                'customMATrigger.customMATrigger')
+
+        }
+        /*
+        if (settings.has('customMAVariable4.customMAVariable4')) {
+
+            document.getElementById("customMAVariable4").value = settings.get(
+                'customMAVariable4.customMAVariable4')
+
+        }
+        */
+
+
+        if (settings.has('customMATriggerType.customMATriggerType')) {
+
+            document.getElementById("customMATriggercurType").innerHTML = settings.get(
+                'customMATriggerType.customMATriggerType');
+
+        }
+
+        if (settings.has('customMAShortType.customMAShortType')) {
+
+            document.getElementById("customMAShortcurType").innerHTML = settings.get(
+                'customMAShortType.customMAShortType');
+
+        }
+        if (settings.has('customMALongType.customMALongType')) {
+
+            document.getElementById("customMALongcurType").innerHTML = settings.get(
+                'customMALongType.customMALongType');
+
+        }
+
+
+
+
+
+
+
+
+
+
+        //Save new settings
+
+        saveChanges.addEventListener('click', function (event) {
+
+            //add new event settings within this function
+
+            let customMALongCollect = document.getElementById('customMALong').value;
+
+
+            settings.set('customMALong', {
+
+                customMALong: customMALongCollect
+
+
+
+            })
+            let customMAShortCollect = document.getElementById('customMAShort').value;
+
+
+            settings.set('customMAShort', {
+
+                customMAShort: customMAShortCollect
+
+
+
+            })
+            let customMATriggerCollect = document.getElementById('customMATrigger')
+                .value;
+
+
+            settings.set('customMATrigger', {
+
+                customMATrigger: customMATriggerCollect
+
+
+
+            })
+            /*
+            let customMAVariable4Collect = document.getElementById('customMAVariable4').value;
+
+
+            settings.set('customMAVariable4', {
+
+                customMAVariable4: customMAVariable4Collect
+
+
+
+            })
+            */
+
+
+            settings.set('message.message',
+                'Your Custom Moving Average Triggers have been saved. Build a strategy to use them')
+            var windows = remote.getCurrentWindow();
+            window.close()
+        });
+
+
+
+
+        resetDefaults.addEventListener('click', function (event) {
+
+
+            //customMA defaults
+
+            settings.set('customMALong.customMALong', 50); // first variable
+            settings.set('customMAShort.customMAShort', 12); // second variable
+            settings.set('customMATrigger.customMATrigger', 7); // thirdvariable
+            settings.set('customMALongType.customMALongType', 'SMA');
+            settings.set('customMAShortType.customMAShortType', 'SMA');
+            settings.set('customMATriggerType.customMATriggerType', 'EMA');
+            // settings.set('customMAVariable4.customMAVariable4', 0); // fourth variable
+            // end of customMA defaults
+
+            settings.set('message.message',
+                'customMA triggers restored to default settings.')
+            passSettings()
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+        closeBtn.addEventListener('click', function (event) {
+
+            var windows = remote.getCurrentWindow();
+            window.close()
+        })
+    }
+</script>
+
+
+
+</html>

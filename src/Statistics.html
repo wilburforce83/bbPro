@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lifetime Statistics</title>
+
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+    <link rel="stylesheet" href="../assets/Semantic-UI-CSS-master/semantic.min.css">
+    <script src="../assets/jquery.min.js"></script>
+    <script src="../assets/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="../src/settings/settings.js"></script>
+
+
+
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+
+        }
+
+        .trading {
+
+            display: flex;
+        }
+    </style>
+
+</head>
+
+<body onload="passSettings()">
+
+    <div class="ui padded inverted segment">
+        <h3 class="ui inverted center aligned icon header">
+            <i class="orange chart line icon"></i>
+            <div class="content">
+                Binary Bot Trading Statistics
+                <div class="ui sub header">See which strategy has been most successful over time.</div>
+            </div>
+        </h3>
+        <div class="ui hidden divider"></div>
+        <div class="ui hidden divider"></div>
+        <div class="ui hidden divider"></div>
+        <h6 class="ui horizontal orange inverted divider">
+            Price Action
+        </h6>
+        <div class="ui hidden divider"></div>
+        <div class="ui inverted center aligned segment">
+
+            <div class="ui olive small inverted statistic">
+                <div class="value">
+                    <span id="paCount">...</span>
+                </div>
+                <div class="label">
+                    Total Trades
+                </div>
+            </div>
+
+
+
+            <div class="ui small inverted statistic">
+                <div class="value">
+                    <span id="paWR">...</span>
+                </div>
+                <div class="label">
+                    W/R %
+                </div>
+            </div>
+
+            <div class="ui small green inverted statistic">
+                <div class="value">
+                    <span id="paWins">...</span>
+                </div>
+                <div class="label">
+                    Wins
+                </div>
+            </div>
+            <div class="ui small red inverted statistic">
+                <div class="value">
+                    <span id="paLosses">...</span>
+                </div>
+                <div class="label">
+                    Losses
+                </div>
+            </div>
+
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+
+            <!--This is a form entry block for advanced options, copy one of these block when you add a new strategy!-->
+            <h6 class="ui horizontal orange inverted divider">
+                Triple EMA
+            </h6>
+
+            <div class="ui hidden divider"></div>
+            <div class="ui inverted center aligned segment">
+
+                <div class="ui olive small inverted statistic">
+                    <div class="value">
+                        <span id="tmaCount">...</span>
+                    </div>
+                    <div class="label">
+                        Total Trades
+                    </div>
+                </div>
+
+
+
+                <div class="ui small inverted statistic">
+                    <div class="value">
+                        <span id="tmaWR">...</span>
+                    </div>
+                    <div class="label">
+                        W/R %
+                    </div>
+                </div>
+
+                <div class="ui small green inverted statistic">
+                    <div class="value">
+                        <span id="tmaWins">...</span>
+                    </div>
+                    <div class="label">
+                        Wins
+                    </div>
+                </div>
+                <div class="ui small red inverted statistic">
+                    <div class="value">
+                        <span id="tmaLosses">...</span>
+                    </div>
+                    <div class="label">
+                        Losses
+                    </div>
+                </div>
+
+                <div class="ui hidden divider"></div>
+                <div class="ui hidden divider"></div>
+
+
+                <!--End of example block!-->
+                <!--This is a form entry block for advanced options, copy one of these block when you add a new strategy!-->
+                <h6 class="ui horizontal orange inverted divider">
+                    Bollinger Bands
+                </h6>
+                <div class="ui hidden divider"></div>
+                <div class="ui inverted center aligned segment">
+
+                    <div class="ui olive small inverted statistic">
+                        <div class="value">
+                            <span id="bbCount">...</span>
+                        </div>
+                        <div class="label">
+                            Total Trades
+                        </div>
+                    </div>
+
+
+
+                    <div class="ui small inverted statistic">
+                        <div class="value">
+                            <span id="bbWR">...</span>
+                        </div>
+                        <div class="label">
+                            W/R %
+                        </div>
+                    </div>
+
+                    <div class="ui small green inverted statistic">
+                        <div class="value">
+                            <span id="bbWins">...</span>
+                        </div>
+                        <div class="label">
+                            Wins
+                        </div>
+                    </div>
+                    <div class="ui small red inverted statistic">
+                        <div class="value">
+                            <span id="bbLosses">...</span>
+                        </div>
+                        <div class="label">
+                            Losses
+                        </div>
+                    </div>
+
+                    <div class="ui hidden divider"></div>
+                    <div class="ui hidden divider"></div>
+
+                    <h6 class="ui horizontal orange inverted divider">
+                        CCI Trends and Reversals
+                    </h6>
+                    <div class="ui hidden divider"></div>
+                    <div class="ui inverted center aligned segment">
+
+                        <div class="ui olive small inverted statistic">
+                            <div class="value">
+                                <span id="cciCount">...</span>
+                            </div>
+                            <div class="label">
+                                Total Trades
+                            </div>
+                        </div>
+
+
+
+                        <div class="ui small inverted statistic">
+                            <div class="value">
+                                <span id="cciWR">...</span>
+                            </div>
+                            <div class="label">
+                                W/R %
+                            </div>
+                        </div>
+
+                        <div class="ui small green inverted statistic">
+                            <div class="value">
+                                <span id="cciWins">...</span>
+                            </div>
+                            <div class="label">
+                                Wins
+                            </div>
+                        </div>
+                        <div class="ui small red inverted statistic">
+                            <div class="value">
+                                <span id="cciLosses">...</span>
+                            </div>
+                            <div class="label">
+                                Losses
+                            </div>
+                        </div>
+
+                        <div class="ui hidden divider"></div>
+                        <div class="ui hidden divider"></div>
+
+
+
+                        <div class="ui right aligned inverted segment">
+
+
+                            <div class="ui small button" id="closeBtn">Close</div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+</body>
+
+
+<script>
+    const dialog = require('electron').remote.dialog;
+
+
+
+    const electron = require('electron')
+    const path = require('path')
+    const remote = electron.remote
+    const {
+        app,
+        BrowserWindow,
+        Menu
+    } = require('electron')
+    const shell = require('electron').shell
+    const settings = require('electron').remote.require('electron-settings');
+    const ws = require('ws');
+
+    const closeBtn = document.getElementById('closeBtn');
+
+
+    var LiveApi = require('binary-live-api').LiveApi;
+    var api = new LiveApi({
+        websocket: ws,
+        appId: 16261
+    });
+
+
+    function passSettings() {
+        //Important placeholder fo setting details can be used for all settings!!
+
+        //Priceaction
+        document.getElementById("paWins").textContent = settings.get('priceActionWins.count');
+
+
+        document.getElementById("paLosses").textContent = settings.get('priceActionLosses.count');
+
+        document.getElementById("paCount").textContent = settings.get('priceActionWins.count') + settings.get(
+            'priceActionLosses.count');
+
+        paWR = Math.floor(settings.get('priceActionWins.count') / (settings.get(
+            'priceActionWins.count') + settings.get('priceActionLosses.count')) * 100 * 100) / 100;
+
+        document.getElementById("paWR").textContent = Math.floor(settings.get('priceActionWins.count') / (settings.get(
+            'priceActionWins.count') + settings.get('priceActionLosses.count')) * 100 * 100) / 100;
+        if (paWR >= 45 && paWR < 52) {
+            document.getElementById('paWR').style.color = '#fbbd08';
+        } else if (paWR >= 52) {
+            document.getElementById('paWR').style.color = '#21ba45';
+
+        } else {
+            document.getElementById('paWR').style.color = 'red';
+
+        }
+        //endof price action
+
+        //TripleMA
+        document.getElementById("tmaWins").textContent = settings.get('tripleEMAWins.count');
+
+
+        document.getElementById("tmaLosses").textContent = settings.get('tripleEMALosses.count');
+
+        document.getElementById("tmaCount").textContent = settings.get('tripleEMAWins.count') + settings.get(
+            'tripleEMALosses.count');
+
+        tmaWR = Math.floor(settings.get('tripleEMAWins.count') / (settings.get(
+            'tripleEMAWins.count') + settings.get('tripleEMALosses.count')) * 100 * 100) / 100;
+
+        document.getElementById("tmaWR").textContent = Math.floor(settings.get('tripleEMAWins.count') / (settings.get(
+            'tripleEMAWins.count') + settings.get('tripleEMALosses.count')) * 100 * 100) / 100;
+        if (tmaWR >= 45 && tmaWR < 52) {
+            document.getElementById('tmaWR').style.color = '#fbbd08';
+        } else if (tmaWR >= 52) {
+            document.getElementById('tmaWR').style.color = '#21ba45';
+
+        } else {
+            document.getElementById('tmaWR').style.color = 'red';
+
+        }
+        //endof TripleMA
+
+        //Bollinger Bands
+        document.getElementById("bbWins").textContent = settings.get('BBandsticksWins.count');
+
+
+        document.getElementById("bbLosses").textContent = settings.get('BBandsticksLosses.count');
+
+        document.getElementById("bbCount").textContent = settings.get('BBandsticksWins.count') + settings.get(
+            'BBandsticksLosses.count');
+
+        bbWR = Math.floor(settings.get('BBandsticksWins.count') / (settings.get(
+            'BBandsticksWins.count') + settings.get('BBandsticksLosses.count')) * 100 * 100) / 100;
+
+        document.getElementById("bbWR").textContent = Math.floor(settings.get('BBandsticksWins.count') / (settings.get(
+            'BBandsticksWins.count') + settings.get('BBandsticksLosses.count')) * 100 * 100) / 100;
+        if (bbWR >= 45 && bbWR < 52) {
+            document.getElementById('bbWR').style.color = '#fbbd08';
+        } else if (bbWR >= 52) {
+            document.getElementById('bbWR').style.color = '#21ba45';
+
+        } else {
+            document.getElementById('bbWR').style.color = 'red';
+
+        }
+        //endof Bollinger Bands
+
+        // CCItrend
+        document.getElementById("cciWins").textContent = settings.get('CCItrendWins.count');
+
+
+        document.getElementById("cciLosses").textContent = settings.get('CCItrendLosses.count');
+
+        document.getElementById("cciCount").textContent = settings.get('CCItrendWins.count') + settings.get(
+            'CCItrendLosses.count');
+
+        cciWR = Math.floor(settings.get('CCItrendWins.count') / (settings.get(
+            'CCItrendWins.count') + settings.get('CCItrendLosses.count')) * 100 * 100) / 100;
+
+        document.getElementById("cciWR").textContent = Math.floor(settings.get('CCItrendWins.count') / (settings.get(
+            'CCItrendWins.count') + settings.get('CCItrendLosses.count')) * 100 * 100) / 100;
+        if (cciWR >= 45 && cciWR < 52) {
+            document.getElementById('cciWR').style.color = '#fbbd08';
+        } else if (cciWR >= 52) {
+            document.getElementById('cciWR').style.color = '#21ba45';
+
+        } else {
+            document.getElementById('cciWR').style.color = 'red';
+
+        }
+        //endof CCItrend
+
+
+
+
+    }
+
+
+
+
+    //  passSettings()
+    //  setInterval(passSettings, 2000);
+
+
+
+
+
+
+
+
+
+
+    closeBtn.addEventListener('click', function (event) {
+
+        var windows = remote.getCurrentWindow();
+        window.close()
+    })
+</script>
+
+
+
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Advanced williamsR Options</title>
+
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+    <link rel="stylesheet" href="../../assets/Semantic-UI-CSS-master/semantic.min.css">
+    <script src="../../assets/jquery.min.js"></script>
+    <script src="../../assets/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="../../src/settings/settings.js"></script>
+
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            background-color: rgb(236, 236, 232) !important;
+
+
+
+
+        }
+
+        .trading {
+
+            display: flex;
+        }
+
+        #mainbody {
+
+            background-color: rgb(236, 236, 232) !important;
+
+        }
+    </style>
+
+</head>
+
+<body onload="passSettings()">
+    <div class="ui hidden divider"></div>
+    <div id="mainbody" class="ui padded center aligned container">
+        <h3 class="ui center aligned small icon header">
+            <i class="orange small settings icon"></i>
+            <div class="content">
+                williamsR Settings
+                <div class="ui sub header">Fine tune and adjust your trading triggers</div>
+            </div>
+        </h3>
+        <div class="ui hidden divider"></div>
+
+        <div class="ui mini equal width center aligned form">
+
+            <p>Williams %R, also known as the Williams Percent Range, is a type of momentum indicator that moves between
+                0 and -100 and measures overbought and oversold levels. Triggers are created while moving past the two
+                threshold figures. the Average is used to confirm momentum during that shift. <br><br>
+                <b>NOTE: threshold figures are negative, please use absolute numbers i.e. for -20 please enter 20.</b>
+            </p>
+            <div class="inline field">
+                <div class="fields">
+                    <div class="field">
+                        <label>%R Period</label>
+                        <input id="williamsRPeriod" placeholder="e.g. 14">
+                    </div>
+                    <div class="field">
+                        <label>Over Bought Threshold (-)</label>
+                        <input id="williamsRThresholdOB" placeholder="default 20">
+                    </div>
+                </div>
+            </div>
+            <div class="inline field">
+                <div class="fields">
+                    <div class="field">
+                        <label>Over Sold Threshold (-)</label>
+                        <input id="williamsRThresholdOS" placeholder="default 80">
+                    </div>
+
+                    <div class="field">
+                        <label>Average Period</label>
+                        <input id="williamsRAverage" placeholder="e.g. 5">
+                    </div>
+                    <!--
+                    <div class="field">
+                        <label>Variable Name</label>
+                        <input id="williamsRVariable4" placeholder="Min. 0.1 - Max. 1">
+                    </div>
+                    -->
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+
+
+
+    <div class="ui right aligned container">
+
+
+        <div class="ui small button" id="closeBtn">Cancel</div>
+        <div class="ui small red button" id="resetDefaults">Default</div>
+
+        <div class="ui small green submit button" id="saveChanges">Save Changes</div>
+    </div>
+    </div>
+    </div>
+    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+
+
+</body>
+
+
+<script>
+    const dialog = require('electron').remote.dialog;
+
+
+
+    const electron = require('electron')
+    const path = require('path')
+    const remote = electron.remote
+    const {
+        app,
+        BrowserWindow,
+        Menu
+    } = require('electron')
+    const shell = require('electron').shell
+    const settings = require('electron').remote.require('electron-settings');
+    const ws = require('ws');
+
+    const closeBtn = document.getElementById('closeBtn');
+    const saveChanges = document.getElementById('saveChanges');
+    const resetDefaults = document.getElementById('resetDefaults');
+
+    var LiveApi = require('binary-live-api').LiveApi;
+    var api = new LiveApi({
+        websocket: ws,
+        appId: 16261
+    });
+
+
+    // Jquery williamsR functions
+
+
+
+
+
+    function passSettings() {
+        //Important placeholder fo setting details can be used for all settings!!
+
+        if (settings.has('williamsRPeriod.williamsRPeriod')) {
+
+            document.getElementById("williamsRPeriod").value = settings.get(
+                'williamsRPeriod.williamsRPeriod')
+
+        }
+        if (settings.has('williamsRThresholdOB.williamsRThresholdOB')) {
+
+            document.getElementById("williamsRThresholdOB").value = settings.get(
+                'williamsRThresholdOB.williamsRThresholdOB')
+
+        }
+        if (settings.has('williamsRThresholdOS.williamsRThresholdOS')) {
+
+            document.getElementById("williamsRThresholdOS").value = settings.get(
+                'williamsRThresholdOS.williamsRThresholdOS')
+
+        }
+        if (settings.has('williamsRAverage.williamsRAverage')) {
+
+            document.getElementById("williamsRAverage").value = settings.get(
+                'williamsRAverage.williamsRAverage')
+
+        }
+
+        // end of collect settings
+
+
+
+
+
+
+
+
+
+
+
+
+        //Save new settings
+
+        saveChanges.addEventListener('click', function (event) {
+
+            //add new event settings within this function
+
+            let williamsRPeriodCollect = document.getElementById('williamsRPeriod').value;
+
+
+            settings.set('williamsRPeriod', {
+
+                williamsRPeriod: williamsRPeriodCollect
+
+
+
+            })
+            let williamsRThresholdOBCollect = document.getElementById('williamsRThresholdOB').value;
+
+
+            settings.set('williamsRThresholdOB', {
+
+                williamsRThresholdOB: williamsRThresholdOBCollect
+
+
+
+            })
+            let williamsRThresholdOSCollect = document.getElementById('williamsRThresholdOS').value;
+
+
+            settings.set('williamsRThresholdOS', {
+
+                williamsRThresholdOS: williamsRThresholdOSCollect
+
+
+
+            })
+            let williamsRAverageCollect = document.getElementById('williamsRAverage').value;
+
+
+            settings.set('williamsRAverage', {
+
+                williamsRAverage: williamsRAverageCollect
+
+
+
+            })
+
+
+
+            settings.set('message.message', 'Your Williams %R triggers have been saved.')
+            var windows = remote.getCurrentWindow();
+            window.close()
+        });
+
+
+
+
+        resetDefaults.addEventListener('click', function (event) {
+
+
+            //williamsR defaults
+
+            settings.set('williamsRPeriod.williamsRPeriod', 9); // first variable
+            settings.set('williamsRThresholdOB.williamsRThresholdOB', 20); // second variable
+            settings.set('williamsRThresholdOS.williamsRThresholdOS', 80); // second variable
+            settings.set('williamsRAverage.williamsRAverage', 4); // thirdvariable
+            //  settings.set('williamsRVariable4.williamsRVariable4', 0); // fourth variable
+            // end of williamsR defaults
+
+            settings.set('message.message', 'williamsR triggers all restored to default settings.')
+            passSettings()
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+        closeBtn.addEventListener('click', function (event) {
+
+            var windows = remote.getCurrentWindow();
+            window.close()
+        })
+    }
+</script>
+
+
+
+</html>

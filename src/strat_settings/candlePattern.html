@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+
+Change all occurances:
+
+candlePattern
+Variable1
+NoOfTriggersRequired
+Variable3
+Variable4
+
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Candle Pattern Strategy Builder</title>
+
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+    <link rel="stylesheet" href="../../assets/Semantic-UI-CSS-master/semantic.min.css">
+    <script src="../../assets/jquery.min.js"></script>
+    <script src="../../assets/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="../../src/settings/settings.js"></script>
+
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            background-color: rgb(236, 236, 232) !important;
+
+
+
+
+        }
+
+        .trading {
+
+            display: flex;
+        }
+
+        #mainbody {
+
+            background-color: rgb(236, 236, 232) !important;
+
+        }
+    </style>
+
+</head>
+
+<body onload="passSettings()">
+    <div class="ui hidden divider"></div>
+    <div id="mainbody" class="ui padded center aligned container">
+        <h3 class="ui center aligned small icon header">
+            <i class="orange small settings icon"></i>
+            <div class="content">
+                Pattern Detection Builder
+                <div class="ui sub header">Machine Learning At Your Finger Tips!</div>
+            </div>
+        </h3>
+        <div class="ui hidden divider"></div>
+
+        <div class="ui mini equal width center aligned form">
+
+            <p>Use our machine learning to search candle charts for common candlestick patterns and use them as trading
+                triggers.<br><br>
+                Select the patterns you wish to use for triggers, the candle length to assess and the trade duration.
+                Let the AI do the rest. <br><br>
+                Use this strategy on it's own, or with any other strategy within the strategy
+                builder.</p>
+            <b style="color: red;">NOTE: Pattern detection works best on longer trades (2 min +). "Trend Detection" and
+                "Any bullish/Bearish" should not be used as triggers on their own, always combine
+                with Price Action or a Technical Indicator. </b>
+            <div class="ui hidden divider"></div>
+            <div class="inline field">
+                <div class="fields">
+                    <div class="field">
+                        <div class="ui center aligned container">
+
+                            <button id="anyTrigger" class="ui left attached compact small button">Allow Any
+                                Trigger</button>
+                            <button id="candlePatternTrigger" class="ui right attached compact small button">Require
+                                Multiple
+                                Triggers</button>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="inline field">
+                <div class="fields">
+                    <div class="field">
+                        <div class="ui labeled input">
+                            <div class="ui label">
+                                Number of Active Triggers Required
+                            </div>
+                            <input type="number" id="candlePatternNoOfTriggersRequired" placeholder="Recommend < 3">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+            <div class="ui equal width left aligned grid">
+                <div class="column">
+                    <div class="ui slider bullBear checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>Any Bullish/Bearish</label>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="ui slider mornEveStar checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>Morning/Evening Star</label>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="ui slider engulfingPattern checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>Engulfing Pattern</label>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="ui slider threeCrowsSoldiers checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>Three Black Crows / White Soldiers</label>
+                    </div>
+                </div>
+            </div>
+            <div class="ui equal width left aligned grid">
+                <div class="column">
+                    <div class="ui slider isMarubozu checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>Bullish/ Bearish Marubozu </label>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="ui slider isHaramiCross checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>Harami Cross</label>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="ui slider dojiStar checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>Morning / Evening Doji Star</label>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="ui slider machineLearnedTrend checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>Trend Detection</label>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+        </div>
+    </div>
+
+    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+
+
+
+    <div class="ui right aligned container">
+
+
+        <div class="ui small button" id="closeBtn">Cancel</div>
+        <div class="ui small red button" id="resetDefaults">Default</div>
+
+        <div class="ui small green submit button" id="saveChanges">Save Changes</div>
+    </div>
+    </div>
+    </div>
+
+
+
+</body>
+
+
+<script>
+    const dialog = require('electron').remote.dialog;
+
+
+
+    const electron = require('electron')
+    const path = require('path')
+    const remote = electron.remote
+    const {
+        app,
+        BrowserWindow,
+        Menu
+    } = require('electron')
+    const shell = require('electron').shell
+    const settings = require('electron').remote.require('electron-settings');
+    const ws = require('ws');
+
+    const closeBtn = document.getElementById('closeBtn');
+    const saveChanges = document.getElementById('saveChanges');
+    const resetDefaults = document.getElementById('resetDefaults');
+
+    var LiveApi = require('binary-live-api').LiveApi;
+    var api = new LiveApi({
+        websocket: ws,
+        appId: 16261
+    });
+
+    var
+        candlePatternArray; // settings.get('candlePatternArray.candlePatternArray'); //settings.get('candlePatternArray.startArray');
+
+    //array contrains script:
+
+    var contains = function (needle) {
+        // Per spec, the way to identify NaN is that it is not equal to itself
+        var findNaN = needle !== needle;
+        var indexOf;
+
+        if (!findNaN && typeof Array.prototype.indexOf === 'function') {
+            indexOf = Array.prototype.indexOf;
+        } else {
+            indexOf = function (needle) {
+                var i = -1,
+                    index = -1;
+
+                for (i = 0; i < this.length; i++) {
+                    var item = this[i];
+
+                    if ((findNaN && item !== item) || item === needle) {
+                        index = i;
+                        break;
+                    }
+                }
+
+                return index;
+            };
+        }
+
+        return indexOf.call(this, needle) > -1;
+    };
+
+    // end of arraycontrains script
+    /* USE LIKE THIS
+
+
+        let needle = 1,
+        index = contains.call(candlePatternArray, needle); // true or false
+
+
+
+    */
+
+
+
+    function testLoop() {
+
+        // bullBear array test and set!
+
+        if ($('.slider.bullBear.checkbox').checkbox('is unchecked')) {
+            // $('.slider.bullBear.checkbox').checkbox('uncheck');
+            let needle = 'bullBear',
+                index = contains.call(candlePatternArray, needle); // true or false
+            if (index) {
+                candlePatternArray.splice(needle, 1);
+            }
+            //   console.log('bullBear is unchecked')
+        }
+
+        if ($('.slider.bullBear.checkbox').checkbox('is checked')) {
+            //$('.slider.bullBear.checkbox').checkbox('check');
+            let needle = 'bullBear',
+                index = contains.call(candlePatternArray, needle); // true or false
+            if (index === false) {
+                candlePatternArray.push(needle);
+
+            }
+            //   console.log('bullBear is checked')
+        }
+
+
+        // mornEveStar array test and set!
+
+        if ($('.slider.mornEveStar.checkbox').checkbox('is unchecked')) {
+            // $('.slider.mornEveStar.checkbox').checkbox('uncheck');
+            let needle = 'mornEveStar',
+                index = contains.call(candlePatternArray, needle); // true or false
+            if (index) {
+                candlePatternArray.splice(needle, 1);
+            }
+            //  console.log('mornEveStar is unchecked')
+        }
+
+        if ($('.slider.mornEveStar.checkbox').checkbox('is checked')) {
+            //$('.slider.mornEveStar.checkbox').checkbox('check');
+            let needle = 'mornEveStar',
+                index = contains.call(candlePatternArray, needle); // true or false
+            if (index === false) {
+                candlePatternArray.push(needle);
+
+            }
+            //    console.log('mornEveStar is checked')
+        }
+
+
+        // engulfingPattern array test and set!
+
+        if ($('.slider.engulfingPattern.checkbox').checkbox('is unchecked')) {
+            // $('.slider.engulfingPattern.checkbox').checkbox('uncheck');
+            let needle = 'engulfingPattern',
+                index = contains.call(candlePatternArray, needle); // true or false
+            if (index) {
+                candlePatternArray.splice(needle, 1);
+            }
+            //   console.log('engulfingPattern is unchecked')
+        }
+
+        if ($('.slider.engulfingPattern.checkbox').checkbox('is checked')) {
+            //$('.slider.engulfingPattern.checkbox').checkbox('check');
+            let needle = 'engulfingPattern',
+                index = contains.call(candlePatternArray, needle); // true or false
+            if (index === false) {
+                candlePatternArray.push(needle);
+
+            }
+            //   console.log('engulfingPattern is checked')
+        }
+
+
+        // threeCrowsSoldiers array test and set!
+
+        if ($('.slider.threeCrowsSoldiers.checkbox').checkbox('is unchecked')) {
+            // $('.slider.threeCrowsSoldiers.checkbox').checkbox('uncheck');
+            let needle = 'threeCrowsSoldiers',
+                index = contains.call(candlePatternArray, needle); // true or false
+            if (index) {
+                candlePatternArray.splice(needle, 1);
+            }
+            //   console.log('threeCrowsSoldiers is unchecked')
+        }
+
+        if ($('.slider.threeCrowsSoldiers.checkbox').checkbox('is checked')) {
+            //$('.slider.threeCrowsSoldiers.checkbox').checkbox('check');
+            let needle = 'threeCrowsSoldiers',
+                index = contains.call(candlePatternArray, needle); // true or false
+            if (index === false) {
+                candlePatternArray.push(needle);
+
+            }
+            //  console.log('threeCrowsSoldiers is checked')
+        }
+
+
+        // isMarubozu array test and set!
+
+        if ($('.slider.isMarubozu.checkbox').checkbox('is unchecked')) {
+            // $('.slider.isMarubozu.checkbox').checkbox('uncheck');
+            let needle = 'isMarubozu',
+                index = contains.call(candlePatternArray, needle); // true or false
+            if (index) {
+                candlePatternArray.splice(needle, 1);
+            }
+            //  console.log('isMarubozu is unchecked')
+        }
+
+        if ($('.slider.isMarubozu.checkbox').checkbox('is checked')) {
+            //$('.slider.isMarubozu.checkbox').checkbox('check');
+            let needle = 'isMarubozu',
+                index = contains.call(candlePatternArray, needle); // true or false
+            if (index === false) {
+                candlePatternArray.push(needle);
+
+            }
+            //  console.log('isMarubozu is checked')
+        }
+
+
+        // isHaramiCross array test and set!
+
+        if ($('.slider.isHaramiCross.checkbox').checkbox('is unchecked')) {
+            // $('.slider.isHaramiCross.checkbox').checkbox('uncheck');
+            let needle = 'isHaramiCross',
+                index = contains.call(candlePatternArray, needle); // true or false
+            if (index) {
+                candlePatternArray.splice(needle, 1);
+            }
+            //  console.log('isHaramiCross is unchecked')
+        }
+
+        if ($('.slider.isHaramiCross.checkbox').checkbox('is checked')) {
+            //$('.slider.isHaramiCross.checkbox').checkbox('check');
+            let needle = 'isHaramiCross',
+                index = contains.call(candlePatternArray, needle); // true or false
+            if (index === false) {
+                candlePatternArray.push(needle);
+
+            }
+            //  console.log('isHaramiCross is checked')
+        }
+
+
+        // dojiStar array test and set!
+
+        if ($('.slider.dojiStar.checkbox').checkbox('is unchecked')) {
+            // $('.slider.dojiStar.checkbox').checkbox('uncheck');
+            let needle = 'dojiStar',
+                index = contains.call(candlePatternArray, needle); // true or false
+            if (index) {
+                candlePatternArray.splice(needle, 1);
+            }
+            //  console.log('dojiStar is unchecked')
+        }
+
+        if ($('.slider.dojiStar.checkbox').checkbox('is checked')) {
+            //$('.slider.dojiStar.checkbox').checkbox('check');
+            let needle = 'dojiStar',
+                index = contains.call(candlePatternArray, needle); // true or false
+            if (index === false) {
+                candlePatternArray.push(needle);
+
+            }
+            //  console.log('dojiStar is checked')
+        }
+
+        // machineLearnedTrend array test and set!
+
+        if ($('.slider.machineLearnedTrend.checkbox').checkbox('is unchecked')) {
+            // $('.slider.machineLearnedTrend.checkbox').checkbox('uncheck');
+            let needle = 'machineLearnedTrend',
+                index = contains.call(candlePatternArray, needle); // true or false
+            if (index) {
+                candlePatternArray.splice(needle, 1);
+            }
+            //  console.log('machineLearnedTrend is unchecked')
+        }
+
+        if ($('.slider.machineLearnedTrend.checkbox').checkbox('is checked')) {
+            //$('.slider.machineLearnedTrend.checkbox').checkbox('check');
+            let needle = 'machineLearnedTrend',
+                index = contains.call(candlePatternArray, needle); // true or false
+            if (index === false) {
+                candlePatternArray.push(needle);
+
+            }
+            //  console.log('machineLearnedTrend is checked')
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        console.log(candlePatternArray)
+    }
+
+    testLoop()
+    setInterval(testLoop, 1000);
+    /*
+        //check a slider
+        $('.slider.bullBear.checkbox').checkbox('check');
+        //uncheck a slider
+        $('.slider.bullBear.checkbox').checkbox('uncheck');
+
+        // is checked
+        $('.slider.bullBear.checkbox').checkbox('is checked');
+        // is unchecked
+        $('.slider.bullBear.checkbox').checkbox('is unchecked');
+
+    */
+
+
+    // $('#CandleOrTickdropdown')
+    //   .dropdown();
+
+
+
+
+
+    $('#anyTrigger').click(function () {
+
+        settings.set('onlyOneTriggerCP.onlyOneTriggerCP', true)
+        $('#anyTrigger').addClass('disabled');
+        $('#anyTrigger').addClass('green');
+        $('#candlePatternTrigger').removeClass('disabled');
+        $('#candlePatternTrigger').removeClass('green');
+
+
+
+    });
+    $('#candlePatternTrigger').click(function () {
+
+        settings.set('onlyOneTriggerCP.onlyOneTriggerCP', false)
+        $('#candlePatternTrigger').addClass('disabled');
+        $('#candlePatternTrigger').addClass('green');
+        $('#anyTrigger').removeClass('disabled');
+        $('#anyTrigger').removeClass('green');
+
+
+
+    });
+    // on load Jquery for toggle buttons
+    if (settings.get('onlyOneTriggerCP.onlyOneTriggerCP')) {
+
+        $('#anyTrigger').addClass('disabled');
+        $('#anyTrigger').addClass('green');
+        $('#candlePatternTrigger').removeClass('disabled');
+        $('#candlePatternTrigger').removeClass('green');
+
+
+
+    } else {
+
+
+
+        $('#candlePatternTrigger').addClass('disabled');
+        $('#candlePatternTrigger').addClass('green');
+        $('#anyTrigger').removeClass('disabled');
+        $('#anyTrigger').removeClass('green');
+
+    }
+
+
+
+
+    // endof on load Jquery for buttons
+
+
+    function passSettings() {
+        //Important placeholder fo setting details can be used for all settings!!
+        candlePatternArray = settings.get('candlePatternArray.candlePatternArray');
+
+        candlePatternArray.forEach(pass_candlePatternArray);
+
+
+
+        if (settings.has('candlePatternNoOfTriggersRequired.candlePatternNoOfTriggersRequired')) {
+
+            document.getElementById("candlePatternNoOfTriggersRequired").value = settings.get(
+                'candlePatternNoOfTriggersRequired.candlePatternNoOfTriggersRequired')
+
+        }
+
+
+        // end of collect settings
+
+
+    }
+
+
+    function pass_candlePatternArray(value) {
+
+        let needle = value,
+            index = contains.call(candlePatternArray, needle); // true or false
+        if (index) {
+            $('.slider.' + needle + '.checkbox').checkbox('check');
+        }
+
+    }
+
+
+
+
+
+
+    //Save new settings
+
+    saveChanges.addEventListener('click', function (event) {
+
+        //add new event settings within this function
+
+
+        let candlePatternNoOfTriggersRequiredCollect = document.getElementById(
+            'candlePatternNoOfTriggersRequired').value;
+
+
+        settings.set('candlePatternNoOfTriggersRequired', {
+
+            candlePatternNoOfTriggersRequired: candlePatternNoOfTriggersRequiredCollect
+
+
+
+        })
+
+
+        settings.set('candlePatternArray.candlePatternArray', candlePatternArray);
+        console.log(settings.get('candlePatternDuration_unit.candlePatternDuration_unit'))
+
+
+
+        settings.set('message.message',
+            'Your Pattern Detection triggers have been saved. Build a strategy to use it.')
+        var windows = remote.getCurrentWindow();
+        window.close()
+    });
+
+
+
+
+    resetDefaults.addEventListener('click', function (event) {
+
+
+        //candlePattern defaults
+
+
+        settings.set('candlePatternNoOfTriggersRequired.candlePatternNoOfTriggersRequired',
+            2); // second variable
+        settings.set('onlyOneTriggerCP.onlyOneTriggerCP', false); // second variable
+
+        settings.set('candlePatternArray.candlePatternArray', ["bullBear", "mornEveStar", "dojiStar",
+            "isHaramiCross"
+        ]);
+        // end of candlePattern defaults
+
+        settings.set('message.message', 'candlePattern triggers restored to default settings.')
+        passSettings()
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+    closeBtn.addEventListener('click', function (event) {
+
+        var windows = remote.getCurrentWindow();
+        window.close()
+    })
+</script>
+
+
+
+</html>

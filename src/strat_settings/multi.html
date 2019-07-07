@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+
+Change all occurances:
+
+multi
+Variable1
+NoOfTriggersRequired
+Variable3
+Variable4
+
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Binary Bot Trader Strategy Builder</title>
+
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+    <link rel="stylesheet" href="../../assets/Semantic-UI-CSS-master/semantic.min.css">
+    <script src="../../assets/jquery.min.js"></script>
+    <script src="../../assets/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="../../src/settings/settings.js"></script>
+
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            background-color: rgb(236, 236, 232) !important;
+
+
+
+
+        }
+
+        .trading {
+
+            display: flex;
+        }
+
+        #mainbody {
+
+            background-color: rgb(236, 236, 232) !important;
+
+        }
+    </style>
+
+</head>
+
+<body onload="passSettings()">
+    <div class="ui hidden divider"></div>
+    <div id="mainbody" class="ui padded center aligned container">
+        <h3 class="ui center aligned small icon header">
+            <i class="orange small settings icon"></i>
+            <div class="content">
+                Strategy Builder
+                <div class="ui sub header">Build your own strategy, no coding, no blocks.</div>
+            </div>
+        </h3>
+        <div class="ui hidden divider"></div>
+
+        <div class="ui mini equal width center aligned form">
+
+            <p>Build a strategy which uses any of Binary Bot Trader's fully adjustable technical indicators. Your trade
+                triggers can be set to activate on <b>any</b> trigger, or only when a certain number of triggers are
+                active.<br><br>
+                An example would be Bollinger Bands <b>and</b> Price Action, requiring <b>both</b> to trigger to place a
+                trade. This means that the last price must be outside the upper/lower limit <b>and</b> the candle is
+                direction and quality meets the required triggers too.</p>
+            <div class="inline field">
+
+                <div class="fields">
+                    <div class="field">
+                        <div class="ui labeled input">
+                            <div class="ui label">
+                                Name Your Strategy
+                            </div>
+                            <input id="multistratName" type="text" placeholder="My Strategy...">
+                        </div>
+                    </div>
+                </div>
+                <div class="ui hidden divider"></div>
+
+                <div class="fields">
+                    <div class="field">
+                        <div class="ui center aligned container">
+
+                            <button id="anyTrigger" class="ui left attached compact small button">Allow Any
+                                Trigger</button>
+                            <button id="multiTrigger" class="ui right attached compact small button">Require Multiple
+                                Triggers</button>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="ui hidden divider"></div>
+            <div class="inline field">
+                <div class="fields">
+                    <div class="field">
+                        <div class="ui labeled input">
+                            <div class="ui label">
+                                Number of Active Triggers Required
+                            </div>
+                            <input type="number" id="multiNoOfTriggersRequired" placeholder="Recommend < 3">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+            <div class="ui equal width center aligned grid">
+                <div class="column">
+                    <div class="ui slider priceAction checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>Price Action</label>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="ui slider CCItrend indeterminate checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>CCI Trend</label>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="ui slider BBands checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>Bollinger Bands</label>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="ui slider tripleEMA checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>Triple EMA</label>
+                    </div>
+                </div>
+            </div>
+            <div class="ui equal width center aligned grid">
+                <div class="column">
+                    <div class="ui slider macd checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>MACD</label>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="ui slider customMA checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>Custom MA</label>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="ui slider TRIX checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>TRIX</label>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="ui slider williamsR checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>WilliamsR</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui equal width center aligned grid">
+                <div class="column">
+                    <div class="ui slider candlePattern checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>Pattern Detection</label>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="ui slider HeikenAshi checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>Heiken Ashi Trend</label>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="ui slider supportResist checkbox">
+                        <input type="checkbox" name="newsletter">
+                        <label>S & R</label>
+                    </div>
+                </div>
+                <div class="ui hidden divider"></div>
+
+
+
+            </div>
+            <div class="ui hidden divider"></div>
+            <div class="ui hidden divider"></div>
+            <div class="inline field">
+                <div class="fields">
+                    <a class="field">
+                        <label>Trade Duration</label>
+                        <div class="ui small labeled input">
+                            <input id="multidurationInt" placeholder="1-10 (t) | 15 + (s) | 1 + (m)">
+                            <div class="ui left dropdown label" id="multiTDdropdown">
+                                <div id="multicurDuration" class="text">period</div>
+                                <i class="dropdown icon"></i>
+                                <div class="menu">
+                                    <div id="multidurationT" class="item">ticks (t)</div>
+                                    <div id="multidurationS" class="item">sec (s)</div>
+                                    <div id="multidurationM" class="item">min (m)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </a>
+                    <a class="field">
+                        <label>Candles Only</label>
+                        <div class="ui small labeled icon dropdown compact button" id="CandleOrTickdropdown">
+                            <input type="hidden" name="MS Style">
+                            <i class="chart line icon"></i>
+                            <div id="CandleOrTickselect" class="default text">Please Select</div>
+                            <div class="menu" id="CandleOrTick">
+                                <div class="item" id="Candles" value="candle">Candles</div>
+                                <div class="item" id="Ticks" value="tick">Ticks</div>
+
+
+                            </div>
+                        </div>
+                    </a>
+                    <a class="field">
+                        <label>Analysis Candle Length</label>
+                        <div class="ui small labeled icon dropdown compact button" id="CandleL">
+                            <input type="hidden" name="MS Style">
+                            <i class="hourglass icon"></i>
+                            <div id="CandleLselect" class="default text">Please Select</div>
+                            <div class="menu" id="currentCandleL">
+                                <div class="item" id="oneMinute" value="60">1 Minute</div>
+                                <div class="item" id="twoMinute" value="120">2 Minute</div>
+                                <div class="item" id="fiveMinute" value="300">5 Minute</div>
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+
+
+
+    <div class="ui right aligned container">
+
+
+        <div class="ui small button" id="closeBtn">Cancel</div>
+
+        <div class="ui small red button" id="resetDefaults">Default</div>
+
+        <div class="ui small green submit button" id="saveChanges">Save</div>
+        <div class="ui small green submit button" id="saveChanges2">Save & Use</div>
+    </div>
+    </div>
+    </div>
+    <div class="ui hidden divider"></div>
+
+
+
+</body>
+
+
+<script>
+    const dialog = require('electron').remote.dialog;
+
+
+
+    const electron = require('electron')
+    const path = require('path')
+    const remote = electron.remote
+    const {
+        app,
+        BrowserWindow,
+        Menu
+    } = require('electron')
+    const shell = require('electron').shell
+    const settings = require('electron').remote.require('electron-settings');
+    const ws = require('ws');
+
+    const closeBtn = document.getElementById('closeBtn');
+    const saveChanges = document.getElementById('saveChanges');
+    const resetDefaults = document.getElementById('resetDefaults');
+
+    var LiveApi = require('binary-live-api').LiveApi;
+    var api = new LiveApi({
+        websocket: ws,
+        appId: 16261
+    });
+
+    var stratArray; // settings.get('stratArray.stratArray'); //settings.get('stratArray.startArray');
+
+    //array contrains script:
+
+    var contains = function (needle) {
+        // Per spec, the way to identify NaN is that it is not equal to itself
+        var findNaN = needle !== needle;
+        var indexOf;
+
+        if (!findNaN && typeof Array.prototype.indexOf === 'function') {
+            indexOf = Array.prototype.indexOf;
+        } else {
+            indexOf = function (needle) {
+                var i = -1,
+                    index = -1;
+
+                for (i = 0; i < this.length; i++) {
+                    var item = this[i];
+
+                    if ((findNaN && item !== item) || item === needle) {
+                        index = i;
+                        break;
+                    }
+                }
+
+                return index;
+            };
+        }
+
+        return indexOf.call(this, needle) > -1;
+    };
+
+    // end of arraycontrains script
+    /* USE LIKE THIS
+
+
+        let needle = 1,
+        index = contains.call(stratArray, needle); // true or false
+
+
+
+    */
+
+
+
+    function testLoop() {
+
+        // priceAction array test and set!
+
+        if ($('.slider.priceAction.checkbox').checkbox('is unchecked')) {
+            // $('.slider.priceAction.checkbox').checkbox('uncheck');
+            let needle = 'priceAction',
+                index = contains.call(stratArray, needle); // true or false
+            if (index) {
+                stratArray.splice(needle, 1);
+            }
+            //   console.log('priceAction is unchecked')
+        }
+
+        if ($('.slider.priceAction.checkbox').checkbox('is checked')) {
+            //$('.slider.priceAction.checkbox').checkbox('check');
+            let needle = 'priceAction',
+                index = contains.call(stratArray, needle); // true or false
+            if (index === false) {
+                stratArray.push(needle);
+
+            }
+            //   console.log('priceAction is checked')
+        }
+
+
+        // CCItrend array test and set!
+
+        if ($('.slider.CCItrend.checkbox').checkbox('is unchecked')) {
+            // $('.slider.CCItrend.checkbox').checkbox('uncheck');
+            let needle = 'CCItrend',
+                index = contains.call(stratArray, needle); // true or false
+            if (index) {
+                stratArray.splice(needle, 1);
+            }
+            //  console.log('CCItrend is unchecked')
+        }
+
+        if ($('.slider.CCItrend.checkbox').checkbox('is checked')) {
+            //$('.slider.CCItrend.checkbox').checkbox('check');
+            let needle = 'CCItrend',
+                index = contains.call(stratArray, needle); // true or false
+            if (index === false) {
+                stratArray.push(needle);
+
+            }
+            //    console.log('CCItrend is checked')
+        }
+
+
+        // tripleEMA array test and set!
+
+        if ($('.slider.tripleEMA.checkbox').checkbox('is unchecked')) {
+            // $('.slider.tripleEMA.checkbox').checkbox('uncheck');
+            let needle = 'tripleEMA',
+                index = contains.call(stratArray, needle); // true or false
+            if (index) {
+                stratArray.splice(needle, 1);
+            }
+            //   console.log('tripleEMA is unchecked')
+        }
+
+        if ($('.slider.tripleEMA.checkbox').checkbox('is checked')) {
+            //$('.slider.tripleEMA.checkbox').checkbox('check');
+            let needle = 'tripleEMA',
+                index = contains.call(stratArray, needle); // true or false
+            if (index === false) {
+                stratArray.push(needle);
+
+            }
+            //   console.log('tripleEMA is checked')
+        }
+
+
+        // customMA array test and set!
+
+        if ($('.slider.customMA.checkbox').checkbox('is unchecked')) {
+            // $('.slider.customMA.checkbox').checkbox('uncheck');
+            let needle = 'customMA',
+                index = contains.call(stratArray, needle); // true or false
+            if (index) {
+                stratArray.splice(needle, 1);
+            }
+            //   console.log('customMA is unchecked')
+        }
+
+        if ($('.slider.customMA.checkbox').checkbox('is checked')) {
+            //$('.slider.customMA.checkbox').checkbox('check');
+            let needle = 'customMA',
+                index = contains.call(stratArray, needle); // true or false
+            if (index === false) {
+                stratArray.push(needle);
+
+            }
+            //  console.log('customMA is checked')
+        }
+
+
+        // TRIX array test and set!
+
+        if ($('.slider.TRIX.checkbox').checkbox('is unchecked')) {
+            // $('.slider.TRIX.checkbox').checkbox('uncheck');
+            let needle = 'TRIX',
+                index = contains.call(stratArray, needle); // true or false
+            if (index) {
+                stratArray.splice(needle, 1);
+            }
+            //  console.log('TRIX is unchecked')
+        }
+
+        if ($('.slider.TRIX.checkbox').checkbox('is checked')) {
+            //$('.slider.TRIX.checkbox').checkbox('check');
+            let needle = 'TRIX',
+                index = contains.call(stratArray, needle); // true or false
+            if (index === false) {
+                stratArray.push(needle);
+
+            }
+            //  console.log('TRIX is checked')
+        }
+
+
+        // macd array test and set!
+
+        if ($('.slider.macd.checkbox').checkbox('is unchecked')) {
+            // $('.slider.macd.checkbox').checkbox('uncheck');
+            let needle = 'macd',
+                index = contains.call(stratArray, needle); // true or false
+            if (index) {
+                stratArray.splice(needle, 1);
+            }
+            //  console.log('macd is unchecked')
+        }
+
+        if ($('.slider.macd.checkbox').checkbox('is checked')) {
+            //$('.slider.macd.checkbox').checkbox('check');
+            let needle = 'macd',
+                index = contains.call(stratArray, needle); // true or false
+            if (index === false) {
+                stratArray.push(needle);
+
+            }
+            //  console.log('macd is checked')
+        }
+
+
+        // BBands array test and set!
+
+        if ($('.slider.BBands.checkbox').checkbox('is unchecked')) {
+            // $('.slider.BBands.checkbox').checkbox('uncheck');
+            let needle = 'BBands',
+                index = contains.call(stratArray, needle); // true or false
+            if (index) {
+                stratArray.splice(needle, 1);
+            }
+            //  console.log('BBands is unchecked')
+        }
+
+        if ($('.slider.BBands.checkbox').checkbox('is checked')) {
+            //$('.slider.BBands.checkbox').checkbox('check');
+            let needle = 'BBands',
+                index = contains.call(stratArray, needle); // true or false
+            if (index === false) {
+                stratArray.push(needle);
+
+            }
+            //  console.log('BBands is checked')
+        }
+
+        if ($('.slider.candlePattern.checkbox').checkbox('is unchecked')) {
+            // $('.slider.BBands.checkbox').checkbox('uncheck');
+            let needle = 'candlePattern',
+                index = contains.call(stratArray, needle); // true or false
+            if (index) {
+                stratArray.splice(needle, 1);
+            }
+            //  console.log('BBands is unchecked')
+        }
+
+        if ($('.slider.candlePattern.checkbox').checkbox('is checked')) {
+
+            let needle = 'candlePattern',
+                index = contains.call(stratArray, needle); // true or false
+            if (index === false) {
+                stratArray.push(needle);
+
+            }
+            //  console.log('BBands is checked')
+        }
+        if ($('.slider.supportResist.checkbox').checkbox('is unchecked')) {
+            // $('.slider.supportResist.checkbox').checkbox('uncheck');
+            let needle = 'supportResist',
+                index = contains.call(stratArray, needle); // true or false
+            if (index) {
+                stratArray.splice(needle, 1);
+            }
+            //  console.log('supportResist is unchecked')
+        }
+
+        if ($('.slider.supportResist.checkbox').checkbox('is checked')) {
+            //$('.slider.supportResist.checkbox').checkbox('check');
+            let needle = 'supportResist',
+                index = contains.call(stratArray, needle); // true or false
+            if (index === false) {
+                stratArray.push(needle);
+
+            }
+            //  console.log('supportResist is checked')
+        }
+
+        if ($('.slider.HeikenAshi.checkbox').checkbox('is checked')) {
+            //$('.slider.HeikenAshi.checkbox').checkbox('check');
+            let needle = 'HeikenAshi',
+                index = contains.call(stratArray, needle); // true or false
+            if (index === false) {
+                stratArray.push(needle);
+
+            }
+            //  console.log('HeikenAshi is checked')
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        console.log(stratArray)
+    }
+
+    testLoop()
+    setInterval(testLoop, 1000);
+    /*
+        //check a slider
+        $('.slider.priceAction.checkbox').checkbox('check');
+        //uncheck a slider
+        $('.slider.priceAction.checkbox').checkbox('uncheck');
+
+        // is checked
+        $('.slider.priceAction.checkbox').checkbox('is checked');
+        // is unchecked
+        $('.slider.priceAction.checkbox').checkbox('is unchecked');
+
+    */
+
+
+    $('#anyTrigger').click(function () {
+
+        settings.set('onlyOneTrigger.onlyOneTrigger', true)
+        $('#anyTrigger').addClass('disabled');
+        $('#anyTrigger').addClass('green');
+        $('#multiTrigger').removeClass('disabled');
+        $('#multiTrigger').removeClass('green');
+        settings.set('message.message', 'please ensure your strategy is set for up to 5 minute trades! ')
+
+
+    });
+    $('#multiTrigger').click(function () {
+
+        settings.set('onlyOneTrigger.onlyOneTrigger', false)
+        $('#multiTrigger').addClass('disabled');
+        $('#multiTrigger').addClass('green');
+        $('#anyTrigger').removeClass('disabled');
+        $('#anyTrigger').removeClass('green');
+
+
+
+    });
+    // on load Jquery for toggle buttons
+    if (settings.get('onlyOneTrigger.onlyOneTrigger')) {
+
+        $('#anyTrigger').addClass('disabled');
+        $('#anyTrigger').addClass('green');
+        $('#multiTrigger').removeClass('disabled');
+        $('#multiTrigger').removeClass('green');
+
+
+
+    } else {
+
+
+
+        $('#multiTrigger').addClass('disabled');
+        $('#multiTrigger').addClass('green');
+        $('#anyTrigger').removeClass('disabled');
+        $('#anyTrigger').removeClass('green');
+
+    }
+
+
+    $('#CandleL')
+        .dropdown();
+
+
+    document.getElementById('oneMinute').addEventListener('click', function (event) {
+        settings.set('multiCandleL.multiCandleL', 60);
+
+
+    });
+    document.getElementById('twoMinute').addEventListener('click', function (event) {
+        settings.set('multiCandleL.multiCandleL', 120);
+
+    });
+    document.getElementById('fiveMinute').addEventListener('click', function (event) {
+        settings.set('multiCandleL.multiCandleL', 300);
+
+    });
+
+
+
+
+
+
+
+
+
+    $('#multiTDdropdown')
+        .dropdown();
+
+
+    document.getElementById('multidurationT').addEventListener('click', function (event) {
+        settings.set('multiDuration_unit.multiDuration_unit', 't');
+
+
+    });
+    document.getElementById('multidurationS').addEventListener('click', function (event) {
+        settings.set('multiDuration_unit.multiDuration_unit', 's');
+
+    });
+    document.getElementById('multidurationM').addEventListener('click', function (event) {
+        settings.set('multiDuration_unit.multiDuration_unit', 'm');
+
+    });
+    // endof on load Jquery for buttons
+
+
+    function passSettings() {
+        //Important placeholder fo setting details can be used for all settings!!
+
+
+        stratArray = settings.get('stratArray.stratArray');
+
+        stratArray.forEach(pass_stratArray);
+
+
+        if (settings.has('multistratName.multistratName')) {
+
+            document.getElementById("multistratName").value = settings.get(
+                'multistratName.multistratName')
+
+        }
+
+
+
+        if (settings.has('multiNoOfTriggersRequired.multiNoOfTriggersRequired')) {
+
+            document.getElementById("multiNoOfTriggersRequired").value = settings.get(
+                'multiNoOfTriggersRequired.multiNoOfTriggersRequired')
+
+        }
+
+        if (settings.has('multiDuration.multiDuration')) {
+
+            document.getElementById("multidurationInt").value = settings.get(
+                'multiDuration.multiDuration')
+
+        }
+        if (settings.has('multiDuration_unit.multiDuration_unit')) {
+
+            document.getElementById("multicurDuration").innerHTML = settings.get(
+                'multiDuration_unit.multiDuration_unit')
+        }
+        if (settings.has('multiCandleL.multiCandleL')) {
+
+            document.getElementById("CandleLselect").innerHTML = settings.get(
+                'multiCandleL.multiCandleL') / 60 + ' minutes';
+
+        }
+        // end of collect settings
+
+
+    }
+
+
+    function pass_stratArray(value) {
+
+        let needle = value,
+            index = contains.call(stratArray, needle); // true or false
+        if (index) {
+            $('.slider.' + needle + '.checkbox').checkbox('check');
+        }
+
+    }
+
+
+
+
+
+
+    //Save new settings
+
+    saveChanges.addEventListener('click', function (event) {
+
+        //add new event settings within this function
+
+        let multistratNameCollect = document.getElementById('multistratName')
+            .value;
+
+
+        settings.set('multistratName', {
+
+            multistratName: multistratNameCollect
+
+
+
+        })
+
+        let multiNoOfTriggersRequiredCollect = document.getElementById('multiNoOfTriggersRequired')
+            .value;
+
+
+        settings.set('multiNoOfTriggersRequired', {
+
+            multiNoOfTriggersRequired: multiNoOfTriggersRequiredCollect
+
+
+
+        })
+        let multiDurationCollect = document.getElementById('multidurationInt').value;
+
+
+        settings.set('multiDuration', {
+
+            multiDuration: multiDurationCollect
+
+
+        })
+        settings.set('stratArray.stratArray', stratArray);
+        console.log(settings.get('multiDuration_unit.multiDuration_unit'))
+
+
+
+        settings.set('message.message',
+            'Your multi-strategy has been saved. Select "use" in strategy menu, to use it.')
+        var windows = remote.getCurrentWindow();
+        window.close()
+    });
+
+    //Save new settings
+
+    saveChanges2.addEventListener('click', function (event) {
+
+        //add new event settings within this function
+
+        let multistratNameCollect = document.getElementById('multistratName')
+            .value;
+
+
+        settings.set('multistratName', {
+
+            multistratName: multistratNameCollect
+
+
+
+        })
+
+
+        let multiNoOfTriggersRequiredCollect = document.getElementById('multiNoOfTriggersRequired')
+            .value;
+
+
+        settings.set('multiNoOfTriggersRequired', {
+
+            multiNoOfTriggersRequired: multiNoOfTriggersRequiredCollect
+
+
+
+        })
+        let multiDurationCollect = document.getElementById('multidurationInt').value;
+
+
+        settings.set('multiDuration', {
+
+            multiDuration: multiDurationCollect
+
+
+        })
+        settings.set('stratArray.stratArray', stratArray);
+        console.log(settings.get('multiDuration_unit.multiDuration_unit'))
+
+        settings.set('strat.strat', 'multi');
+        settings.set('tradeDuration.tradeDuration', settings.get('multiDuration.multiDuration'));
+        settings.set('duration.duration', settings.get('multiDuration_unit.multiDuration_unit'));
+
+
+        settings.set('message.message',
+            'Your new strategy has been saved and set as active.')
+        var windows = remote.getCurrentWindow();
+        window.close()
+    });
+
+
+
+
+    resetDefaults.addEventListener('click', function (event) {
+
+
+        //multi defaults
+        settings.set('multiDuration.multiDuration', 7); //integer time period
+        settings.set('multiDuration_unit.multiDuration_unit', 't'); // 's', 'm'
+        settings.set('multiCandleOrTick.multiCandleOrTick',
+            'candle'); // candle only for this strategy
+        settings.set('multiCandleL.multiCandleL', 60); // 120, 180,300 candle duration
+        settings.set('multiVariable1.multiVariable1', 0.7); // first variable
+        settings.set('multiNoOfTriggersRequired.multiNoOfTriggersRequired', false); // second variable
+        settings.set('multiVariable3.multiVariable3', 0); // thirdvariable
+        settings.set('multiVariable4.multiVariable4', 0); // fourth variable
+        settings.set('stratArray.stratArray', ["priceAction", "CCItrend", "BBands", "macd"]);
+        // end of multi defaults
+
+        settings.set('message.message', 'multi triggers restored to default settings.')
+        passSettings()
+    });
+
+
+
+
+    // const saveSettings = JSON.stringify(settings.getAll());
+
+
+    // const arrayOfObject = [JSON.parse(stringOfObject)];
+
+    //console.log(filterByValue(arrayOfObject, 'ita')); // [{name: 'Lea', country: 'Italy'}, {name: 'John', country: 'Italy'}]
+
+
+
+
+
+
+
+
+
+
+
+
+    closeBtn.addEventListener('click', function (event) {
+
+        var windows = remote.getCurrentWindow();
+        window.close()
+    })
+</script>
+
+
+
+</html>

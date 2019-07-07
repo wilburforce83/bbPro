@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Add API Tokens</title>
+
+    <!-- Insert this line above script imports  -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+    <link rel="stylesheet" href="../assets/Semantic-UI-CSS-master/semantic.min.css">
+    <script src="../assets/jquery.min.js"></script>
+    <script src="../assets/Semantic-UI-CSS-master/semantic.min.js"></script>
+
+
+
+
+    <!-- Insert this line after script imports -->
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            overflow-y: hidden;
+        }
+
+        .ui.inverted.segment {
+            height: 100%;
+        }
+    </style>
+
+</head>
+
+<body onload="passSettings()">
+
+    <div class="ui padded inverted segment">
+        <h5>Please enter your virtual API token Here</h5>
+        <div class="ui inverted form">
+            <div class="one field">
+                <div class="field">
+                    <label>Virtual API Token</label>
+                    <input id="virtualToken" placeholder="Paste Here" type="text">
+
+                    <h6><span id="virtualTestResult"></span></h6>
+                </div>
+            </div>
+
+            <div class="ui small button" id="closeBtn">Cancel</div>
+            <div class="ui small button" id="testBtn">Test</div>
+            <div class="ui small green submit button" id="saveTokens">Save Tokens</div>
+        </div>
+    </div>
+
+
+
+</body>
+
+
+<script>
+    const dialog = require('electron').remote.dialog;
+
+
+    const electron = require('electron')
+    const path = require('path')
+    const remote = electron.remote
+    const {
+        app,
+        BrowserWindow,
+        Menu
+    } = require('electron')
+    const shell = require('electron').shell
+    const settings = require('electron').remote.require('electron-settings');
+    const ws = require('ws');
+
+    const closeBtn = document.getElementById('closeBtn');
+    const saveTokens = document.getElementById('saveTokens');
+    const testBtn = document.getElementById('testBtn');
+
+    var LiveApi = require('binary-live-api').LiveApi;
+    var api = new LiveApi({
+        websocket: ws,
+        appId: 16261
+    });
+
+
+    //Important placeholder fo setting details can be used for all settings!!
+
+    if (settings.has('virtualToken.virtualToken')) {
+
+        document.getElementById("virtualToken").value = settings.get('virtualToken.virtualToken')
+
+    }
+
+    // save settings, must contain virtual, real is optional
+
+    saveTokens.addEventListener('click', function (event) {
+
+        let virtualTokenCollect = document.getElementById('virtualToken').value;
+
+
+        settings.set('virtualToken', {
+
+            virtualToken: virtualTokenCollect
+
+
+        })
+        console.log('virtual token: ', settings.get('virtualToken.virtualToken'));
+
+
+        var windows = remote.getCurrentWindow();
+        window.close()
+    });
+
+
+
+    // test token with authorise and and send alert
+
+    testBtn.addEventListener('click', function (event) {
+
+        let token = document.getElementById('virtualToken').value;
+
+        api.authorize(token).then(
+
+            () => {
+                document.getElementById('virtualTestResult').textContent = "Token Authorized!";
+                document.getElementById('virtualTestResult').style.color = 'green'
+
+            },
+            () => {
+                document.getElementById('virtualTestResult').textContent = "Not Authorized, try again!"
+                document.getElementById('virtualTestResult').style.color = 'red'
+            }
+
+            // () => dialog.showMessageBox(authDialogBox),
+            // () => dialog.showMessageBox(notauthDialogBox)
+        );
+
+
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+    closeBtn.addEventListener('click', function (event) {
+
+        var windows = remote.getCurrentWindow();
+        window.close()
+    })
+</script>
+
+
+
+</html>
