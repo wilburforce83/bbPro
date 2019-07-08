@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Binary Bot Trading</title>
     <link rel="stylesheet" href="../assets/Semantic-UI-CSS-master/semantic.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap" rel="stylesheet">
+
 
 
 
@@ -98,7 +100,7 @@
             width: 100%;
             height: 100vh;
 
-            background: rgb(4, 1, 36) url('../assets/images/spinner5.gif') no-repeat center center;
+            background: rgb(255, 255, 255) url('../assets/images/spinner7.gif') no-repeat center center;
             ;
             z-index: 150000;
         }
@@ -134,15 +136,16 @@
 
         <div id="loadingfooter">
             <img class="ui centered small image" src="../assets/images/logo.png">
-            <h5 class="ui center aligned grey header">
+            <h5 class="ui center aligned black header">
 
-                <div class="content">
-                    binarybottrading.eu (2019)| V2.0.5 Release Candidate | The ultimate binary trading platform.
-                    <div class="grey sub header"></div>
+                <div style="font-family: 'Comfortaa', cursive; font-size: 0.7em" class="content">
+                    binarybottrading.eu (2019)| V3.0.0 bbTrader <sup>pro</sup> | The ultimate binary trading platform.
+                    <div class="black sub header"></div>
                 </div>
             </h5>
             <div class="ui hidden divider"></div>
         </div>
+
 
 
 
@@ -151,7 +154,7 @@
         -->
 
 
-    <div id="sidebar" context="main" class="ui borderless left sidebar inverted vertical menu">
+    <div id="sidebar" context="main" class="ui borderless left sidebar vertical menu">
 
         <div class="ui hidden divider"></div>
         <a class="item">
@@ -187,7 +190,7 @@
             </div>
         </a>
 
-        <h5 class="ui  inverted horizontal divider header">
+        <h5 class="ui horizontal divider header">
             Martingale Style
         </h5>
 
@@ -225,7 +228,7 @@
             </div>
         </a>
 
-        <h5 class="ui  inverted horizontal divider header">
+        <h5 class="ui horizontal divider header">
             Manual Trading
         </h5>
         <a class="item">
@@ -241,7 +244,7 @@
                     </div>
                 </div>
             </div>
-            <h6 class="ui inverted compact header">Note: this is for manual trading only. For strategy durations go to
+            <h6 class="ui compact header">Note: this is for manual trading only. For strategy durations go to
                 advanced settings.
             </h6>
         </a>
@@ -263,14 +266,15 @@
 
 
         <main class="Site-content">
-            <div style="-webkit-app-region: drag;" class="ui borderless inverted top attached menu">
+            <div style="-webkit-app-region: drag;" class="ui borderless top attached menu">
 
-                <div class="ui small image">
-                    <svg width="150" height="50">
-                        <image xlink:href="../assets/images/logo.svg" x="0" y="10" width="100%" height="80%"></image>
-                    </svg>
-                </div>
-
+                <h5 class="ui padded black header">
+                    <div class="ui hidden divider"></div>
+                    <div style="font-family: 'Comfortaa', cursive; font-size: 1em" class="content">
+                        bbTrader <sup>pro</sup>
+                        <div class="black sub header">The ultimate trading platform</div>
+                    </div>
+                </h5>
 
 
 
@@ -318,10 +322,10 @@
 
 
                     </div>
-                    <div class="ui vertically fitted inverted text menu">
+                    <div class="ui vertically fitted text menu">
                         <div class="vertically fitted item"><span id="clock"></span></span></div>
                     </div>
-                    <div class="ui vertically fitted inverted text menu">
+                    <div class="ui vertically fitted text menu">
                         <div class="vertically fitted item"><span id="account"></span>&nbsp;|&nbsp;<span
                                 id="currency"></span>&nbsp;|&nbsp;<span id="balance">Please Choose
                                 Account</span></div>
@@ -332,7 +336,7 @@
         <div class="trading">
 
             <div class="ui fluid padded grid">
-                <div class="five wide inverted column">
+                <div class="five wide column">
 
 
 
@@ -341,7 +345,7 @@
                     </div>
                     <div class="ui fluid card">
 
-                        <h6 class="ui inverted horizontal divider header">
+                        <h6 class="ui horizontal divider header">
 
                             <span style="color: white" id="sparklineSym"> Symbol</span>
                         </h6>
@@ -378,7 +382,7 @@
 
                     </div>
 
-                    <h6 class="ui inverted horizontal divider header">
+                    <h6 class="ui horizontal divider header">
                         Trading Controls
                     </h6>
 
@@ -395,11 +399,11 @@
                     </p>
 
                     <div class="ui mini fluid buttons">
-                        <button id="startBot" class="ui black icon button">
+                        <button id="startBot" class="ui icon button">
                             <i class="play icon"></i>
 
                         </button>
-                        <button id="pauseBot" class="ui black icon button">
+                        <button id="pauseBot" class="ui icon button">
                             <i class="pause icon"></i>
 
                         </button>
@@ -421,7 +425,7 @@
                     </div>
                     <div class="ui hidden divider"></div>
                     <div class="stretched row">
-                        <h6 class="ui inverted horizontal divider header">
+                        <h6 class="ui horizontal divider header">
                             Trading Notifications
                         </h6>
                         <div class="ui mini fluid card">
@@ -509,8 +513,10 @@
 
                     </div>
 
-                    <div id="chart" class="ui stretched row">
-                        <div id="plotly-div" style="margin-bottom:0px"></div>
+                    <div class="ui stretched row">
+                        <iframe id="tradingviewWindow" name="tradingview" src="about: blank" height="95%"
+                            frameborder="0" scrolling="auto" class="iframe-area">
+                        </iframe>
                     </div>
 
 
@@ -535,7 +541,7 @@
                 <div class="two wide black column">
 
 
-                    <div class="ui inverted segment">
+                    <div class="ui inverted compact segment">
 
                         <div class="ui mini inverted statistic">
                             <div class="value">
@@ -553,7 +559,7 @@
 
 
 
-                    <div class="ui inverted segment">
+                    <div class="ui inverted compact segment">
 
                         <div id='hidemgstep' class="ui red mini inverted statistic">
                             <div class="value">
@@ -1628,6 +1634,35 @@
         return false;
 
     }
+</script>
+
+<script>
+    // Load tradingview based on symbol
+
+    var chartSymbol = '';
+
+    function changeChart() {
+        symbolsymbol = settings.get('symbol.symbol');
+        console.log('symbol=' + symbolsymbol, 'chart=' + chartSymbol)
+        if (symbolsymbol != chartSymbol) {
+
+            chartSymbol = symbolsymbol;
+            document.getElementById('tradingviewWindow').src =
+                'https://charts.binarybottrading.eu/' + symbolsymbol + '.html';
+
+            document.getElementsByName('tradingview').contentWindow.location.reload(true)
+            
+
+        }
+
+    }
+
+
+
+
+
+    changeChart()
+    setInterval(changeChart, 1000);
 </script>
 
 

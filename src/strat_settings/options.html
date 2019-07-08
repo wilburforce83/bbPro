@@ -146,27 +146,6 @@
             <div class="ui hidden divider"></div>
             <div class="ui hidden divider"></div>
 
-            <!--This is a form entry block for advanced options, copy one of these block when you add a new strategy!-->
-            <h6 class="ui horizontal orange divider">
-                Chart Settings
-            </h6>
-            <p>The default BBtrader charting changes and updates automatically based on the market conditions and
-                settings. If you prefer to use Trading View, please select it below.
-            </p>
-            <b style="color: red;">WARNING: only BBtrader default charting change automatically. If using trading view
-                PLEASE make sure you are on the correct chart, AND auto market selection is off! </b>
-            <div class="ui center aligned container">
-
-                <button id="enablebbtrader" class="ui left attached compact small button">Default Charting</button>
-                <button id="enabletradingview" class="ui right attached compact small button">Trading View</button>
-
-
-            </div>
-
-            <div class="ui hidden divider"></div>
-            <div class="ui hidden divider"></div>
-            <div class="ui hidden divider"></div>
-
             <h6 class="ui horizontal orange divider">
                 Classic Martingale Settings
             </h6>
@@ -420,50 +399,7 @@
 
 
 
-    $('#enablebbtrader').click(function () {
 
-        settings.set('useBBtrader.useBBtrader', true)
-        $('#enablebbtrader').addClass('disabled');
-        $('#enablebbtrader').addClass('green');
-        $('#enabletradingview').removeClass('disabled');
-        $('#enabletradingview').removeClass('green');
-        settings.set('message.message', 'Default Charting Selected! ')
-
-
-    });
-    $('#enabletradingview').click(function () {
-
-        settings.set('useBBtrader.useBBtrader', false)
-        $('#enabletradingview').addClass('disabled');
-        $('#enabletradingview').addClass('green');
-        $('#enablebbtrader').removeClass('disabled');
-        $('#enablebbtrader').removeClass('green');
-        settings.set('message.message',
-            'Trading View Charting Selected, please ensure AUTO market is off, and you are trading the correct market! '
-        )
-
-
-
-    });
-    // on load Jquery for toggle buttons
-    if (settings.get('useBBtrader.useBBtrader')) {
-
-        $('#enablebbtrader').addClass('disabled');
-        $('#enablebbtrader').addClass('green');
-        $('#enabletradingview').removeClass('disabled');
-        $('#enabletradingview').removeClass('green');
-
-
-
-    } else {
-
-        $('#enabletradingview').addClass('disabled');
-        $('#enabletradingview').addClass('green');
-        $('#enablebbtrader').removeClass('disabled');
-        $('#enablebbtrader').removeClass('green');
-
-
-    }
 
     $('#enableFX').click(function () {
 
@@ -576,7 +512,7 @@
 
 
 
-        labouchereList
+        //labouchereList
 
 
 
