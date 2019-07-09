@@ -49,7 +49,7 @@ function HeikenAshirun() {
 
     if (today + candleLengthAdjust >= candleEnding) { // open in new candle more or less
         // console.log('time window open for trade')
-        if (hac > hao && close > hac) {
+        if (hac > hao) {
 
             //  console.log('call event');
             if (settings.get('strat.strat') == 'multi' && settings.get('onlyOneTrigger.onlyOneTrigger') === false) {
@@ -80,7 +80,7 @@ function HeikenAshirun() {
 
         //if function for PUT event
 
-        if (hac < hao && close < hac) {
+        if (hac < hao) {
             //   console.log('put event');
             if (settings.get('strat.strat') == 'multi' && settings.get('onlyOneTrigger.onlyOneTrigger') === false) {
 
