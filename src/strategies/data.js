@@ -1,5 +1,10 @@
 var stream;
+var switched = true;
 var lastTick;
+var tick;
+var ticks;
+var lastEpoch;
+var lastSecond;
 var Rxlong_close_list;
 var Rxlong_open_list;
 var Rxlong_high_list;
@@ -47,7 +52,7 @@ function data() {
         end: 'latest',
         style: 'candles',
         granularity: candle_t,
-        count: 301
+        count: 100
     }).then(function (response) {
         // // console.log(response)
         Rxlong_close_list = response.candles.map(candles => candles.close * 1);
@@ -82,10 +87,6 @@ function data() {
 
 
         });
-        Rxlong_close_list.push("End");
-        Rxlong_open_list.push("End");
-        Rxlong_high_list.push("End");
-        Rxlong_low_list.push("End");
 
         connected = true;
     }).catch(function (error) {
@@ -105,50 +106,106 @@ function data() {
 
 
 
+    if (switched === true) {
 
-    api.getTickHistory(settings.get('symbol.symbol'), {
-        end: 'latest',
-        style: 'ticks',
-        count: 200
-    }).then(function (response) {
+        tick = [];
+        ticks = [];
+        console.log('switched')
 
-        // // console.log(response);
+        api.getTickHistory(settings.get('symbol.symbol'), {
+            end: 'latest',
+            style: 'ticks',
+            count: 120
 
-        let tick = response.history.prices;
-        let ticks = tick.map(tick => tick * 1);
-        response.history.times.push("End");
-        response.history.prices.push("End")
-        times = response.history.times.slice(-30, -1)
-        stream = response.history.prices.slice(-30, -1);
-        lastTick = stream.slice(-1)[0] * 1;
-        let lastEpoch = response.history.times.slice(-2)[0] * 1;
-        // console.log(response.history.times)
-        let lastSecond = lastEpoch % 60;
-        settings.set('stream.stream', stream)
-        settings.set('epoch.epoch', lastSecond);
-        settings.set('lastTick.lastTick', response.history.prices.slice(-1)[0] * 1)
+        }).then(function (response) {
+
+            // // console.log(response);
+
+            tick = response.history.prices;
+            ticks = tick.map(tick => tick * 1);
 
 
-        settings.set('tickData', {
-            tickList: ticks,
-            lastTick: lastTick
+            times = response.history.times.slice(-60, -1)
 
-        });
+            lastTick = response.history.prices.slice(-1)[0] * 1;
+            lastEpoch = response.history.times.slice(-1)[0] * 1;
+            // console.log(response.history.times)
+            lastSecond = lastEpoch % 60;
 
-    }).catch(function (error) {
+            settings.set('epoch.epoch', lastSecond);
 
-        let string = error.message;
-        let position = string.indexOf(`{`);
-        let message = string.slice(0, position - 1);
-        //var pos = string.indexOf('{')-1
-        // var message = string.substring(0,pos);
-        console.log(message);
-        // // console.log(position);
-        // document.getElementById('notifyme').insertAdjacentHTML("afterbegin",
-        //    '<p style="color:#755505">' + message + '</p>');
-        return;
+            settings.set('tickData', {
+                tickList: ticks,
+                lastTick: lastTick
 
-    })
+            });
+            renderSparkline = true;
+
+        }).catch(function (error) {
+
+            let string = error.message;
+            let position = string.indexOf(`{`);
+            let message = string.slice(0, position - 1);
+            //var pos = string.indexOf('{')-1
+            // var message = string.substring(0,pos);
+            console.log(error.message);
+            // // console.log(position);
+            // document.getElementById('notifyme').insertAdjacentHTML("afterbegin",
+            //    '<p style="color:#755505">' + message + '</p>');
+            return;
+
+        })
+
+        switched = false;
+    } else {
+
+        api.getTickHistory(settings.get('symbol.symbol'), {
+            end: 'latest',
+            style: 'ticks',
+            count: 1
+        }).then(function (response) {
+
+            // console.log(response);
+
+            tick = response.history.prices * 1;
+            // ticks.push(response.history.prices * 1);
+            times.push(response.history.times);
+
+            ticks.push(response.history.prices * 1)
+
+
+            // console.log(tick);
+            lastTick = tick * 1;
+            lastEpoch = response.history.times * 1;
+            // console.log(response.history.times)
+            lastSecond = lastEpoch % 60;
+            if (ticks != undefined) {
+                stream = ticks.slice(-90);
+            }
+            renderSparkline = true;
+            settings.set('epoch.epoch', lastSecond);
+
+
+
+        }).catch(function (error) {
+
+            let string = error.message;
+            let position = string.indexOf(`{`);
+            let errmessage = string.slice(0, position - 1);
+
+            console.log(error.message);
+
+            return;
+
+        })
+
+
+    }
+
+
+
+
+
     //  // console.log(settings.get('tickData.tickList'));
 
     if (strat == 'manual') {
@@ -156,176 +213,9 @@ function data() {
         //   // console.log('waitingfortrade')
 
     } else {
-
-        if (settings.get('timeUntilTrading.Open') > 3 && settings.get('changesymAuto.changesymAuto')) {
-            // console.log('strats are running from data.js')
-            this[strat + 'run']() // use the strategy prefix to run the function for the relevent strategy
-
-        }
-
-        if (settings.get('changesymAuto.changesymAuto') === false) {
-
-            this[strat + 'run']() // use the strategy prefix to run the function for the relevent strategy
-
-        }
-
-
+        console.log('this.run')
+        this[strat + 'run']() // use the strategy prefix to run the function for the relevent strategy
 
     }
-
-
-    // Sparkline rendering move to event.on
-
-
-    var color;
-
-    const tradeBarrier = settings.get('tradeBarrier.tradeBarrier')
-    var tradeBarrierNo = tradeBarrier * 1;
-
-
-    // // console.log('This should be a number: '+tradeBarrierNo)
-
-
-
-
-    if (settings.get('callOrPut.callOrPut') == 'PUT' && settings.get('barrier.barrier') != 'no open trade') {
-        // console.log('Main If Triggered PUT'+tradeBarrierNo)
-        if (tradeBarrierNo == 0) {
-            // console.log('No barrier PUT')
-            if (lastTick < settings.get('barrier.barrier')) {
-
-                color = 'green';
-                document.getElementById('closeL').style.color = 'green';
-
-            } else if (lastTick > settings.get('barrier.barrier')) {
-                color = 'red'
-                document.getElementById('closeL').style.color = 'red';
-            }
-        } else if (settings.get('inverseBarrier.inverseBarrier') == 'Normal' && tradeBarrierNo != 0) {
-            // console.log('Normal barrier PUT')
-            if (lastTick < settings.get('barrier.barrier') + tradeBarrierNo) {
-
-                color = 'green';
-                document.getElementById('closeL').style.color = 'green';
-
-            } else if (lastTick > settings.get('barrier.barrier') + tradeBarrierNo) {
-                color = 'red'
-                document.getElementById('closeL').style.color = 'red';
-            }
-
-
-
-        } else if (settings.get('inverseBarrier.inverseBarrier') == 'Inverse' && tradeBarrierNo != 0) {
-            // console.log('Inverse barrier PUT')
-            if (lastTick < settings.get('barrier.barrier') - tradeBarrierNo) {
-
-                color = 'green';
-                document.getElementById('closeL').style.color = 'green';
-
-            } else if (lastTick > settings.get('barrier.barrier') - tradeBarrierNo) {
-                color = 'red'
-                document.getElementById('closeL').style.color = 'red';
-            }
-        }
-    }
-
-
-    if (settings.get('callOrPut.callOrPut') == 'CALL' && settings.get('barrier.barrier') != 'no open trade') {
-        // console.log('Main If Triggered CALL')
-        if (tradeBarrierNo == 0) {
-            // console.log('No barrier CALL')
-            if (lastTick > settings.get('barrier.barrier')) {
-
-                color = 'green';
-                document.getElementById('closeL').style.color = 'green';
-
-            } else if (lastTick < settings.get('barrier.barrier')) {
-                color = 'red'
-                document.getElementById('closeL').style.color = 'red';
-            }
-        } else if (settings.get('inverseBarrier.inverseBarrier') == 'Normal' && tradeBarrierNo != 0) {
-            // console.log('Normanl barrier CALL')
-            if (lastTick > settings.get('barrier.barrier') - tradeBarrierNo) {
-
-                color = 'green';
-                document.getElementById('closeL').style.color = 'green';
-
-            } else if (lastTick < settings.get('barrier.barrier') - tradeBarrierNo) {
-                color = 'red'
-                document.getElementById('closeL').style.color = 'red';
-            }
-
-
-
-        } else if (settings.get('inverseBarrier.inverseBarrier') == 'Inverse' && tradeBarrierNo != 0) {
-            // console.log('Inverse barrier CALL')
-            if (lastTick > settings.get('barrier.barrier') + tradeBarrierNo) {
-
-                color = 'green';
-                document.getElementById('closeL').style.color = 'green';
-
-            } else if (lastTick < settings.get('barrier.barrier') + tradeBarrierNo) {
-                color = 'red'
-                document.getElementById('closeL').style.color = 'red';
-            }
-
-        }
-    }
-
-
-
-    //sellingearly functionality
-
-    if (settings.get('sellprofit.sellprofit') != 0 && settings.get('canSell.canSell') == 1) {
-
-        document.getElementById('sell').style.display = '';
-
-        document.getElementById('contractProfit').textContent = settings.get('sellprofit.sellprofit');
-
-        if (settings.get('sellprofit.sellprofit') >= 0) {
-            document.getElementById('contractProfit').style.color = '#21ba45';
-        } else {
-            document.getElementById('contractProfit').style.color = 'red';
-
-        }
-    } else {
-        document.getElementById('sell').style.display = 'none';
-
-
-    }
-    document.getElementById('closeC').textContent = lastTick;
-    document.getElementById('entryC').textContent = settings.get('barrier.barrier');
-
-
-
-
-    if (settings.get('tradeInProgress.tradeInProgress') === false) {
-
-        color = 'orange';
-        document.getElementById('closeL').style.color = '';
-    }
-
-    //  // console.log('lastvalue:', lastTick);
-    //// console.log('entry spot:', settings.get('barrier.barrier'));
-    //// console.log(settings.get('callOrPut.callOrPut'));
-    //// console.log(settings.get('tradeInProgress.tradeInProgress'));
-
-    $("#sparkline").sparkline(stream, {
-
-        spotColor: color,
-        type: 'line',
-        width: '100%',
-        height: '100%',
-        lineColor: color,
-        fillColor: '#a0743b40',
-        minSpotColor: false,
-        maxSpotColor: false,
-        spotRadius: 4,
-        disableHighlight: true,
-        disableTooltips: true,
-        drawNormalOnTop: false
-
-    });
-
 
 }

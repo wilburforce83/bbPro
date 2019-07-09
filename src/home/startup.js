@@ -62,4 +62,9 @@
 
      settings.set('trading.view', false)
 
+
+     api.events.on('*', function (response) {
+         // console.log('all', response);
+     });
+
  }

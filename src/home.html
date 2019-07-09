@@ -42,7 +42,11 @@
 
         .Site-content {
             display: flex !important;
+
             flex-direction: column;
+
+            min-height: 100%;
+
             margin: 0;
             padding: 5;
 
@@ -54,28 +58,6 @@
             z-index: 10010;
         }
 
-        .js-plotly-plot,
-        .plot-container {
-            height: 74vh;
-            margin-left: -30px;
-            margin-right: 10px;
-        }
-
-        .iframe-area {
-            display: flex !important;
-            flex-direction: row;
-            height: 74vh;
-            margin-left: -30px;
-            margin-right: 10px;
-
-
-            margin-top: 15px;
-        }
-
-        .ui.button {
-
-            border-radius: 0;
-        }
 
         .ui-mini-inverted-card {
 
@@ -103,6 +85,12 @@
             background: rgb(255, 255, 255) url('../assets/images/spinner7.gif') no-repeat center center;
             ;
             z-index: 150000;
+        }
+
+        #tradingGrid {
+
+            width: 100%;
+            height: 92%;
         }
 
         #loadingfooter {
@@ -270,7 +258,7 @@
 
                 <h5 class="ui padded black header">
                     <div class="ui hidden divider"></div>
-                    <div style="font-family: 'Comfortaa', cursive; font-size: 1em" class="content">
+                    <div style="font-family: 'Comfortaa', cursive; font-size: 1em; margin-left: 10px;" class="content">
                         bbTrader <sup>pro</sup>
                         <div class="black sub header">The ultimate trading platform</div>
                     </div>
@@ -326,9 +314,11 @@
                         <div class="vertically fitted item"><span id="clock"></span></span></div>
                     </div>
                     <div class="ui vertically fitted text menu">
-                        <div class="vertically fitted item"><span id="account"></span>&nbsp;|&nbsp;<span
-                                id="currency"></span>&nbsp;|&nbsp;<span id="balance">Please Choose
-                                Account</span></div>
+                        <div style="font-family: 'Comfortaa', cursive; font-size: 1em" class="vertically fitted item">
+                            <h5> <span id="account"></span>&nbsp;|&nbsp;<span id="currency"></span>&nbsp;|&nbsp;<span
+                                    id="balance">Please Choose
+                                    Account</span></h5>
+                        </div>
                     </div>
 
 
@@ -340,14 +330,15 @@
 
 
 
-                    <div class="ui small compact fluid buttons">
+                    <div class="ui small fluid buttons">
                         <button id="setParameters" class="ui button">Parameters & Money Management</button>
                     </div>
-                    <div class="ui fluid card">
+                    <div class="ui hidden divider"></div>
+                    <div class="ui centered padded container">
 
-                        <h6 class="ui horizontal divider header">
+                        <h6 class=" ui padded horizontal divider header">
 
-                            <span style="color: white" id="sparklineSym"> Symbol</span>
+                            <span style="color: black; margin-top: 5px;" id="sparklineSym"> Symbol</span>
                         </h6>
                         <div>
 
@@ -430,8 +421,8 @@
                         </h6>
                         <div class="ui mini fluid card">
 
-                            <p style="color:grey;overflow-y: auto;
-                            max-height: 20vh;"><span id='notifyme'></span></p>
+                            <p style="color:grey;overflow-y: auto; min-height: 25vh; max-height: 25vh;
+                            "><span id='notifyme'></span></p>
                         </div>
                     </div>
                     <div class="ui hidden divider"></div>
@@ -449,7 +440,7 @@
 
 
 
-                <div class="eleven wide center aligned column">
+                <div style="margin: 0;" class="eleven wide center aligned column">
                     <div id="chartcolumn" class="column">
                         <div class="three ui right aligned columns">
                             <button id="setFX" class="ui left attached compact small button">FX</button>
@@ -490,32 +481,15 @@
                                     </div>
                                 </div>
                             </a>
-                            <a class="item">
-                                <div class="ui small right aligned labeled icon dropdown compact button"
-                                    id="CLdropdown">
-                                    <input type="hidden" name="CL Style" id="CLelect">
-                                    <i class="cog icon"></i>
-                                    <div id="dropDownChart" class="default text">No. of Candles</div>
-                                    <div class="menu" id="currentMS">
-                                        <div class="item" id="TwentyCl" value="20">20 Candles</div>
-                                        <div class="item" id="FourtyCl" value="40">40 Candles</div>
-                                        <div class="item" id="SixtyCl" value="60">60 Candles</div>
-                                        <div class="item" id="EightyCl" value="80">80 Candles</div>
-                                        <div class="item" id="HundredCl" value="100">100 Candles</div>
-                                        <div class="item" id="HundredFiftyCl" value="150">150 Candles</div>
-                                        <div class="item" id="ThreeHundredCl" value="300">300 Candles</div>
-
-                                    </div>
-                                </div>
-                            </a>
 
                         </div>
 
                     </div>
 
-                    <div class="ui stretched row">
-                        <iframe id="tradingviewWindow" name="tradingview" src="about: blank" height="95%"
-                            frameborder="0" scrolling="auto" class="iframe-area">
+                    <div id="tradingGrid" class="sixteen wide column">
+                        <div class="ui hidden divider"></div>
+                        <iFrame id="tradingviewWindow" src="https://charts.binarybottrading.eu/R_100.html"
+                            style=" width:100%; height:100%" frameborder="0" scrolling="auto" class="iframe-area">
                         </iframe>
                     </div>
 
@@ -535,10 +509,10 @@
 
     <footer>
 
-        <div style="width:100%;" class="ui black sticky">
+        <div style="width:100%; min-height: flex;" class="ui black sticky">
 
             <div class="ui center aligned grid">
-                <div class="two wide black column">
+                <div style="padding-top: 0; padding-bottom: 0;" class="two wide black column">
 
 
                     <div class="ui inverted compact segment">
@@ -554,7 +528,7 @@
                     </div>
 
                 </div>
-                <div class="twelve wide black column">
+                <div style="padding-top: 0; padding-bottom: 0;" class="twelve wide black compact column">
 
 
 
@@ -679,7 +653,7 @@
 
 
 
-                <div class="two wide black column">
+                <div style="padding-top: 0; padding-bottom: 0;" class="two wide black column">
 
 
 
@@ -723,7 +697,7 @@
 
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
+    <script src="../assets/binary-live-api.js"></script>
     <script src="../assets/moment.min.js"></script>
     <script src="../assets/jquery.min.js"></script>
     <script src="../assets/jquery.sparkline.js"></script>
@@ -855,9 +829,6 @@
     $('#MSdropdown')
         .dropdown();
 
-    $('#CLdropdown')
-        .dropdown();
-
 
     $('#quitDropdown')
         .dropdown();
@@ -903,36 +874,44 @@
 
         settings.set('symbol.symbol', 'R_10');
         settings.set('changesymAuto.changesymAuto', false);
+        switched = true;
+
     });
     $('#25sym').click(function () {
 
         settings.set('symbol.symbol', 'R_25');
         settings.set('changesymAuto.changesymAuto', false);
+        switched = true;
     });
     $('#50sym').click(function () {
 
         settings.set('symbol.symbol', 'R_50');
         settings.set('changesymAuto.changesymAuto', false);
+        switched = true;
     });
     $('#75sym').click(function () {
 
         settings.set('symbol.symbol', 'R_75');
         settings.set('changesymAuto.changesymAuto', false);
+        switched = true;
     });
     $('#100sym').click(function () {
 
         settings.set('symbol.symbol', 'R_100');
         settings.set('changesymAuto.changesymAuto', false);
+        switched = true;
     });
     $('#bullsym').click(function () {
 
         settings.set('symbol.symbol', 'RDBULL');
         settings.set('changesymAuto.changesymAuto', false);
+        switched = true;
     });
     $('#bearsym').click(function () {
 
         settings.set('symbol.symbol', 'RDBEAR');
         settings.set('changesymAuto.changesymAuto', false);
+        switched = true;
     });
 
     // FOREX 
@@ -942,36 +921,43 @@
 
         settings.set('symbol.symbol', 'frxUSDCHF');
         settings.set('changesymAuto.changesymAuto', false);
+        switched = true;
     });
     $('#eurusd').click(function () {
 
         settings.set('symbol.symbol', 'frxEURUSD');
         settings.set('changesymAuto.changesymAuto', false);
+        switched = true;
     });
     $('#usdjpy').click(function () {
 
         settings.set('symbol.symbol', 'frxUSDJPY');
         settings.set('changesymAuto.changesymAuto', false);
+        switched = true;
     });
     $('#gbpusd').click(function () {
 
         settings.set('symbol.symbol', 'frxGBPUSD');
         settings.set('changesymAuto.changesymAuto', false);
+        switched = true;
     });
     $('#audusd').click(function () {
 
         settings.set('symbol.symbol', 'frxAUDUSD');
         settings.set('changesymAuto.changesymAuto', false);
+        switched = true;
     });
     $('#nzdusd').click(function () {
 
         settings.set('symbol.symbol', 'frxNZDUSD');
         settings.set('changesymAuto.changesymAuto', false);
+        switched = true;
     });
     $('#usdcad').click(function () {
 
         settings.set('symbol.symbol', 'frxUSDCAD');
         settings.set('changesymAuto.changesymAuto', false);
+        switched = true;
     });
 
 
@@ -1018,7 +1004,7 @@
     });
 
     $('#linktoken').click(function () {
-        shell.openExternal('https://www.binary.com/en/user/security/api_tokenws.html')
+        shell.openExternal('https://www.binary.me/en/user/security/api_tokenws.html')
     });
 
 
@@ -1114,50 +1100,6 @@
         console.log(settings.get('MSstyle.MSstyle'));
         settings.set('message.message', 'Market Selector set to ' + settings.get('MSstyle.MSstyle'));
     });
-
-
-    // Chart Length Selector Options
-
-
-    document.getElementById('TwentyCl').addEventListener('click', function (event) {
-        settings.set('candlesOnChart.candlesOnChart', 20);
-        console.log(settings.get('candlesOnChart.candlesOnChart'));
-        settings.set('message.message', 'Candle Chart Length set to 20');
-    });
-
-    document.getElementById('FourtyCl').addEventListener('click', function (event) {
-        settings.set('candlesOnChart.candlesOnChart', 40);
-        console.log(settings.get('candlesOnChart.candlesOnChart'));
-        settings.set('message.message', 'Candle Chart Length set to 40');
-    });
-    document.getElementById('SixtyCl').addEventListener('click', function (event) {
-        settings.set('candlesOnChart.candlesOnChart', 60);
-        console.log(settings.get('candlesOnChart.candlesOnChart'));
-        settings.set('message.message', 'Candle Chart Length set to 60');
-    });
-    document.getElementById('EightyCl').addEventListener('click', function (event) {
-        settings.set('candlesOnChart.candlesOnChart', 80);
-        console.log(settings.get('candlesOnChart.candlesOnChart'));
-        settings.set('message.message', 'Candle Chart Length set to 80');
-    });
-    document.getElementById('HundredCl').addEventListener('click', function (event) {
-        settings.set('candlesOnChart.candlesOnChart', 100);
-        console.log(settings.get('candlesOnChart.candlesOnChart'));
-        settings.set('message.message', 'Candle Chart Length set to 100');
-    });
-
-    document.getElementById('HundredFiftyCl').addEventListener('click', function (event) {
-        settings.set('candlesOnChart.candlesOnChart', 150);
-        console.log(settings.get('candlesOnChart.candlesOnChart'));
-        settings.set('message.message', 'Candle Chart Length set to 150 ');
-    });
-    document.getElementById('ThreeHundredCl').addEventListener('click', function (event) {
-        settings.set('candlesOnChart.candlesOnChart', 300);
-        console.log(settings.get('candlesOnChart.candlesOnChart'));
-        settings.set('message.message', 'Candle Chart Length set to 300');
-    });
-
-
 
 
 
@@ -1629,7 +1571,7 @@
         //   document.getElementById('notifyme').insertAdjacentHTML("afterbegin",
         //     '<p style="color:#8c01a0">' +
         //   errorMsg + '</p>');
-        console.log(errorMsg)
+        console.log(errorMsg, url, lineNumber)
 
         return false;
 
@@ -1642,19 +1584,270 @@
     var chartSymbol = '';
 
     function changeChart() {
-        symbolsymbol = settings.get('symbol.symbol');
-        console.log('symbol=' + symbolsymbol, 'chart=' + chartSymbol)
-        if (symbolsymbol != chartSymbol) {
+        settings.get('symbol.symbol') = settings.get('symbol.symbol');
+        console.log('symbol=' + settings.get('symbol.symbol'), 'chart=' + chartSymbol)
+        if (settings.get('symbol.symbol') != chartSymbol) {
 
-            chartSymbol = symbolsymbol;
+            chartSymbol = settings.get('symbol.symbol');
             document.getElementById('tradingviewWindow').src =
-                'https://charts.binarybottrading.eu/' + symbolsymbol + '.html';
+                'https://charts.binarybottrading.eu/' + settings.get('symbol.symbol') + '.html';
 
             document.getElementsByName('tradingview').contentWindow.location.reload(true)
-            
+
 
         }
 
+    }
+
+    renderSparkline()
+    setInterval(renderSparkline, 200);
+
+    function renderSparkline() {
+
+        if (renderSparkline === true) {
+
+
+            document.getElementById('sparklineSym').textContent = settings.get('symbol.symbol');
+
+            // Sparkline rendering
+
+            var normalRange = lastTick;
+            var normalRange2 = lastTick;
+
+            var color;
+            var barrierColour;
+            var drawontop = false;
+            renderSparkline = false;
+
+            if (settings.get('tradeInProgress.tradeInProgress') === false) {
+
+                color = 'orange';
+                barrierColour = '#ffff';
+                drawontop = false;
+            }
+
+
+            const tradeBarrier = settings.get('tradeBarrier.tradeBarrier')
+            var tradeBarrierNo = tradeBarrier * 1;
+
+
+
+            if (settings.get('callOrPut.callOrPut') == 'PUT' && settings.get('barrier.barrier') !=
+                'no open trade') {
+                normalRange = lastTick;
+                normalRange2 = lastTick;
+
+                barrierColour = '#ffff';
+                drawontop = false;
+                // console.log('Main If Triggered PUT'+tradeBarrierNo)
+                if (tradeBarrierNo == 0) {
+                    // console.log('No barrier PUT')
+                    if (lastTick < settings.get('barrier.barrier')) {
+
+                        color = 'green';
+                        normalRange = settings.get('barrier.barrier');
+                        normalRange2 = Math.min(...ticks.slice(-90));
+                        barrierColour = '#C6ECC940';
+                        document.getElementById('closeL').style.color = 'green';
+
+                    } else if (lastTick > settings.get('barrier.barrier')) {
+                        color = 'red'
+                        normalRange2 = settings.get('barrier.barrier');
+                        normalRange = Math.max(...ticks.slice(-90));
+                        barrierColour = '#EEB5B540';
+                        document.getElementById('closeL').style.color = 'red';
+                    }
+                } else if (settings.get('inverseBarrier.inverseBarrier') == 'Normal' && tradeBarrierNo != 0) {
+                    // console.log('Normal barrier PUT')
+                    if (lastTick < settings.get('barrier.barrier') + tradeBarrierNo) {
+
+                        color = 'green';
+                        normalRange = settings.get('barrier.barrier');
+                        normalRange2 = Math.min(...ticks.slice(-90));
+                        barrierColour = '#C6ECC940';
+                        document.getElementById('closeL').style.color = 'green';
+
+                    } else if (lastTick > settings.get('barrier.barrier') + tradeBarrierNo) {
+                        color = 'red'
+                        normalRange2 = settings.get('barrier.barrier');
+                        normalRange = Math.max(...ticks.slice(-90));
+                        barrierColour = '#EEB5B540';
+                        document.getElementById('closeL').style.color = 'red';
+                    }
+
+
+
+                } else if (settings.get('inverseBarrier.inverseBarrier') == 'Inverse' && tradeBarrierNo != 0) {
+                    // console.log('Inverse barrier PUT')
+                    if (lastTick < settings.get('barrier.barrier') - tradeBarrierNo) {
+
+                        color = 'green';
+                        normalRange = settings.get('barrier.barrier');
+                        normalRange2 = Math.min(...ticks.slice(-90));
+                        barrierColour = '#C6ECC940';
+                        document.getElementById('closeL').style.color = 'green';
+
+                    } else if (lastTick > settings.get('barrier.barrier') - tradeBarrierNo) {
+                        color = 'red'
+                        normalRange2 = settings.get('barrier.barrier');
+                        normalRange = Math.max(...ticks.slice(-90));
+                        barrierColour = '#EEB5B540';
+                        document.getElementById('closeL').style.color = 'red';
+                    }
+                }
+            }
+
+
+            if (settings.get('callOrPut.callOrPut') == 'CALL' && settings.get('barrier.barrier') !=
+                'no open trade') {
+
+                normalRange = lastTick;
+                normalRange2 = lastTick;
+                barrierColour = '#ffff';
+                drawontop = false;
+                // console.log('Main If Triggered CALL')
+                if (tradeBarrierNo == 0) {
+                    // console.log('No barrier CALL')
+                    if (lastTick > settings.get('barrier.barrier')) {
+
+                        color = 'green';
+                        normalRange2 = settings.get('barrier.barrier');
+                        normalRange = Math.max(...ticks.slice(-90));
+
+                        barrierColour = '#C6ECC940';
+                        document.getElementById('closeL').style.color = 'green';
+
+                    } else if (lastTick < settings.get('barrier.barrier')) {
+                        color = 'red'
+                        normalRange = settings.get('barrier.barrier');
+                        normalRange2 = Math.min(...ticks.slice(-90));
+
+                        barrierColour = '#EEB5B540';
+                        document.getElementById('closeL').style.color = 'red';
+                    }
+                } else if (settings.get('inverseBarrier.inverseBarrier') == 'Normal' && tradeBarrierNo != 0) {
+                    // console.log('Normanl barrier CALL')
+                    if (lastTick > settings.get('barrier.barrier') - tradeBarrierNo) {
+
+                        color = 'green';
+                        normalRange2 = settings.get('barrier.barrier');
+                        normalRange = Math.max(...ticks.slice(-90));
+
+                        barrierColour = '#C6ECC940';
+                        document.getElementById('closeL').style.color = 'green';
+
+                    } else if (lastTick < settings.get('barrier.barrier') - tradeBarrierNo) {
+                        color = 'red'
+                        normalRange = settings.get('barrier.barrier');
+                        normalRange2 = Math.min(...ticks.slice(-90));
+
+                        barrierColour = '#EEB5B540';
+                        document.getElementById('closeL').style.color = 'red';
+                    }
+
+
+
+                } else if (settings.get('inverseBarrier.inverseBarrier') == 'Inverse' && tradeBarrierNo != 0) {
+                    // console.log('Inverse barrier CALL')
+                    if (lastTick > settings.get('barrier.barrier') + tradeBarrierNo) {
+
+                        color = 'green';
+                        normalRange2 = settings.get('barrier.barrier');
+                        normalRange = Math.max(...ticks.slice(-90));
+
+                        barrierColour = '#C6ECC940';
+                        document.getElementById('closeL').style.color = 'green';
+
+                    } else if (lastTick < settings.get('barrier.barrier') + tradeBarrierNo) {
+                        color = 'red'
+                        normalRange = settings.get('barrier.barrier');
+                        normalRange2 = Math.min(...ticks.slice(-90));
+
+                        barrierColour = '#EEB5B540';
+                        document.getElementById('closeL').style.color = 'red';
+                    }
+
+                }
+            }
+
+
+
+            //sellingearly functionality
+
+            if (settings.get('sellprofit.sellprofit') != 0 && settings.get('canSell.canSell') == 1) {
+
+                document.getElementById('sell').style.display = '';
+
+                document.getElementById('contractProfit').textContent = settings.get('sellprofit.sellprofit');
+
+                if (settings.get('sellprofit.sellprofit') >= 0) {
+                    document.getElementById('contractProfit').style.color = '#21ba45';
+                } else {
+                    document.getElementById('contractProfit').style.color = 'red';
+
+                }
+            } else {
+                document.getElementById('sell').style.display = 'none';
+
+
+            }
+            document.getElementById('closeC').textContent = lastTick;
+            document.getElementById('entryC').textContent = settings.get('barrier.barrier');
+
+
+
+
+            if (settings.get('tradeInProgress.tradeInProgress') === false) {
+
+                color = 'orange';
+                document.getElementById('closeL').style.color = '';
+            }
+
+            //  // console.log('lastvalue:', lastTick);
+            //// console.log('entry spot:', settings.get('barrier.barrier'));
+            //// console.log(settings.get('callOrPut.callOrPut'));
+            //// console.log(settings.get('tradeInProgress.tradeInProgress'));
+
+            $("#sparkline").sparkline(ticks.slice(-90), {
+
+                spotColor: color,
+                type: 'line',
+                width: '100%',
+                height: '100%',
+                lineColor: color,
+                fillColor: '#BABABA40',
+                minSpotColor: '#C90000',
+                maxSpotColor: '#002AB3',
+                spotRadius: 2,
+                disableHighlight: true,
+                disableTooltips: true,
+                normalRangeMax: normalRange,
+                normalRangeMin: normalRange2,
+                normalRangeColor: barrierColour,
+                drawNormalOnTop: drawontop
+
+            });
+
+        }
+    };
+
+
+
+    // Load tradingview based on symbol
+
+    var chartSymbol = '';
+
+    function changeChart() {
+
+        console.log('symbol=' + settings.get('symbol.symbol'), 'chart=' + chartSymbol)
+        if (settings.get('symbol.symbol') != chartSymbol) {
+            console.log('should be reloading')
+            chartSymbol = settings.get('symbol.symbol');
+            document.getElementById('tradingviewWindow').src =
+                'https://charts.binarybottrading.eu/' + settings.get('symbol.symbol') + '.html';
+
+            document.getElementById('tradingviewWindow').src += '';
+        }
     }
 
 

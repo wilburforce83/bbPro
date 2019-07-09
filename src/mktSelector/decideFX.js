@@ -140,6 +140,7 @@ function decideFX() {
 
                     settings.set('timeUntilTrading.Open', 0);
                     settings.set('symbol.symbol', newSymbol)
+                    switched = true;
                 }
             }
 
@@ -266,9 +267,9 @@ function decideFX() {
                 }
 
                 if (newSymbol !== settings.get('symbol.symbol')) {
-
+                    switched = true;
                     settings.set('timeUntilTrading.Open', 0);
-                    settings.set('symbol.symbol', newSymbol)
+                    settings.set('symbol.symbol', newSymbol);
                 }
             }
 
@@ -347,7 +348,8 @@ function decideFX() {
                 if (newSymbol !== settings.get('symbol.symbol')) {
 
                     settings.set('timeUntilTrading.Open', 0);
-                    settings.set('symbol.symbol', newSymbol)
+                    settings.set('symbol.symbol', newSymbol);
+                    switched = true;
                 }
             }
 

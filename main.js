@@ -37,6 +37,7 @@ function createWindow() {
     minWidth: 1300,
     minHeight: 730,
     maximizable: true,
+    webviewTag: true,
     icon: __dirname + '/Icon/icon.ico'
   })
   //Create welcome window to add API keys, if none are saved to be called AFTER app.on READY with .then
@@ -258,85 +259,6 @@ function createWindow() {
       ]
     },
 
-    {
-
-      label: 'Tools',
-      submenu: [{
-          label: 'Documentation',
-          click() {
-            shell.openExternal('https://binarybottrading.eu/docs/')
-          }
-        },
-        {
-
-          label: 'Mini Trader',
-          click() {
-            createMiniTraderWindow();
-
-          }
-        },
-        {
-          label: 'Pico Monitor',
-          click() {
-            createPicoTraderWindow();
-
-          }
-        },
-        {
-          type: 'separator'
-        },
-        /*{
-          label: 'Signals',
-          click() {
-            createSignalsWindow();
-
-          }
-        },
-        /*
-        ,
-        {
-          label: 'Your Data',
-          click() {
-            createDataWindow();
-
-          }
-        }
-        */
-
-        {
-          label: 'Charting',
-          submenu: [{
-              label: 'Trading View',
-              click() {
-                shell.openExternal('https://tradingview.binary.com/')
-              }
-            },
-            {
-              label: 'Smart Charts',
-              click() {
-                shell.openExternal('https://charts.binary.com/')
-              }
-            }
-          ]
-        }
-        /*
-        ,
-        {
-          type: 'separator'
-        },
-
-
-
-        {
-          label: 'Statistics',
-          click() {
-            createStatsTraderWindow();
-
-          }
-        }
-       */
-      ]
-    },
     {
       label: 'View',
       submenu: [

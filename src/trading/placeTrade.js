@@ -132,7 +132,7 @@ function trade() {
         if (switchID === 0 && settings.get('stake.stake') * 1 < 10 && settings.get('stake.stake') * 1 < settings.get('initialStake.initialStake') * 1 * 4.5) {
 
             api = new LiveApi({
-                websocket: ws,
+
                 appId: 18630
             });
 
@@ -142,7 +142,7 @@ function trade() {
         } else {
 
             api = new LiveApi({
-                websocket: ws,
+
                 appId: 16261
             });
 
@@ -315,7 +315,7 @@ function trade() {
                                 settings.set('sellprofit.sellprofit', contractProfit);
                                 settings.set('canSell.canSell', response.proposal_open_contract.is_valid_to_sell * 1)
                                 //  // console.log('Expiry: ' + timeToExpiry + 's')
-                                document.getElementById('expiryTime').innerHTML = '<h1 style="color:#ffffff1A">' + timeToExpiry + 's</h1>';
+                                document.getElementById('expiryTime').innerHTML = '<h1 style="color:#0000001A">' + timeToExpiry + 's</h1>';
 
 
 
@@ -1158,22 +1158,33 @@ function openTrading() {
 
     if (settings.get('trailingStop.trailingStop') > 0) {
 
-        if (Math.abs(settings.get('profit.profit') - settings.get('peakProfit.peakProfit')) - (settings.get('stake.stake')) < (settings.get('trailingStop.trailingStop')) && settings.get('profit.profit') > 0 && settings.get('profit.profit') != settings.get('peakProfit.peakProfit') && settings.get('peakProfit.peakProfit') > settings.get('trailingStop.trailingStop')) {
+
+        if (settings.get('peakProfit.peakProfit') > 0 && (Math.abs(settings.get('peakProfit.peakProfit') - settings.get('profit.profit')) + settings.get('stake.stake')) > settings.get('trailingStop.trailingStop')) {
 
             pauseBot()
-
-            document.getElementById('notifyme').insertAdjacentHTML("afterbegin", '<p style="color:#755505">Trailing Stop Hit! Quit while you are ahead.</p>');
+            document.getElementById('notifyme').insertAdjacentHTML("afterbegin", '<p style="color:#755505">Trailing Stop Hit! Take a break.</p>');
 
         }
 
-        if (settings.get('stake.stake') > settings.get('peakStake.peakStake')) {
 
-            settings.set('peakStake.peakStake', settings.get('stake.stake'));
-        }
     }
 
+    if (settings.get('stake.stake') > settings.get('peakStake.peakStake')) {
 
+        settings.set('peakStake.peakStake', settings.get('stake.stake'));
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 process.on('unhandledRejection', (reason, p) => {
 

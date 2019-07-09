@@ -31,7 +31,7 @@ function priceActionrun() {
     if (settings.get('run.run') && settings.get('autoTrade.autoTrade') && settings.get('tradeInProgress.tradeInProgress') === false) {
 
         // ------------------  ANALYZE DATA  ----------------------
-
+        console.log('priceaction.js running')
         closeList = settings.get('candleData.closeList');
         openList = settings.get('candleData.openList');
         highList = settings.get('candleData.highList');
@@ -48,13 +48,13 @@ function priceActionrun() {
         let seconds = settings.get('epoch.epoch');
         let candleEnding = settings.get('multiCandleL.multiCandleL') / 1.2;
         let candleStarting = settings.get('multiCandleL.multiCandleL') / 10;
-        // console.log('open ' + open + '| close ' + close + '| high ' + high + '| low ' + low);
-        // console.log('seconds ' + seconds + 's');
-        // console.log('CandlePercent ' + CandlePercent + '%');
+        console.log('open ' + open + '| close ' + close + '| high ' + high + '| low ' + low);
+        console.log('seconds ' + seconds + 's');
+        console.log('CandlePercent ' + CandlePercent + '%');
 
         //if function for CALL event
 
-        if (close > open && CandlePercent > settings.get('priceActionCandleBody.priceActionCandleBody')) {
+        if (close > open && CandlePercent > settings.get('priceActionCandleBody.priceActionCandleBody') * 1) {
             let time = moment().format("kk:mm:ss");
 
 
@@ -92,7 +92,7 @@ function priceActionrun() {
         }
 
         //if function for PUT event
-        else if (close < open && CandlePercent > settings.get('priceActionCandleBody.priceActionCandleBody')) {
+        else if (close < open && CandlePercent > settings.get('priceActionCandleBody.priceActionCandleBody') * 1) {
             let time = moment().format("kk:mm:ss");
 
 

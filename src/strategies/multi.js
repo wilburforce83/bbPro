@@ -21,7 +21,7 @@ function multirun() {
     triggerCalls = settings.get('numberOfCalls.numberOfCalls');
     triggerPuts = settings.get('numberOfPuts.numberOfPuts');
 
-    //  console.log(triggerCalls, triggerPuts, 'Requires ' + triggerNumber + ' active Triggers');
+    console.log(triggerCalls, triggerPuts, 'Requires ' + triggerNumber + ' active Triggers');
 
     if (settings.get('run.run') && settings.get('autoTrade.autoTrade') && settings.get('tradeInProgress.tradeInProgress') === false && anyTrade === false && triggerNumber >= 1) {
         let time = moment().format("kk:mm:ss");
@@ -81,5 +81,6 @@ function multirun() {
 
 // run each strategy function
 function passStrats(value) {
+    console.log('running passStrats');
     this[value + 'run']() // use the strategy prefixto run the function for the relevent strategy
 }

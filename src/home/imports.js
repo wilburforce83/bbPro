@@ -9,12 +9,13 @@
      BrowserWindow,
      app
  } = require('electron').remote;
+ var LiveApi = require('binary-live-api').LiveApi;
  const path = require('path');
  const closeApp = document.getElementById('exitApp');
  const stats = require('stats-lite');
  const settings = require('electron').remote.require('electron-settings');
  var ws = require('ws');
- var LiveApi = require('binary-live-api').LiveApi;
+
  var api = new LiveApi({
      websocket: ws,
      appId: 16261
@@ -37,7 +38,7 @@
 
  };
 
- 
+ var renderSparkline = false;
 
  //Technical indicators const
  const technicalIndicators = require('technicalindicators');
