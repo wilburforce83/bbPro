@@ -133,7 +133,7 @@ function trade() {
 
             api = new LiveApi({
 
-                appId: 18630
+                appId: 18970 // Simon's when active
             });
 
 
@@ -143,7 +143,7 @@ function trade() {
 
             api = new LiveApi({
 
-                appId: 16261
+                appId: 18970
             });
 
 

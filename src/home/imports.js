@@ -18,7 +18,7 @@
 
  var api = new LiveApi({
      websocket: ws,
-     appId: 16261
+     appId: 18970
  });
  const shell = require('electron').shell
 

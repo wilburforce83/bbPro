@@ -21,7 +21,7 @@ let RSI = require('technicalindicators').RSI;
 let CCI = require('technicalindicators').CCI;
 
 let LiveApi = require('binary-live-api').LiveApi;
-let api = new LiveApi({ websocket: ws, appId: 16261 });
+let api = new LiveApi({ websocket: ws, appId: 18970 });
 
 
 

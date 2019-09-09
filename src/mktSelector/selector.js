@@ -4,7 +4,7 @@ const ws = require('ws');
 let LiveApi = require('binary-live-api').LiveApi;
 let api = new LiveApi({
     websocket: ws,
-    appId: 16261
+    appId: 18970
 });
 
 

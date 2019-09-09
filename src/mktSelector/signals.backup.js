@@ -25,7 +25,7 @@ var RSI = require('technicalindicators').RSI;
 var CCI = require('technicalindicators').CCI;
 
 var LiveApi = require('binary-live-api').LiveApi;
-var api = new LiveApi({ websocket: ws, appId: 16261 });
+var api = new LiveApi({ websocket: ws, appId: 18970 });
 
 //candle settings from /settings/tickSettings.js
 
