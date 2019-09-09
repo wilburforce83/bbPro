@@ -1661,40 +1661,40 @@
 
         if (response.tick.symbol == 'R_10' && response.tick.symbol == settings.get('symbol.symbol')) {
             R_10raw.push(response.tick.quote)
-            R_10 = R_10raw.slice(-Math.abs(120 - 1));
+            R_10 = R_10raw.slice(-Math.abs(settings.get('ticksToShow.ticksToShow') - 1));
             charting('R_10', R_10);
         };
         if (response.tick.symbol == 'R_25' && response.tick.symbol == settings.get('symbol.symbol')) {
             R_25raw.push(response.tick.quote)
-            R_25 = R_25raw.slice(-Math.abs(120 - 1));
+            R_25 = R_25raw.slice(-Math.abs(settings.get('ticksToShow.ticksToShow') - 1));
             charting('R_25', R_25);
         };
         if (response.tick.symbol == 'R_50' && response.tick.symbol == settings.get('symbol.symbol')) {
             R_50raw.push(response.tick.quote)
-            R_50 = R_50raw.slice(-Math.abs(120 - 1));
+            R_50 = R_50raw.slice(-Math.abs(settings.get('ticksToShow.ticksToShow') - 1));
             charting('R_50', R_50);
         };
         if (response.tick.symbol == 'R_75' && response.tick.symbol == settings.get('symbol.symbol')) {
             R_75raw.push(response.tick.quote)
-            R_75 = R_75raw.slice(-Math.abs(120 - 1));
+            R_75 = R_75raw.slice(-Math.abs(settings.get('ticksToShow.ticksToShow') - 1));
             charting('R_75', R_75);
 
         };
         if (response.tick.symbol == 'R_100' && response.tick.symbol == settings.get('symbol.symbol')) {
             R_100raw.push(response.tick.quote)
-            R_100 = R_100raw.slice(-Math.abs(120 - 1));
+            R_100 = R_100raw.slice(-Math.abs(settings.get('ticksToShow.ticksToShow') - 1));
             charting('R_100', R_100);
 
         }
         if (response.tick.symbol == 'RDBEAR' && response.tick.symbol == settings.get('symbol.symbol')) {
             RDBEARraw.push(response.tick.quote)
-            RDBEAR = RDBEARraw.slice(-Math.abs(120 - 1));
+            RDBEAR = RDBEARraw.slice(-Math.abs(settings.get('ticksToShow.ticksToShow') - 1));
             charting('RDBEAR', RDBEAR);
 
         }
         if (response.tick.symbol == 'RDBULL' && response.tick.symbol == settings.get('symbol.symbol')) {
             RDBULLraw.push(response.tick.quote)
-            RDBULL = RDBULLraw.slice(-Math.abs(120 - 1));
+            RDBULL = RDBULLraw.slice(-Math.abs(settings.get('ticksToShow.ticksToShow') - 1));
             charting('RDBULL', RDBULL);
 
         }

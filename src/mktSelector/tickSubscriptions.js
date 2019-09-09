@@ -189,14 +189,14 @@ function charting(market, dataset) {
 
                 color = 'green';
                 normalRange = settings.get('barrier.barrier');
-                normalRange2 = Math.min(...ticks.slice(-90));
+                normalRange2 = Math.min(...ticks.slice(-Math.abs(settings.get('ticksToShow.ticksToShow'))));
                 barrierColour = '#C6ECC940';
                 document.getElementById('closeL').style.color = 'green';
 
             } else if (lastTick > settings.get('barrier.barrier')) {
                 color = 'red'
                 normalRange2 = settings.get('barrier.barrier');
-                normalRange = Math.max(...ticks.slice(-90));
+                normalRange = Math.max(...ticks.slice(-Math.abs(settings.get('ticksToShow.ticksToShow'))));
                 barrierColour = '#EEB5B540';
                 document.getElementById('closeL').style.color = 'red';
             }
@@ -206,14 +206,14 @@ function charting(market, dataset) {
 
                 color = 'green';
                 normalRange = settings.get('barrier.barrier');
-                normalRange2 = Math.min(...ticks.slice(-90));
+                normalRange2 = Math.min(...ticks.slice(-Math.abs(settings.get('ticksToShow.ticksToShow'))));
                 barrierColour = '#C6ECC940';
                 document.getElementById('closeL').style.color = 'green';
 
             } else if (lastTick > settings.get('barrier.barrier') + tradeBarrierNo) {
                 color = 'red'
                 normalRange2 = settings.get('barrier.barrier');
-                normalRange = Math.max(...ticks.slice(-90));
+                normalRange = Math.max(...ticks.slice(-Math.abs(settings.get('ticksToShow.ticksToShow'))));
                 barrierColour = '#EEB5B540';
                 document.getElementById('closeL').style.color = 'red';
             }
@@ -226,14 +226,14 @@ function charting(market, dataset) {
 
                 color = 'green';
                 normalRange = settings.get('barrier.barrier');
-                normalRange2 = Math.min(...ticks.slice(-90));
+                normalRange2 = Math.min(...ticks.slice(-Math.abs(settings.get('ticksToShow.ticksToShow'))));
                 barrierColour = '#C6ECC940';
                 document.getElementById('closeL').style.color = 'green';
 
             } else if (lastTick > settings.get('barrier.barrier') - tradeBarrierNo) {
                 color = 'red'
                 normalRange2 = settings.get('barrier.barrier');
-                normalRange = Math.max(...ticks.slice(-90));
+                normalRange = Math.max(...ticks.slice(-Math.abs(settings.get('ticksToShow.ticksToShow'))));
                 barrierColour = '#EEB5B540';
                 document.getElementById('closeL').style.color = 'red';
             }
@@ -255,7 +255,7 @@ function charting(market, dataset) {
 
                 color = 'green';
                 normalRange2 = settings.get('barrier.barrier');
-                normalRange = Math.max(...ticks.slice(-90));
+                normalRange = Math.max(...ticks.slice(-Math.abs(settings.get('ticksToShow.ticksToShow'))));
 
                 barrierColour = '#C6ECC940';
                 document.getElementById('closeL').style.color = 'green';
@@ -263,7 +263,7 @@ function charting(market, dataset) {
             } else if (lastTick < settings.get('barrier.barrier')) {
                 color = 'red'
                 normalRange = settings.get('barrier.barrier');
-                normalRange2 = Math.min(...ticks.slice(-90));
+                normalRange2 = Math.min(...ticks.slice(-Math.abs(settings.get('ticksToShow.ticksToShow'))));
 
                 barrierColour = '#EEB5B540';
                 document.getElementById('closeL').style.color = 'red';
@@ -274,7 +274,7 @@ function charting(market, dataset) {
 
                 color = 'green';
                 normalRange2 = settings.get('barrier.barrier');
-                normalRange = Math.max(...ticks.slice(-90));
+                normalRange = Math.max(...ticks.slice(-Math.abs(settings.get('ticksToShow.ticksToShow'))));
 
                 barrierColour = '#C6ECC940';
                 document.getElementById('closeL').style.color = 'green';
@@ -282,7 +282,7 @@ function charting(market, dataset) {
             } else if (lastTick < settings.get('barrier.barrier') - tradeBarrierNo) {
                 color = 'red'
                 normalRange = settings.get('barrier.barrier');
-                normalRange2 = Math.min(...ticks.slice(-90));
+                normalRange2 = Math.min(...ticks.slice(-Math.abs(settings.get('ticksToShow.ticksToShow'))));
 
                 barrierColour = '#EEB5B540';
                 document.getElementById('closeL').style.color = 'red';
@@ -296,7 +296,7 @@ function charting(market, dataset) {
 
                 color = 'green';
                 normalRange2 = settings.get('barrier.barrier');
-                normalRange = Math.max(...ticks.slice(-90));
+                normalRange = Math.max(...ticks.slice(-Math.abs(settings.get('ticksToShow.ticksToShow'))));
 
                 barrierColour = '#C6ECC940';
                 document.getElementById('closeL').style.color = 'green';
@@ -304,7 +304,7 @@ function charting(market, dataset) {
             } else if (lastTick < settings.get('barrier.barrier') + tradeBarrierNo) {
                 color = 'red'
                 normalRange = settings.get('barrier.barrier');
-                normalRange2 = Math.min(...ticks.slice(-90));
+                normalRange2 = Math.min(...ticks.slice(-Math.abs(settings.get('ticksToShow.ticksToShow'))));
 
                 barrierColour = '#EEB5B540';
                 document.getElementById('closeL').style.color = 'red';
@@ -351,7 +351,7 @@ function charting(market, dataset) {
     //// console.log(settings.get('callOrPut.callOrPut'));
     //// console.log(settings.get('tradeInProgress.tradeInProgress'));
 
-    $("#sparkline").sparkline(ticks.slice(-90), {
+    $("#sparkline").sparkline(ticks.slice(-Math.abs(settings.get('ticksToShow.ticksToShow'))), {
 
         spotColor: color,
         type: 'line',
