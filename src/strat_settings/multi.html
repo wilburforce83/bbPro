@@ -569,6 +569,17 @@ Variable4
             //  console.log('supportResist is checked')
         }
 
+
+        if ($('.slider.HeikenAshi.checkbox').checkbox('is unchecked')) {
+            // $('.slider.HeikenAshi.checkbox').checkbox('uncheck');
+            let needle = 'HeikenAshi',
+                index = contains.call(stratArray, needle); // true or false
+            if (index) {
+                stratArray.splice(needle, 1);
+            }
+            //  console.log('supportResist is unchecked')
+        }
+
         if ($('.slider.HeikenAshi.checkbox').checkbox('is checked')) {
             //$('.slider.HeikenAshi.checkbox').checkbox('check');
             let needle = 'HeikenAshi',
