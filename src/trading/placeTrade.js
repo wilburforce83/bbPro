@@ -252,141 +252,138 @@ function trade() {
 
         if (convertedDuration >= convertedSymDuration) {
 
-            api.authorize(token).then(function resolve(resp) {
-
-
-
-                api.buyContractParams(parameters, 2500).then(
-
-                    (response, reject) => {
-                        //  // console.log(response);
-                        let time = moment().format("kk:mm:ss");
-                        let contract_id = response.buy.contract_id;
-                        let longCode = response.buy.longcode;
-                        let newBalance = response.buy.balance_after;
-                        //  // console.log(response.buy.buy_price);
-                        settings.set('contractid.contractid', contract_id);
-
-                        settings.set('message.message', time + ' : ' + longCode);
-                        settings.set('balance', {
-                            balance: newBalance,
-                        });
-
-                        var convertedDurationPLUS = convertedDuration + 10;
-                        var tradeDurationPLUS = 0;
-                        var timer = setInterval(contractSub, 2000);
-
-                        function contractSub() {
-                            if (isSold == 1 || tradeDurationPLUS > convertedDurationPLUS) {
-                                //  // console.log(payout, buy_price, contractProfit, sellPrice);
-
-                                // // console.log('sold')
-                                //  // console.log('Result = ', profit)
-                                let time = moment().format("kk:mm:ss");
-                                billyDate = moment().format("l");
-                                billyDay = moment().format("dddd");
-                                if (contractProfit > 0) {
-                                    document.getElementById('notifyme').insertAdjacentHTML("afterbegin", '<p style="color:#27b700">' + time + ': Contract ' + result + '!  ' + contractProfit + '</p>');
-
-                                } else {
-                                    document.getElementById('notifyme').insertAdjacentHTML("afterbegin", '<p style="color:#755505">' + time + ': Contract ' + result + '!  ' + contractProfit + '</p>');
-
-                                }
-                                //settings.set('message.message', time + ': Contract ' + result + '!  ' + contractProfit);
-                                //  settings.set('resultOnClose.resultOnclose', )
-                                settings.set('resultOnClose.resultOnClose', contractProfit)
-                                billyPL = contractProfit;
-                                billyTime = time;
-                                settings.set('barrier.barrier', 'no open trade');
-                                settings.set('contractid.contractid', null);
-                                settings.set('sellprofit.sellprofit', 0);
-                                settings.set('canSell.canSell', 0);
-                                document.getElementById('expiryTime').innerHTML = '';
-                                clearInterval(timer);
-                                postTrade();
-
-                                return;
-
-                            }
-                            tradeDurationPLUS += 2;
-                            api.getContractInfo(contract_id).then(function (response) {
-                                //  // console.log(response.proposal_open_contract);
-                                // // console.log(tradeDurationPLUS);
-
-                                isSold = response.proposal_open_contract.is_sold;
-                                result = response.proposal_open_contract.status;
-                                contractProfit = response.proposal_open_contract.profit * 1;
-                                sellPrice = response.proposal_open_contract.sell_price * 1;
-                                payout = response.proposal_open_contract.payout * 1;
-                                buy_price = response.proposal_open_contract.buy_price * 1;
-                                date_expiry = (response.proposal_open_contract.date_expiry + 2) * 1000;
-                                current_spot_time = response.proposal_open_contract.current_spot_time * 1000;
-                                let timeToExpiry = moment(date_expiry).diff(current_spot_time, seconds) / 1000
-                                settings.set('barrier.barrier', response.proposal_open_contract.entry_spot * 1);
-                                settings.set('sellprofit.sellprofit', contractProfit);
-                                settings.set('canSell.canSell', response.proposal_open_contract.is_valid_to_sell * 1)
-                                //  // console.log('Expiry: ' + timeToExpiry + 's')
-                                document.getElementById('expiryTime').innerHTML = '<h1 style="color:#0000001A">' + timeToExpiry + 's</h1>';
 
 
 
 
-                            })
+            api.buyContractParams(parameters, 2500).then(
 
+                (response, reject) => {
+                    //  // console.log(response);
+                    let time = moment().format("kk:mm:ss");
+                    let contract_id = response.buy.contract_id;
+                    let longCode = response.buy.longcode;
+                    let newBalance = response.buy.balance_after;
+                    //  // console.log(response.buy.buy_price);
+                    settings.set('contractid.contractid', contract_id);
 
-                            // startStatement();
+                    settings.set('message.message', time + ' : ' + longCode);
+                    settings.set('balance', {
+                        balance: newBalance,
+                    });
 
+                    var convertedDurationPLUS = convertedDuration + 10;
+                    var tradeDurationPLUS = 0;
+                    var timer = setInterval(contractSub, 2000);
 
+                    function contractSub() {
+                        if (isSold == 1 || tradeDurationPLUS > convertedDurationPLUS) {
+                            //  // console.log(payout, buy_price, contractProfit, sellPrice);
 
-                        }
+                            // // console.log('sold')
+                            //  // console.log('Result = ', profit)
+                            let time = moment().format("kk:mm:ss");
+                            billyDate = moment().format("l");
+                            billyDay = moment().format("dddd");
+                            if (contractProfit > 0) {
+                                document.getElementById('notifyme').insertAdjacentHTML("afterbegin", '<p style="color:#27b700">' + time + ': Contract ' + result + '!  ' + contractProfit + '</p>');
 
-
-
-                        //  reject(new Error('whoops'))
-                    }).catch(function (error) {
-                    var errortimer = setTimeout(clearErr, 5000);
-
-                    function clearErr() {
-
-                        openTrading()
-                        if (settings.has('errorCount.errorCount') === false) {
-
-                            settings.set('errorCount.errorCount', 0);
-                        }
-                        let errorCount = settings.get('errorCount.errorCount');
-                        errorCount++;
-                        settings.set('errorCount.errorCount', errorCount);
-                        let string = error.message;
-                        let position = string.indexOf(`{`);
-                        let message = string.slice(0, position - 1);
-                        clearTimeout(errortimer);
-
-
-                        // console.log(string);
-
-                        document.getElementById('notifyme').insertAdjacentHTML("afterbegin", '<p style="color:#8c01a0">' + message + ' | count : ' + errorCount + '</p>');
-
-                        if (errorCount >= 20) {
-
-                            if (settings.get('run.run')) {
-
-                                pauseBot();
-                                document.getElementById('notifyme').insertAdjacentHTML("afterbegin", '<p style="color:#8c01a0">Auto Trading paused binary.com errors.</p>');
-                                settings.set('errorCount.errorCount', 0);
                             } else {
-                                settings.set('errorCount.errorCount', 0);
+                                document.getElementById('notifyme').insertAdjacentHTML("afterbegin", '<p style="color:#755505">' + time + ': Contract ' + result + '!  ' + contractProfit + '</p>');
 
-                                openTrading()
                             }
-                            clearTimeout(errortimer);
+                            //settings.set('message.message', time + ': Contract ' + result + '!  ' + contractProfit);
+                            //  settings.set('resultOnClose.resultOnclose', )
+                            settings.set('resultOnClose.resultOnClose', contractProfit)
+                            billyPL = contractProfit;
+                            billyTime = time;
+                            settings.set('barrier.barrier', 'no open trade');
+                            settings.set('contractid.contractid', null);
+                            settings.set('sellprofit.sellprofit', 0);
+                            settings.set('canSell.canSell', 0);
+                            document.getElementById('expiryTime').innerHTML = '';
+                            clearInterval(timer);
+                            postTrade();
+
                             return;
 
                         }
-                        return;
+                        tradeDurationPLUS += 2;
+                        api.getContractInfo(contract_id).then(function (response) {
+                            //  // console.log(response.proposal_open_contract);
+                            // // console.log(tradeDurationPLUS);
+
+                            isSold = response.proposal_open_contract.is_sold;
+                            result = response.proposal_open_contract.status;
+                            contractProfit = response.proposal_open_contract.profit * 1;
+                            sellPrice = response.proposal_open_contract.sell_price * 1;
+                            payout = response.proposal_open_contract.payout * 1;
+                            buy_price = response.proposal_open_contract.buy_price * 1;
+                            date_expiry = (response.proposal_open_contract.date_expiry + 2) * 1000;
+                            current_spot_time = response.proposal_open_contract.current_spot_time * 1000;
+                            let timeToExpiry = moment(date_expiry).diff(current_spot_time, seconds) / 1000
+                            settings.set('barrier.barrier', response.proposal_open_contract.entry_spot * 1);
+                            settings.set('sellprofit.sellprofit', contractProfit);
+                            settings.set('canSell.canSell', response.proposal_open_contract.is_valid_to_sell * 1)
+                            //  // console.log('Expiry: ' + timeToExpiry + 's')
+                            document.getElementById('expiryTime').innerHTML = '<h1 style="color:#0000001A">' + timeToExpiry + 's</h1>';
+
+
+
+
+                        })
+
+
+                        // startStatement();
+
+
+
                     }
 
-                });
 
+
+                    //  reject(new Error('whoops'))
+                }).catch(function (error) {
+                var errortimer = setTimeout(clearErr, 5000);
+
+                function clearErr() {
+
+                    openTrading()
+                    if (settings.has('errorCount.errorCount') === false) {
+
+                        settings.set('errorCount.errorCount', 0);
+                    }
+                    let errorCount = settings.get('errorCount.errorCount');
+                    errorCount++;
+                    settings.set('errorCount.errorCount', errorCount);
+                    let string = error.message;
+                    let position = string.indexOf(`{`);
+                    let message = string.slice(0, position - 1);
+                    clearTimeout(errortimer);
+
+
+                    // console.log(string);
+
+                    document.getElementById('notifyme').insertAdjacentHTML("afterbegin", '<p style="color:#8c01a0">' + message + ' | count : ' + errorCount + '</p>');
+
+                    if (errorCount >= 20) {
+
+                        if (settings.get('run.run')) {
+
+                            pauseBot();
+                            document.getElementById('notifyme').insertAdjacentHTML("afterbegin", '<p style="color:#8c01a0">Auto Trading paused binary.com errors.</p>');
+                            settings.set('errorCount.errorCount', 0);
+                        } else {
+                            settings.set('errorCount.errorCount', 0);
+
+                            openTrading()
+                        }
+                        clearTimeout(errortimer);
+                        return;
+
+                    }
+                    return;
+                }
 
             }).catch(function (error) {
                 var errortimer = setTimeout(clearErr, 5000);
@@ -447,16 +444,16 @@ function trade() {
 function sellContractEarly() {
     let token = settings.get('tokenToBeUsed.tokenToBeUsed');
     let contract_id = settings.get('contractid.contractid') * 1;
-    api.authorize(token).then(function resolve(resp) {
-        api.sellContract(contract_id, 0).then(function (response) {
-            // console.log(response);
-        })
+
+    api.sellContract(contract_id, 0).then(function (response) {
+        // console.log(response);
     })
+
 
 }
 
 function postTrade() {
-    authorise()
+
     // Run post trade calculations for martingale and and stats
     let time = moment().format("kk:mm:ss");
 
@@ -1068,6 +1065,7 @@ function ladderMartingale() {
 function openTrading() {
     postTradeBackup();
     logData();
+    authorise();
     let time = moment().format("kk:mm:ss");
     //open up trading after last trade is completed
     settings.set('barrier.barrier', 'no open trade');

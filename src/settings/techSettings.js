@@ -4,6 +4,8 @@ module.exports = {
     technicalReset: function () {
 
         const settings = require('electron-settings');
+
+        settings.set('ticksToShow.ticksToShow', 120)
         //3 MA Periods
 
         // copy from techSettings.js after any new strategies are added!

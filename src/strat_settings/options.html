@@ -122,6 +122,49 @@
         <div class="ui hidden divider"></div>
 
 
+
+
+
+
+        <div class="ui hidden divider"></div>
+
+        <h6 class="ui horizontal orange divider">
+            Tick Chart Settings
+        </h6>
+        <p>Number of ticks to show in the tick chart display
+        </p>
+        <div class="ui center aligned container">
+            <div class="inline field">
+                <div class="fields">
+                    <div class="field">
+                        <div class="ui labeled input">
+                            <div class="ui label">
+                                #
+                            </div>
+                            <input id="ticksToShow" type="number" placeholder="120">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="ui hidden divider"></div>
+        <div class="ui hidden divider"></div>
+        <div class="ui hidden divider"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
         <div class="ui mini equal width center aligned form">
             <!--This is a form entry block for advanced options, copy one of these block when you add a new strategy!-->
             <h6 class="ui horizontal orange divider">
@@ -261,29 +304,6 @@
             <div class="ui hidden divider"></div>
             <div class="ui hidden divider"></div>
             <div class="ui hidden divider"></div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             <h6 class="ui horizontal orange divider">
                 Ladder Profit Settings
@@ -471,6 +491,17 @@
                 'ladderProfitMultiplier.ladderProfitMultiplier')
 
         }
+
+        if (settings.has('ticksToShow.ticksToShow')) {
+
+            document.getElementById("ticksToShow").value = settings.get(
+                'ticksToShow.ticksToShow')
+
+        }
+
+
+
+
         if (settings.has('ladderMaxMultiplier.ladderMaxMultiplier')) {
 
             document.getElementById("ladderMaxMultiplier").value = settings.get(
@@ -567,6 +598,16 @@
 
         })
 
+        let ticksToShowCollect = document.getElementById('ticksToShow').value;
+
+
+        settings.set('ticksToShow', {
+
+            ticksToShow: ticksToShowCollect
+
+
+
+        })
 
         let ladderMaxMultiplierCollect = document.getElementById('ladderMaxMultiplier').value;
 
@@ -652,6 +693,7 @@
 
 
         settings.set('ladderProfitMultiplier.ladderProfitMultiplier', 0.9)
+        settings.set('ticksToShow.ticksToShow', 120)
         settings.set('ladderMaxMultiplier.ladderMaxMultiplier', 50)
         settings.set('ladderStakeMultiplier.ladderStakeMultiplier', 1.1)
         settings.set('martingaleMultiplier.martingaleMultiplier', 2.36)

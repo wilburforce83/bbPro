@@ -4,6 +4,7 @@ function setDefaults() {
     settings.set('wins.wins', 0);
     settings.set('duration.duration', 't');
     settings.set('candlesOnChart.candlesOnChart', 100)
+    settings.set('ticksToShow.ticksToShow', 120)
 
     settings.set('losses.losses', 0)
     settings.set('lossesInRow.lossesInRow', 0)
