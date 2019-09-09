@@ -227,6 +227,15 @@ function checkDefaults() {
 
 
 
+
+    if (settings.has('ticksToShow.ticksToShow') === false) {
+        //TRIX defaults
+
+        settings.set('ticksToShow.ticksToShow', 120) // first variable
+
+    }
+
+
     if (settings.has('TRIXPeriod.TRIXPeriod') === false) {
         //TRIX defaults
 
