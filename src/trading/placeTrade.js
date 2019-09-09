@@ -31,9 +31,17 @@ settings.get('billyBig.data');
 
 */
 
+//Add constants for all other JS files here to keep html file clean
+
+var LiveApi = require('binary-live-api').LiveApi;
+var ws = require('ws');
+
+var api = new LiveApi({
+    websocket: ws,
+    appId: 18970
+});
 
 
-// Authorise after load app or switch from virtual to live.
 
 var billyDate;
 var billyDay;
@@ -68,6 +76,7 @@ function authorise() {
         let currency = response.authorize.currency;
         let loginId = response.authorize.loginid;
         billyAccount = loginId;
+        api.subscribeToBalance();
 
         //  // console.log('authorize Obj: ', authorize);
 
@@ -111,6 +120,8 @@ function authorise() {
     })
 
 }
+
+
 
 
 
