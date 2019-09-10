@@ -827,7 +827,7 @@ function cumLossMartingale() {
 
     } else {
 
-        let cumStake = Math.abs(Math.abs(settings.get('cumLoss.cumLoss') * 1.07)) + (Math.abs(settings.get('initialStake.initialStake')) + (settings.get('initialStake.initialStake') * settings.get('consecutiveLosses.consecutiveLosses')));
+        let cumStake = Math.abs(Math.abs(settings.get('cumLoss.cumLoss')) * 1.07) + Math.abs(settings.get('initialStake.initialStake')) + (settings.get('initialStake.initialStake') * settings.get('consecutiveLosses.consecutiveLosses'));
 
         settings.set('stake.stake', Math.floor(cumStake * 100) / 100);
         openTrading()

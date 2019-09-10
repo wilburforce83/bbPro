@@ -54,7 +54,7 @@ function priceActionrun() {
 
         //if function for CALL event
 
-        if (close > open && CandlePercent > settings.get('priceActionCandleBody.priceActionCandleBody') * 1) {
+        if (close > open && CandlePercent > settings.get('priceActionCandleBody.priceActionCandleBody') * 1 && close == high) {
             let time = moment().format("kk:mm:ss");
 
 
@@ -92,7 +92,7 @@ function priceActionrun() {
         }
 
         //if function for PUT event
-        else if (close < open && CandlePercent > settings.get('priceActionCandleBody.priceActionCandleBody') * 1) {
+        else if (close < open && CandlePercent > settings.get('priceActionCandleBody.priceActionCandleBody') * 1 && close == high) {
             let time = moment().format("kk:mm:ss");
 
 

@@ -11,15 +11,36 @@ function decide() {
 
         settings.set('timeUntilTrading.Open', timeUntilTrading);
 
-        if (settings.get('forex.forex')) {
+        //temp pause trading during transition between markets
 
-            decideFX()
+        settings.set('autoTrade', {
+            autoTrade: false,
 
-        } else {
+        })
 
-            decideVIX()
+        setTimeout(function () {
 
-        }
+            if (settings.get('forex.forex')) {
+
+                decideFX()
+
+            } else {
+
+                decideVIX()
+
+            }
+
+        }, 2000);
+
+        setTimeout(function () {
+
+            settings.set('autoTrade', {
+                autoTrade: true,
+
+            })
+
+
+        }, 2000);
 
 
     } else {
