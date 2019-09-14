@@ -110,7 +110,7 @@ function data() {
 
         tick = [];
         ticks = [];
-        console.log('switched')
+      //  console.log('switched')
 
         api.getTickHistory(settings.get('symbol.symbol'), {
             end: 'latest',
@@ -213,7 +213,7 @@ function data() {
         //   // console.log('waitingfortrade')
 
     } else {
-        console.log('this.run')
+       // console.log('this.run')
         this[strat + 'run']() // use the strategy prefix to run the function for the relevent strategy
 
     }

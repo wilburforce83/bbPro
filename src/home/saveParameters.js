@@ -7,7 +7,7 @@ function saveParametersOnClick() {
         settings.set('stake.stake', document.getElementById('setStake').value);
     }
 
-    settings.set('initialStake.initialStake', document.getElementById('setStake').value);
+    settings.set('initialStake.initialStake', document.getElementById('setStake').value *1);
 
     settings.set('takeProfit.takeProfit', document.getElementById('setTakeProfit').value);
     settings.set('stopLoss.stopLoss', document.getElementById('setStopLoss').value);

@@ -1,36 +1,3 @@
-//var balance;
-//var sellAmount;
-
-
-// Set live token will come from a trigger on home page shere tradeToken is set to live or virtual based on the selection made
-/*
-Profti table paths in array:
-
-profit_table.transactions.buy_price
-profit_table.transactions.sell_price
-profit_table.transactions.sell_time
-
-
-
-settings.get('billyBig.data');
-
-        [{
-            'Date': billyDate,
-            'Day': billyDay,
-            'Time': billyTime,
-            'Strategy': billyStrat,
-            'Trade Duration (s)': billyDuration,
-            'CALL / PUT': billyCallPut,
-            'Market': billyMarket,
-            'Stake': billyStake,
-            'Win / Loss': billyWinLoss,
-            'P / L': billyPL,
-            'Account': billyAccount,
-            'Data Source': billyDataSource
-        }];
-
-*/
-
 //Add constants for all other JS files here to keep html file clean
 
 var LiveApi = require('binary-live-api').LiveApi;
@@ -139,34 +106,10 @@ function trade() {
 
     if (trading == 0) {
 
-        /*
 
-        Doesn't work without authorising which is too slow
-
-
-                if (switchID === 0 && settings.get('stake.stake') * 1 < 10 && settings.get('stake.stake') * 1 < settings.get('initialStake.initialStake') * 1 * 4.5) {
-
-                    api = new LiveApi({
-
-                        appId: 18970 // Simon's when active
-                    });
-
-
-
-
-                } else {
-
-                    api = new LiveApi({
-
-                        appId: 18970
-                    });
-
-
-                }
-        */
 
         // Places a trade, used for all types of trades auto or manual.
-        //  intialize();
+
         trading = 1;
         isSold = 0;
         const strat = settings.get('strat.strat')
@@ -656,6 +599,11 @@ function postTrade() {
         ladderMartingale();
     }
 
+    if (settings.get('MGstyle.MGstyle') === "bbMixed") {
+
+        bbMixedMartingale();
+    }
+
 
 
     if (settings.get('MGstyle.MGstyle') === "DAlembert") {
@@ -811,6 +759,75 @@ function compoundMartingale() {
     }
 
 }
+
+
+// bbMixed martingale for money management || fixed return of initial stake per loss
+
+function bbMixedMartingale() {
+
+    // if wins and stake bigger than initial stake andconsecutive wins only 1 then reset stake, this is the recovered trade! 
+    if (settings.get('resultOnClose.resultOnClose') > 0 && settings.get('consecutiveWins.consecutiveWins') == 1 && settings.get('stake.stake') > settings.get('initialStake.initialStake')) {
+        console.log('Recovered trade')
+        let stake = settings.get('initialStake.initialStake');
+        settings.set('cumLoss.cumLoss', 0);
+        settings.set('consecutiveLosses.consecutiveLosses', 0);
+        settings.set('compoundWins.compoundWins', 0);
+        settings.set('consecutiveWins.consecutiveWins', 0)
+
+        settings.set('stake.stake', Math.floor(stake * 100) / 100);
+        openTrading()
+
+    }
+
+    // if result is win and consecutive wins = 1, but stake equals initial stake then compound
+    if (settings.get('resultOnClose.resultOnClose') > 0 && settings.get('consecutiveWins.consecutiveWins') == 1 && settings.get('stake.stake') == settings.get('initialStake.initialStake')) {
+console.log('first compound win')
+        let stake = settings.get('stake.stake') * settings.get('compoundMultiplier.compoundMultiplier');
+        settings.set('cumLoss.cumLoss', 0);
+
+        settings.set('stake.stake', Math.floor(stake * 100) / 100);
+        openTrading()
+
+
+
+    }
+
+    // if first loss, set the stake to the intial stake plus recovery, this will allow compounding resets to recover without doubling the largest stake
+    if (settings.get('resultOnClose.resultOnClose') <= 0 && settings.get('consecutiveLosses.consecutiveLosses') == 1) {
+console.log('1st cumloss MG')
+        let stake = (settings.get('initialStake.initialStake') * 1.15) + settings.get('initialStake.initialStake')*1;
+       // settings.set('cumLoss.cumLoss', 0);
+
+
+        settings.set('stake.stake', Math.floor(stake * 100) / 100);
+        openTrading()
+
+    }
+    // cumulative loss multiplier if loss and loss > 1
+    if (settings.get('resultOnClose.resultOnClose') <= 0 && settings.get('consecutiveLosses.consecutiveLosses') > 1 && settings.get('stake.stake') > settings.get('initialStake.initialStake')) {
+
+console.log('cumlossmultiplier > 1')
+        let cumStake = Math.abs(Math.abs(settings.get('cumLoss.cumLoss')) * 1.15) + Math.abs(settings.get('initialStake.initialStake')*1);
+
+        settings.set('stake.stake', Math.floor(cumStake * 100) / 100);
+        openTrading()
+
+
+    }
+
+    if (settings.get('resultOnClose.resultOnClose') > 0 && settings.get('consecutiveWins.consecutiveWins') > 1 && settings.get('stake.stake') != settings.get('initialStake.initialStake')) {
+console.log('compounding > 1')
+        let stake = settings.get('stake.stake') * settings.get('compoundMultiplier.compoundMultiplier');
+        settings.set('cumLoss.cumLoss', 0);
+
+        settings.set('stake.stake', Math.floor(stake * 100) / 100);
+        openTrading()
+
+
+
+    }
+
+}; // end of bbMixed
 
 
 // cumLoss martingale for money management || fixed return of initial stake per loss
@@ -1093,7 +1110,7 @@ function openTrading() {
 
 
             }
-        } else if (settings.get('MGstyle.MGstyle') == 'Compound') {
+        } if (settings.get('MGstyle.MGstyle') == 'Compound') {
             if (settings.get('mgreset.mgreset') <= settings.get('compoundWins.compoundWins')) {
 
 
@@ -1102,6 +1119,35 @@ function openTrading() {
 
 
                 document.getElementById('notifyme').insertAdjacentHTML("afterbegin", '<p style="color:#755505">Compound Reset</p>');
+
+
+
+
+            }
+        } if (settings.get('MGstyle.MGstyle') == 'bbMixed') {
+            if (2 <= settings.get('consecutiveWins.consecutiveWins')) {
+
+
+                settings.set('stake.stake', settings.get('initialStake.initialStake'));
+                settings.set('consecutiveWins.consecutiveWins', 0)
+
+
+                document.getElementById('notifyme').insertAdjacentHTML("afterbegin", '<p style="color:#755505">Compound Reset</p>');
+
+
+
+
+            }
+             if (settings.get('mgreset.mgreset') <= settings.get('consecutiveLosses.consecutiveLosses')) {
+
+
+
+
+                settings.set('stake.stake', settings.get('initialStake.initialStake'));
+                settings.set('cumLoss.cumLoss', 0);
+                // settings.set('consecutiveLosses.consecutiveLosses', 0); causing errors probably not required for anything!
+                //settings.set('message.message', 'Martingale Reset');
+                document.getElementById('notifyme').insertAdjacentHTML("afterbegin", '<p style="color:#755505">Martingale Reset</p>');
 
 
 

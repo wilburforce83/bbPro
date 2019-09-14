@@ -192,6 +192,7 @@
                     <div class="item" id="MGcum" value="Cum. Loss">Cum. Loss</div>
                     <div class="item" id="MGladder" value="Ladder">Ladder</div>
                     <div class="item" id="MGcompound" value="Compound">Compound</div>
+                    <div class="item" id="MGbbMixed" value="bbMixed">bbMixed</div>
                     <div class="item" id="MGoscar" value="Oscar">Oscar's Grind</div>
                     <div class="item" id="MGDAlembert" value="DAlembert">D'Alembert</div>
                     <div class="item" id="MGLabouchere" value="Labouchere">Labouchere</div>
@@ -1046,6 +1047,10 @@
         settings.set('MGstyle.MGstyle', document.getElementById('MGcompound').innerHTML);
         console.log(settings.get('MGstyle.MGstyle'));
     });
+    document.getElementById('MGbbMixed').addEventListener('click', function (event) {
+        settings.set('MGstyle.MGstyle', document.getElementById('MGbbMixed').innerHTML);
+        console.log(settings.get('MGstyle.MGstyle'));
+    });
     document.getElementById('MGcum').addEventListener('click', function (event) {
         settings.set('MGstyle.MGstyle', document.getElementById('MGcum').innerHTML);
         settings.set('cumLoss.cumLoss', 0)
@@ -1618,9 +1623,9 @@
 
     function changeChart() {
 
-        console.log('symbol=' + settings.get('symbol.symbol'), 'chart=' + chartSymbol)
+      //  console.log('symbol=' + settings.get('symbol.symbol'), 'chart=' + chartSymbol)
         if (settings.get('symbol.symbol') != chartSymbol) {
-            console.log('should be reloading')
+         //   console.log('should be reloading')
             chartSymbol = settings.get('symbol.symbol');
             document.getElementById('tradingviewWindow').src =
                 'https://charts.binarybottrading.eu/' + settings.get('symbol.symbol') + '.html';

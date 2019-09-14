@@ -31,7 +31,7 @@ function priceActionrun() {
     if (settings.get('run.run') && settings.get('autoTrade.autoTrade') && settings.get('tradeInProgress.tradeInProgress') === false) {
 
         // ------------------  ANALYZE DATA  ----------------------
-        console.log('priceaction.js running')
+      //  console.log('priceaction.js running')
         closeList = settings.get('candleData.closeList');
         openList = settings.get('candleData.openList');
         highList = settings.get('candleData.highList');
@@ -49,8 +49,8 @@ function priceActionrun() {
         let candleEnding = settings.get('multiCandleL.multiCandleL') / 1.2;
         let candleStarting = settings.get('multiCandleL.multiCandleL') / 10;
         console.log('open ' + open + '| close ' + close + '| high ' + high + '| low ' + low);
-        console.log('seconds ' + seconds + 's');
-        console.log('CandlePercent ' + CandlePercent + '%');
+     //   console.log('seconds ' + seconds + 's');
+     //   console.log('CandlePercent ' + CandlePercent + '%');
 
         //if function for CALL event
 
