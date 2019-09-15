@@ -1266,7 +1266,7 @@
             terms.show()
         })
         // Open the DevTools.
-        // terms.webContents.openDevTools()
+        //terms.webContents.openDevTools()
 
 
 
@@ -1623,9 +1623,9 @@
 
     function changeChart() {
 
-      //  console.log('symbol=' + settings.get('symbol.symbol'), 'chart=' + chartSymbol)
+        //  console.log('symbol=' + settings.get('symbol.symbol'), 'chart=' + chartSymbol)
         if (settings.get('symbol.symbol') != chartSymbol) {
-         //   console.log('should be reloading')
+            //   console.log('should be reloading')
             chartSymbol = settings.get('symbol.symbol');
             document.getElementById('tradingviewWindow').src =
                 'https://charts.binarybottrading.eu/' + settings.get('symbol.symbol') + '.html';
