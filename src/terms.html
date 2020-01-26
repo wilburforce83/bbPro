@@ -105,9 +105,11 @@
                 spanner icon
                 found next to your balnace in the top right at any time.
             </p>
+
             <a href="#">
                 <h4 class="center aligned header" id="linkToken">Get your Tokens Here</h4>
             </a>
+            <button id="createaccount" class=" ui large fluid orange button">Create Binary.com Account</button>
             <div class="fields">
                 <div class="field">
                     <label>Virtual Token</label>
@@ -170,6 +172,11 @@
     $('#linkToken').click(function () {
         shell.openExternal('https://www.binary.com/en/user/security/api_tokenws.html')
     });
+
+    $('#createaccount').click(function () {
+        shell.openExternal('https://record.binary.com/_HwuMZEzKxUO6tyDIijdDK2Nd7ZgqdRLk/1/')
+    });
+
 
     saveChanges.addEventListener('click', function (event) {
 

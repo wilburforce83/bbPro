@@ -118,6 +118,12 @@ function createWindow() {
     {
       label: 'File',
       submenu: [{
+          label: 'Create Account',
+          click() {
+            shell.openExternal('https://record.binary.com/_HwuMZEzKxUO6tyDIijdDK2Nd7ZgqdRLk/1/')
+          }
+        },
+        {
           label: 'Binary.com',
           click() {
             shell.openExternal('https://www.binary.me/')
@@ -129,6 +135,12 @@ function createWindow() {
             shell.openExternal('https://www.binarybottrading.eu/')
           }
         },
+
+
+
+
+
+
         {
           type: 'separator'
         },
