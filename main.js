@@ -21,6 +21,8 @@ const electronLocalshortcut = require('electron-localshortcut');
 
 
 
+
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
@@ -28,7 +30,20 @@ let win
 
 function createWindow() {
   // Create the browser window.
+  var electron = require('electron');
+  var screenElectron = electron.screen;
+  var mainScreen = screenElectron.getPrimaryDisplay();
+  let width = mainScreen['size']['width'];
+  let height = mainScreen['size']['height'];
+  console.log(width, height);
+  var zoomFactor;
+  if (height <= 768) {
+    zoomFactor = 0.73;
+  } else {
+    zoomFactor = 1;
+  }
 
+  console.log(zoomFactor)
 
   win = new BrowserWindow({
     parent: true,
@@ -38,6 +53,9 @@ function createWindow() {
     minHeight: 730,
     maximizable: true,
     webviewTag: true,
+    webPreferences: {
+      zoomFactor: zoomFactor,
+    },
     icon: __dirname + '/Icon/icon.ico'
   })
   //Create welcome window to add API keys, if none are saved to be called AFTER app.on READY with .then
