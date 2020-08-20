@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>bbTrader lite for Web</title>
+    <link rel="stylesheet" href="./lib/semantic/semantic.min.css">
+    <script src="./lib/jquery.min.js"></script>
+    <script src="./lib/semantic/semantic.min.js"></script>
+    <link rel="stylesheet" href="./lib/onsen/css/onsenui.css">
+    <link rel="stylesheet" href="./lib/semantic/semantic.min.css">
+    <link rel="stylesheet" href="./lib/onsen/css/onsen-css-components.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Comfortaa&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json" />
+
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(() => console.log("Service Worker Registered"))
+                .catch(e => console.log(e));
+        }
+    </script>
+
+    <style>
+        html,
+
+
+        iframe {
+            width: 100%;
+            height: 48vh;
+
+        }
+
+        ons-page {
+            width: 100%;
+            height: 97vh;
+
+        }
+
+        #loading {
+            margin: 0;
+            position: fixed;
+
+            width: 100%;
+            height: 100vh;
+
+            background: rgb(255, 255, 255) url('src/images/spinner7.gif') no-repeat center center;
+            ;
+            z-index: 150000;
+        }
+
+        #loadingfooter {
+            position: absolute;
+            bottom: 0%;
+            width: 100%;
+            z-index: 160000;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loading">
+
+        <div id="loadingfooter">
+            <img class="ui centered small image" src="src/images/logo.png">
+            <h5 class="ui center aligned black header">
+
+                <div style="font-family: 'Comfortaa', cursive; font-size: 0.7em" class="content">
+                    binarybottrading.eu (2019)| V1.2.0 bbChart Monitor | The ultimate binary trading platform.
+                    <div class="black sub header"></div>
+                </div>
+            </h5>
+            <div class="ui hidden divider"></div>
+        </div>
+
+
+
+    </div>
+    <div style="margin:3px" class="ui grid">
+        <div class="four wide column">
+            <iframe src="https://charts.binarybottrading.eu/R_10.html" height="95%" frameborder="0" scrolling="auto"
+                class="iframe-area">
+            </iframe>
+        </div>
+        <div class="four wide column">
+            <iframe src="https://charts.binarybottrading.eu/R_25.html" height="95%" frameborder="0" scrolling="auto"
+                class="iframe-area">
+            </iframe>
+        </div>
+        <div class="four wide column">
+            <iframe src="https://charts.binarybottrading.eu/R_50.html" height="95%" frameborder="0" scrolling="auto"
+                class="iframe-area">
+            </iframe>
+        </div>
+        <div class="four wide column">
+            <iframe src="https://charts.binarybottrading.eu/R_75.html" height="95%" frameborder="0" scrolling="auto"
+                class="iframe-area">
+            </iframe>
+        </div>
+        <div class="four wide column">
+            <iframe src="https://charts.binarybottrading.eu/R_100.html" height="95%" frameborder="0" scrolling="auto"
+                class="iframe-area">
+            </iframe>
+        </div>
+        <div class="four wide column">
+            <iframe src="https://charts.binarybottrading.eu/RDBEAR.html" height="95%" frameborder="0" scrolling="auto"
+                class="iframe-area">
+            </iframe>
+        </div>
+        <div class="four wide column">
+            <iframe src="https://charts.binarybottrading.eu/RDBULL.html" height="95%" frameborder="0" scrolling="auto"
+                class="iframe-area">
+            </iframe>
+        </div>
+        <div class="four wide column">
+            <div class="ui hidden divider"></div>
+            <img class="ui centered image" src="src/images/logo.png">
+
+            <h5 class="ui center aligned black header">
+
+                <div style="font-family: 'Comfortaa', cursive; font-size: 0.7em" class="content">
+                    binarybottrading.eu (2019)| bbChart Monitor | The ultimate binary trading platform.
+                    <div class="black sub header"></div>
+                </div>
+            </h5>
+
+
+        </div>
+    </div>
+
+
+
+</body>
+<!-- Insert this line above script imports  -->
+<script>
+    if (typeof module === 'object') {
+        window.module = module;
+        module = undefined;
+    }
+</script>
+
+<script src="./lib/binary-live-api.js"></script>
+<script src="./lib/jquery.min.js"></script>
+<script src="./lib/jquery.sparkline.js"></script>
+<script src="./lib/onsen/js/onsenui.min.js"></script>
+<script src="./lib/semantic/semantic.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="./lib/moment.min.js"></script>
+<script src="./src/home/variables.js"></script>
+<script src="./src/strategies/data.js"></script>
+<script src="./src/home/saveParameters.js"></script>
+<script src="./src/home/manualTrading.js"></script>
+<script src="./src/trading/placeTrade.js"></script>
+<script src="./src/strategies/priceAction.js"></script>
+<script src="./src/strategies/HeikenAshi.js"></script>
+<script src="./src/home/botControls.js"></script>
+<script src="./src/home/updateDash.js"></script>
+<script src="./src/home/resetTrading.js"></script>
+
+
+<!-- Insert this line after script imports -->
+<script>
+    if (window.module) module = window.module;
+</script>
+
+
+
+<script>
+
+</script>
+<script>
+    // Menu functions for onsen.io 
+
+    window.fn = {};
+
+    window.fn.open = function () {
+        var menu = document.getElementById('menu');
+        menu.open();
+    };
+
+    window.fn.load = function (page) {
+        var content = document.getElementById('content');
+        var menu = document.getElementById('menu');
+        content.load(page)
+            .then(menu.close.bind(menu));
+    };
+
+
+
+    data()
+    setInterval(data, 2000);
+
+    $(document).ready(function () {
+
+
+
+        $('#loading').delay(10000).fadeOut(3000);
+    });
+</script>
+
+</html>

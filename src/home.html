@@ -489,9 +489,10 @@
 
                     <div id="tradingGrid" class="sixteen wide column">
                         <div class="ui hidden divider"></div>
-                        <iFrame id="tradingviewWindow" src="https://charts.binarybottrading.eu/R_100.html"
+                        <iFrame id="tradingviewWindow" name="tradingview" src="about: blank"
                             style=" width:100%; height:100%" frameborder="0" scrolling="auto" class="iframe-area">
                         </iframe>
+
                     </div>
 
 
@@ -1587,22 +1588,24 @@
 <script>
     // Load tradingview based on symbol
 
+    // Load tradingview based on symbol
+
     var chartSymbol = '';
 
     function changeChart() {
-        settings.get('symbol.symbol') = settings.get('symbol.symbol');
-        console.log('symbol=' + settings.get('symbol.symbol'), 'chart=' + chartSymbol)
-        if (settings.get('symbol.symbol') != chartSymbol) {
+        console.log('symbol=' + symbolsymbol, 'chart=' + chartSymbol)
+        if (symbolsymbol != chartSymbol) {
+            console.log('should be reloading')
+            chartSymbol = symbolsymbol;
+            document.getElementById('tradingviewWindow').src = './charts/' +
+                symbolsymbol + '.html';
 
-            chartSymbol = settings.get('symbol.symbol');
-            document.getElementById('tradingviewWindow').src =
-                'https://charts.binarybottrading.eu/' + settings.get('symbol.symbol') + '.html';
+            // document.getElementById('tradingviewWindow').contentWindow.location.reload(true)
 
-            document.getElementsByName('tradingview').contentWindow.location.reload(true)
-
-
+            document.getElementById("tradingviewWindow").innerHTML = '<object type="text/html" data="./charts/' +
+                symbolsymbol +
+                '.html" ></object>';
         }
-
     }
     /*
        renderSparkline()

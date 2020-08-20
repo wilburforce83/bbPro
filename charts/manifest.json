@@ -1,0 +1,13 @@
+{
+    "name": "bbTrader",
+    "short_name": "bbTrader",
+    "start_url": "/",
+    "display": "standalone",
+    "theme_color": "#F07440",
+    "background_color": "#F07440",
+    "icons": [{
+        "src": "https://bbmobile.binarybottrading.eu/favicon.png",
+        "sizes": "128x128",
+        "type": "image/png"
+    }]
+}
