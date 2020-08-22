@@ -127,7 +127,7 @@
             <h5 class="ui center aligned black header">
 
                 <div style="font-family: 'Comfortaa', cursive; font-size: 0.7em" class="content">
-                    binarybottrading.eu (2019)| V3.0.0 bbTrader <sup>pro</sup> | The ultimate binary trading platform.
+                    binarybottrading.eu (2019)| V3.0.1 bbTrader <sup>pro</sup> | The ultimate binary trading platform.
                     <div class="black sub header"></div>
                 </div>
             </h5>
@@ -1586,39 +1586,7 @@
 </script>
 
 <script>
-    // Load tradingview based on symbol
-
-    // Load tradingview based on symbol
-
-    var chartSymbol = '';
-
-    function changeChart() {
-        console.log('symbol=' + symbolsymbol, 'chart=' + chartSymbol)
-        if (symbolsymbol != chartSymbol) {
-            console.log('should be reloading')
-            chartSymbol = symbolsymbol;
-            document.getElementById('tradingviewWindow').src = './charts/' +
-                symbolsymbol + '.html';
-
-            // document.getElementById('tradingviewWindow').contentWindow.location.reload(true)
-
-            document.getElementById("tradingviewWindow").innerHTML = '<object type="text/html" data="./charts/' +
-                symbolsymbol +
-                '.html" ></object>';
-        }
-    }
-    /*
-       renderSparkline()
-       setInterval(renderSparkline, 200);
-      
-           function renderSparkline() {
-
-               if (renderSparkline === true) {
-
-
-           };
-       */
-
+   
 
     // Load tradingview based on symbol
 
@@ -1631,7 +1599,7 @@
             //   console.log('should be reloading')
             chartSymbol = settings.get('symbol.symbol');
             document.getElementById('tradingviewWindow').src =
-                'https://charts.binarybottrading.eu/' + settings.get('symbol.symbol') + '.html';
+            '../charts/' + settings.get('symbol.symbol') + '.html';
 
             document.getElementById('tradingviewWindow').src += '';
         }
