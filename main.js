@@ -117,7 +117,9 @@ function createWindow() {
 
     {
       label: 'File',
-      submenu: [{
+      submenu: [
+       
+        {
           label: 'Create Account',
           click() {
             shell.openExternal('https://record.binary.com/_HwuMZEzKxUO6tyDIijdDK2Nd7ZgqdRLk/1/')

@@ -67,27 +67,39 @@ function authorise() {
 
         //  // console.log('Balance: ', settings.get('balance.balance'), 'currency: ', settings.get('currency.currency'), 'login Id: ', settings.get('loginid.loginid'));
 
-        api.setTnCApproval({tnc_approval: 1}).then(function (response) {
-            console.log("TnC Response: ")
-                console.log(response);
-                document.getElementById('notifyme').insertAdjacentHTML("afterbegin",
-                '<p style="color:#755505">Latest Deriv / Binary.com terms auto approved. For detail please go to the Deriv / Binary.com website to review latest terms.</p>');
+       
+          
+            if (response.authorize.loginid.substring(0,3) != "VRT") {
+                api.setTnCApproval({tnc_approval: 1}).then(function (response) {
+                    console.log("TnC Response: ")
+                        console.log(response);
+                       // document.getElementById('notifyme').insertAdjacentHTML("afterbegin",
+                        //'<p style="color:#755505">Latest Deriv / Binary.com terms auto approved. For detail please go to the Deriv / Binary.com website to review latest terms.</p>');
+            
+            
+                }).catch(function (error) {
+            
+                    let string = error.message;
+                    let position = string.indexOf(`{`);
+                    let message = string.slice(0, position - 1);
+                    //var pos = string.indexOf('{')-1
+                    // var message = string.substring(0,pos);
+                    OauthLogin ();
+                    console.log(error.message);
+                    // // console.log(position);
+                    document.getElementById('notifyme').insertAdjacentHTML("afterbegin",
+                        '<p style="color:#755505"> Failed Miserably!!!' + message + '</p>');
+            
+                })
+                 
+            } else {
+                console.log("TnC approval not required on VRT accounts")
+            }
     
     
-        }).catch(function (error) {
     
-            let string = error.message;
-            let position = string.indexOf(`{`);
-            let message = string.slice(0, position - 1);
-            //var pos = string.indexOf('{')-1
-            // var message = string.substring(0,pos);
-            // console.log(error.message);
-            // // console.log(position);
-            document.getElementById('notifyme').insertAdjacentHTML("afterbegin",
-                '<p style="color:#755505">' + message + '</p>');
     
-        })
-
+    
 
 
 
@@ -102,6 +114,7 @@ function authorise() {
         // var message = string.substring(0,pos);
         // console.log(error.message);
         // // console.log(position);
+        OauthLogin ();
         document.getElementById('notifyme').insertAdjacentHTML("afterbegin",
             '<p style="color:#755505">' + message + '</p>');
 

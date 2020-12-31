@@ -2,6 +2,7 @@
 
  function startup() {
 
+    startupLogin();
 
      if (settings.get('virtualToken.virtualToken') == null) {
 
@@ -9,7 +10,7 @@
 
              if (settings.get('virtualToken.virtualToken') == null) {
 
-                 createTermsWindow()
+               
              } else {
                  authorise();
                  checkDefaults();

@@ -113,6 +113,14 @@
 
             /*dim the background*/
         }
+
+        .vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
     </style>
 
 </head>
@@ -277,24 +285,12 @@
                         <i class="folder open icon"></i>
                     </div>
                     <div style="-webkit-app-region: no-drag" class="ui dropdown icon item" id="prefDropdown">
-                        <i class="wrench icon"></i>
+                        <i class="user icon"></i>
                         <div class="menu">
-                            <div class="item">
-                                <i class="dropdown icon"></i>
-                                <span class="text">Set API Tokens</span>
-                                <div class="menu">
-                                    <div class="item">
-                                        <span class="text" id="virtualtokenId">Set Virtual Token</span>
-                                    </div>
-                                    <div class="item">
-                                        <span class="text" id="tokenId">Set Live Token</span>
-                                    </div>
-                                </div>
+                            <div id="userLogin" class="item">
+                                Login
                             </div>
-                            <div class="divider"></div>
-                            <div id="linktoken" class="item">
-                                Get Tokens
-                            </div>
+                                                     
                             <div class="divider"></div>
                             <div id="topUpVirtual" class="item">
                                 Top Up Virtual Account
@@ -315,8 +311,13 @@
                         <div class="vertically fitted item"><span id="clock"></span></span></div>
                     </div>
                     <div class="ui vertically fitted text menu">
+                        <select class="ui dropdown" onchange="postLogin()" id="accountSelect">
+                            
+                        </select>
+                    </div>
+                    <div class="ui vertically fitted text menu">
                         <div style="font-family: 'Comfortaa', cursive; font-size: 1em" class="vertically fitted item">
-                            <h5> <span id="account"></span>&nbsp;|&nbsp;<span id="currency"></span>&nbsp;|&nbsp;<span
+                            <h5> <span id="currency"></span>&nbsp;|&nbsp;<span
                                     id="balance">Please Choose
                                     Account</span></h5>
                         </div>
@@ -379,10 +380,9 @@
                     </h6>
 
 
-                    <div class="two mini ui fluid buttons">
-
-                        <button id="setVirt" class="ui left attached button">Virtual Account</button>
-                        <button id="setLive" class="right attached ui button">Live Account</button>
+                    <div class="ui vertically fitted right aligned text menu">
+                       
+                       
                     </div>
 
 
@@ -730,6 +730,8 @@
     <!--    End of Strategy Files    -->
 
     <script src="../src/home/imports.js"></script>
+    <script src="../src/home/common.js"></script>
+    <script src="../src/home/login.js"></script>
     <script src="../src/home/dataLogger.js"></script>
     <script src="../src/home/startup.js"></script>
     <script src="../src/home/LiveorVirt.js"></script>
@@ -770,7 +772,7 @@
 
 
 
-            $('#loading').delay(4000).fadeOut(1000);
+            $('#loading').delay(1500).fadeOut(1000);
         });
     </script>
 </body>
@@ -987,7 +989,7 @@
         .sidebar('setting', 'transition', 'overlay', 'toggle');
 
 
-
+/*
     $('#setVirt').click(function () {
 
 
@@ -996,7 +998,7 @@
     $('#setLive').click(function () {
 
     });
-
+*/
     $('#setFX').click(function () {
         settings.set('forex.forex', true);
 
@@ -1005,11 +1007,11 @@
 
         settings.set('forex.forex', false);
     });
-
+/*
     $('#linktoken').click(function () {
         shell.openExternal('https://www.binary.me/en/user/security/api_tokenws.html')
     });
-
+*/
 
 
     // save trading parameters
@@ -1156,30 +1158,45 @@
     // set settings conditions fo trading from buttons
 
 
-    // Token tests and saves
+    //Login
+    document.getElementById('userLogin').addEventListener('click', function (event) {
 
-    //Live token
-    document.getElementById('tokenId').addEventListener('click', function (event) {
+        OauthLogin();
+    })
 
-        const modalPath1 = path.join('file://', __dirname, 'liveToken.html')
-        let livetoken = new BrowserWindow({
-            width: 330,
-            height: 255,
-            frame: false,
-            alwaysOnTop: true
-        })
-        livetoken.on('close', function () {
-            livetoken = null
-        })
-        livetoken.loadURL(modalPath1)
-        livetoken.once('ready-to-show', () => {
-            livetoken.show()
-        })
-
-        // tokens.webContents.openDevTools()
-
-
-    });
+function OauthLogin () {
+      authWindow = new BrowserWindow({
+    width: 650, 
+    height: 750, 
+    show: false, 
+    frame: false,
+   // parent: getCurrentWindow(),
+   // modal: true,
+    'node-integration': false,
+    'web-security': false
+  });
+  // This is just an example url - follow the guide for whatever service you are using
+  var authUrl = "https://oauth.deriv.app/oauth2/authorize?app_id=24239"
+  
+  authWindow.loadURL(authUrl);
+  authWindow.once('ready-to-show', () => {
+    authWindow.show();
+   
+  
+    
+  // 'will-navigate' is an event emitted when the window.location changes
+  // newUrl should contain the tokens you need
+  authWindow.webContents.on('will-navigate', function (event, newUrl) {
+    console.log('got request')
+   
+    login();
+})
+    // More complex code to handle tokens goes here
+  });
+  
+ 
+  };
+  
 
     // top up virtual account
 
@@ -1212,29 +1229,6 @@
         };
     });
 
-
-
-    //virtual token
-    document.getElementById('virtualtokenId').addEventListener('click', function (event) {
-
-        const modalPath2 = path.join('file://', __dirname, 'virtualToken.html')
-        let virtualtoken = new BrowserWindow({
-            width: 330,
-            height: 255,
-            frame: false,
-            alwaysOnTop: true
-        })
-        virtualtoken.on('close', function () {
-            virtualtoken = null
-        })
-        virtualtoken.loadURL(modalPath2)
-        virtualtoken.once('ready-to-show', () => {
-            virtualtoken.show()
-        })
-        // tokens.webContents.openDevTools()
-
-
-    });
 
 
     // welcome window
@@ -1458,7 +1452,7 @@
 
 
         document.getElementById('balance').textContent = settings.get('balance.balance');
-        document.getElementById('account').textContent = settings.get('loginid.loginid');
+       // document.getElementById('account').textContent = settings.get('loginid.loginid');
         document.getElementById('currency').textContent = settings.get('currency.currency');
         document.getElementById('sparklineSym').textContent = settings.get('symbol.symbol');
 
