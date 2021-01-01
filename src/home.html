@@ -22,6 +22,8 @@
             overflow-x: hidden;
         }
 
+        
+
         footer {
             position: absolute;
             bottom: 0%;
@@ -295,13 +297,7 @@
                             <div id="topUpVirtual" class="item">
                                 Top Up Virtual Account
                             </div>
-                            <div class="divider"></div>
-                            <div class="header">
-                                Careful...
-                            </div>
-                            <div id="removeTokens" class="item">
-                                Remove my Tokens
-                            </div>
+                           
                         </div>
 
 
@@ -317,7 +313,7 @@
                     </div>
                     <div class="ui vertically fitted text menu">
                         <div style="font-family: 'Comfortaa', cursive; font-size: 1em" class="vertically fitted item">
-                            <h5> <span id="currency"></span>&nbsp;|&nbsp;<span
+                            <h5> &nbsp;&nbsp;<span id="currency"></span>&nbsp;|&nbsp;<span
                                     id="balance">Please Choose
                                     Account</span></h5>
                         </div>
@@ -1290,17 +1286,7 @@ function OauthLogin () {
         })
     }
 
-    // remove Tokens at user request!
-
-    document.getElementById('removeTokens').addEventListener('click', function (event) {
-
-        settings.set('virtualToken.virtualToken', null);
-        settings.set('liveToken.liveToken', null);
-        settings.set('message.message',
-            'Tokens have been removed, you will need to add new tokens before being able to trade. The platform will not work properly without a virtual token.'
-        )
-    })
-
+   
 
     // set settings conditions for trading from buttons
 
@@ -1481,7 +1467,7 @@ function OauthLogin () {
             document.getElementById("startBot").disabled = false;
         }
 
-        setAccountBtn()
+        //setAccountBtn() Depricated
 
         symbolBtns()
 
