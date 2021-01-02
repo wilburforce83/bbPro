@@ -2,16 +2,17 @@
 
  function startup() {
 
-    startupLogin();
+    
 
-     if (settings.get('virtualToken.virtualToken') == null) {
+     if (settings.get('tokenToBeUsed.tokenToBeUsed') == null) {
 
          repairSettings(() => {
 
-             if (settings.get('virtualToken.virtualToken') == null) {
-
+             if (settings.get('tokenToBeUsed.tokenToBeUsed') == null) {
+               
                
              } else {
+                startupLogin();
                  authorise();
                  checkDefaults();
 
@@ -21,7 +22,7 @@
 
 
      } else {
-
+        startupLogin();
          authorise();
 
          checkDefaults();

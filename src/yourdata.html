@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Your Binary Bot Trading Data</title>
+    <script src="../assets/jquery.min.js"></script>
 
 
 
@@ -15,6 +16,29 @@
             height: 100%;
 
         }
+
+       
+		table {
+		  margin: 0 auto;
+		  text-align: center;
+		  border-collapse: collapse;
+		  border: 1px solid #d4d4d4;
+		  height: 500px; 
+          font-size: x-small;
+		}
+		 
+		tr:nth-child(even) {
+		  background: #d4d4d4;
+		}
+		 
+		th, td {
+		  padding: 10px 30px;
+		}
+		 
+		th {
+		  border-bottom: 1px solid #d4d4d4;
+		}
+	
     </style>
 
 </head>
@@ -22,17 +46,86 @@
 <body class='Site'>
 
 
-    <div id="container"></div>
-
-
-
+    
     
     <link rel="stylesheet" href="../assets/Semantic-UI-CSS-master/semantic.min.css">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="../assets/moment.min.js"></script>
+  
+   
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+    
     <script src="../assets/jquery.min.js"></script>
-    <script src="../assets/jquery.sparkline.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="../assets/binary-live-api.js"></script>
+    <script src="../assets/moment.min.js"></script>
+   
+    
     <script src="../assets/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="../assets/csv/CsvToTable.js"></script>
+    <script src="../src/trading/placeTrade.js"></script>
+    <script src="../src/mktselector.js"></script>
+    <script src="../src/mktSelector/decideVIX.js"></script>
+    <script src="../src/mktSelector/decideFX.js"></script>
+    <script src="../src/mktSelector/decide.js"></script>
+    <script src="../assets/jquery.drawsvg.js"></script>
+
+    <!--  Strategy Files Kept here -->
+    <script src="../src/strategies/data.js"></script>
+    <script src="../src/mktSelector/tickSubscriptions.js"></script>
+    <script src="../src/strategies/priceAction.js"></script>
+    <script src="../src/strategies/supportResist.js"></script>
+    <script src="../src/strategies/CCItrend.js"></script>
+    <script src="../src/strategies/BBands.js"></script>
+    <script src="../src/strategies/tripleEMA.js"></script>
+    <script src="../src/strategies/macd.js"></script>
+    <script src="../src/strategies/customMA.js"></script>
+    <script src="../src/strategies/TRIX.js"></script>
+    <script src="../src/strategies/multi.js"></script>
+    <script src="../src/strategies/williamsR.js"></script>
+    <script src="../src/strategies/candlePattern.js"></script>
+    <script src="../src/strategies/HeikenAshi.js"></script>
+
+    <!--    End of Strategy Files    -->
+
+    <script src="../src/home/imports.js"></script>
+  
+    <script src="../src/home/common.js"></script>
+    <script src="../src/home/login.js"></script>
+    <script src="../src/home/dataLogger.js"></script>
+    <script src="../src/home/startup.js"></script>
+    <script src="../src/home/LiveorVirt.js"></script>
+    <script src="../src/home/symbolBtns.js"></script>
+    <script src="../src/home/FXorVIX.js"></script>
+    <script src="../src/home/resetTrading.js"></script>
+    <script src="../src/home/loadCSVfiles.js"></script>
+
+    <script src="../src/home/botControls.js"></script>
+    <script src="../src/home/saveParameters.js"></script>
+    <script src="../src/home/strategySelect.js"></script>
+
+    <script src="../src/settings/settings.js"></script>
+    <script src="../parseStrats.js"></script>
+
+    <script>
+        if (window.module) module = window.module;
+    </script>
+
+
+
 </body>
+
+<script>
+
+$(document).ready(function () {
+
+loadCSV();
+});
+
+</script>
+
 
 </html>

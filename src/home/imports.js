@@ -146,7 +146,7 @@
      fs.readFile(location, 'utf-8', (err, data) => {
          if (err) {
              console.log("An error ocurred reading the file :" + err.message);
-             createTermsWindow()
+              OauthLogin();
              return;
          }
 
@@ -159,7 +159,7 @@
          fs.writeFile(fileName, content, (err) => {
              if (err) {
                  console.log("An error ocurred restoring your settings")
-                 createTermsWindow()
+                  OauthLogin();
              }
 
              console.log("Succesfully repaired Settings after crash! You may have lost your last trade data. Your platform will restart now.");

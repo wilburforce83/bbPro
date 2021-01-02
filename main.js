@@ -132,11 +132,12 @@ function createWindow() {
           }
         },
         {
-          label: 'BinaryBotTrading.eu',
+          label: 'BinaryBotTrading.com',
           click() {
-            shell.openExternal('https://www.binarybottrading.eu/')
+            shell.openExternal('https://www.binarybottrading.com/')
           }
         },
+
 
 
 
@@ -292,6 +293,35 @@ function createWindow() {
     },
 
     {
+      label: 'Windows',
+      submenu: [
+       
+        {
+          label: 'Trading Data',
+          click() {
+            createDataWindow()
+          }
+        },
+        /*
+                {
+          label: 'Signal Map',
+          click() {
+            createSignalsWindow()
+          }
+        },
+        */
+        {
+          label: 'Lite Webtrader',
+          click() {
+            shell.openExternal('https://www.binarybottrading.com/trade')
+          }
+        },
+
+       
+      ]
+    },
+
+    {
       label: 'View',
       submenu: [
         // { role: 'reload' },
@@ -433,9 +463,9 @@ function createOptionsWindow() {
 
   options = new BrowserWindow({
     show: false,
-    frame: true,
+    frame: false,
     width: 775,
-    height: 650,
+    height: 700,
     maximizable: false,
     resizable: false,
     icon: __dirname + '/Icon/icon.ico'
@@ -474,8 +504,8 @@ function createDataWindow() {
   DataLog = new BrowserWindow({
     show: true,
     frame: true,
-    width: 775,
-    height: 650,
+    width: 1200,
+    height: 500,
     maximizable: true,
     resizable: true,
     icon: __dirname + '/Icon/icon.ico',
@@ -515,7 +545,7 @@ function createBuilderWindow() {
 
   builder = new BrowserWindow({
     show: false,
-    frame: true,
+    frame: false,
     width: 800,
     height: 750,
     maximizable: false,

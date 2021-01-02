@@ -1,10 +1,9 @@
 // OAuth log in functions for binary.com and deriv
 
-
 //Refactor for electron!!!!!
 
 // OAuth link
-var authWindowURI = "https://binarybottrading.eu/";
+var authWindowURI = "https://binarybottrading.com/redirect/";
 //Check and parse Oauth Parameters through to Object "OauthData"
 
 function login() {
@@ -13,7 +12,7 @@ function login() {
 
   authWindowURI = authWindow.webContents.getURL().toString();
 
-  while (!authWindowURI.includes("VRT")) {
+  while (!authWindowURI.includes("?acct1=")) {
     // Add in a break for if client moves to the registration page, and load the open account link in external window
     authWindowURI = authWindow.webContents.getURL().toString();
 
@@ -29,7 +28,7 @@ function login() {
     }
   }
 
-  if (authWindowURI.includes("VRT")) {
+  if (authWindowURI.includes("?acct1=")) {
     var param_array = authWindowURI.split("?")[1].split("&");
 
     for (var i in param_array) {
@@ -67,12 +66,30 @@ function login() {
       document.getElementById("accountSelect").appendChild(el);
     }
 
-    settings.set('tokenToBeUsed.tokenToBeUsed', account_1.token);
-   
+    settings.set("tokenToBeUsed.tokenToBeUsed", account_1.token);
+
     authWindow.close();
     authWindow = null;
 
     authorise();
+    checkDefaults();
+    app.relaunch();
+
+    settings.set("run", {
+      run: false,
+    });
+    settings.set("lockauto", {
+      lockauto: 0,
+    });
+    settings.set("tradeInProgress", {
+      tradeInProgress: false,
+    });
+    settings.set("autoTrade", {
+      autoTrade: true,
+    });
+
+    terms = null;
+    app.quit(); //or any message
   }
 }
 
@@ -83,7 +100,7 @@ function postLogin() {
     document.getElementById("accountSelect").selectedIndex
   ].text;
   let temptoken = document.getElementById("accountSelect").value;
-  settings.set('tokenToBeUsed.tokenToBeUsed', temptoken);
+  settings.set("tokenToBeUsed.tokenToBeUsed", temptoken);
   document
     .getElementById("notifyme")
     .insertAdjacentHTML(
@@ -97,21 +114,19 @@ function postLogin() {
   console.log("post login on account change");
 }
 
-
 function startupLogin() {
-
   let accArr = settings.get("account.array");
   let accList = settings.get("account.list");
 
-    for (var i = 0; i < accArr.length; i++) {
-      var opt = accArr[i];
-      var el = document.createElement("option");
-      el.textContent = opt.account;
-      el.value = opt.token;
-      document.getElementById("accountSelect").appendChild(el);
-    }
+  for (var i = 0; i < accArr.length; i++) {
+    var opt = accArr[i];
+    var el = document.createElement("option");
+    el.textContent = opt.account;
+    el.value = opt.token;
+    document.getElementById("accountSelect").appendChild(el);
+  }
 
-    settings.set('tokenToBeUsed.tokenToBeUsed', accArr[0].token);
-   
-    authorise();
+  settings.set("tokenToBeUsed.tokenToBeUsed", accArr[0].token);
+
+  authorise();
 }
