@@ -13,7 +13,7 @@ function login() {
 
   authWindowURI = authWindow.webContents.getURL().toString();
 
-  while (!authWindowURI.includes("acct1")) {
+  while (!authWindowURI.includes("https://binarybottrading.com/redirect/?")) {
     // Add in a break for if client moves to the registration page, and load the open account link in external window
     authWindowURI = authWindow.webContents.getURL().toString();
 
@@ -29,7 +29,7 @@ function login() {
     }
   }
 
-  if (authWindowURI.includes("acct1")) {
+  if (authWindowURI.includes("https://binarybottrading.com/redirect/?")) {
     var param_array = authWindowURI.split("?")[1].split("&");
 
     for (var i in param_array) {
@@ -78,7 +78,7 @@ function login() {
 
     authorise();
     checkDefaults();
-   app.relaunch();
+   //app.relaunch();
 
     settings.set("run", {
       run: false,
@@ -94,7 +94,7 @@ function login() {
     });
 
     terms = null;
-   app.quit(); //or any message
+   //app.quit(); //or any message
   }
 }
 
