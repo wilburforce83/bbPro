@@ -3,6 +3,7 @@
 //Refactor for electron!!!!!
 
 // OAuth link
+var account_array = [];
 var authWindowURI = "https://binarybottrading.com/redirect/";
 //Check and parse Oauth Parameters through to Object "OauthData"
 
@@ -12,7 +13,7 @@ function login() {
 
   authWindowURI = authWindow.webContents.getURL().toString();
 
-  while (!authWindowURI.includes("?acct1=")) {
+  while (!authWindowURI.includes("acct1")) {
     // Add in a break for if client moves to the registration page, and load the open account link in external window
     authWindowURI = authWindow.webContents.getURL().toString();
 
@@ -28,7 +29,7 @@ function login() {
     }
   }
 
-  if (authWindowURI.includes("?acct1=")) {
+  if (authWindowURI.includes("acct1")) {
     var param_array = authWindowURI.split("?")[1].split("&");
 
     for (var i in param_array) {
@@ -38,20 +39,24 @@ function login() {
     console.log(params);
     OauthData = params;
 
-    account_1 = {
-      account: makeArrayBySuffix(OauthData, "1")[0],
-      token: makeArrayBySuffix(OauthData, "1")[1],
-    };
-    account_2 = {
-      account: makeArrayBySuffix(OauthData, "2")[0],
-      token: makeArrayBySuffix(OauthData, "2")[1],
-    };
-    account_3 = {
-      account: makeArrayBySuffix(OauthData, "3")[0],
-      token: makeArrayBySuffix(OauthData, "3")[1],
-    };
+    
+    let noOfAccounts = (ObjectLength(OauthData)-1)/3;
+    for (var i in OauthData) {
+     
+      
+    }
 
-    account_array = [account_1, account_2, account_3];
+    account_array = [];
+    for (var i = 0; i < noOfAccounts; ++i) {
+      account_array[i] = {
+        account: makeArrayBySuffix(OauthData, i+1)[0],
+        token: makeArrayBySuffix(OauthData, i+1)[1],
+      };
+    }
+
+    
+
+    console.log(account_array);
 
     account_list = makeArrayByPrefix(OauthData, "acc");
 
@@ -66,14 +71,14 @@ function login() {
       document.getElementById("accountSelect").appendChild(el);
     }
 
-    settings.set("tokenToBeUsed.tokenToBeUsed", account_1.token);
+    settings.set("tokenToBeUsed.tokenToBeUsed", account_array[0].token);
 
     authWindow.close();
     authWindow = null;
 
     authorise();
     checkDefaults();
-    app.relaunch();
+   app.relaunch();
 
     settings.set("run", {
       run: false,
@@ -89,7 +94,7 @@ function login() {
     });
 
     terms = null;
-    app.quit(); //or any message
+   app.quit(); //or any message
   }
 }
 

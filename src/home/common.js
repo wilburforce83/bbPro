@@ -3,7 +3,7 @@ function getParameterByName(a) {
     var b = new RegExp("[\\?&]" + a + "=([^&#]*)"),
         c = b.exec(location.search);
     return null === c ? "" : decodeURIComponent(c[1].replace(/\+/g, " "))
-}
+};
 
 
 //search an object name (name : key) and return 1st object.key of found object(s)
@@ -15,7 +15,7 @@ function findValueByPrefix(object, prefix) {
          return object[property];
       }
     }
-  }
+  };
 
 
   //search an object name prefix (name : key) and return ALL object.keys of found object(s)
@@ -30,7 +30,7 @@ function makeArrayByPrefix(object, prefix) {
       }
     } console.log(result)
     return result;
-  }
+  };
 
 
    //search an object name suffix (name : key) and return ALL object.keys of found object(s)
@@ -45,7 +45,7 @@ function makeArrayBySuffix(object, suffix) {
     }
   } console.log(result)
   return result;
-}
+};
 
 
 // Build a drop down from an Array
@@ -63,4 +63,15 @@ function buildDropdown(elementID, arr) {
       el.value = opt;
       dropdownsource.appendChild(el);
   }
-}
+};
+
+
+function ObjectLength( object ) {
+  var length = 0;
+  for( var key in object ) {
+      if( object.hasOwnProperty(key) ) {
+          ++length;
+      }
+  }
+  return length;
+};
