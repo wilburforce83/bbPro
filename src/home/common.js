@@ -75,3 +75,4 @@ function ObjectLength( object ) {
   }
   return length;
 };
+

@@ -137,7 +137,7 @@
             <h5 class="ui center aligned black header">
 
                 <div style="font-family: 'Comfortaa', cursive; font-size: 0.7em" class="content">
-                    binarybottrading.com (2020)| V4.0.1 bbTrader <sup>pro</sup> | The ultimate binary trading platform.
+                    binarybottrading.com (2020)| V4.0.4 bbTrader <sup>pro</sup> | The ultimate binary trading platform.
                     <div class="black sub header"></div>
                 </div>
             </h5>
@@ -304,7 +304,7 @@
 
                     </div>
                     <div class="ui vertically fitted text menu">
-                        <div class="vertically fitted item"><span id="clock"></span></span></div>
+                        <div class="vertically fitted item"><span id="clock"></span></span>&nbsp;&nbsp;</div>
                     </div>
                     <div class="ui vertically fitted text menu">
                         <select class="ui dropdown" onchange="postLogin()" id="accountSelect">
@@ -814,6 +814,60 @@
 
     });
 
+// Login
+
+//Login
+document.getElementById('userLogin').addEventListener('click', function (event) {
+
+OauthLogin();
+})
+
+function OauthLogin () {
+authWindow = new BrowserWindow({
+width: 650,
+height: 750,
+show: false,
+alwaysOnTop: true,
+frame: false,
+// parent: getCurrentWindow(),
+// modal: true,
+'node-integration': false,
+'web-security': false
+});
+// This is just an example url - follow the guide for whatever service you are using
+var authUrl = "https://oauth.deriv.app/oauth2/authorize?app_id=24239"
+
+authWindow.loadURL(authUrl);
+authWindow.once('ready-to-show', () => {
+authWindow.show();
+
+
+
+// 'will-navigate' is an event emitted when the window.location changes
+// newUrl should contain the tokens you need
+authWindow.webContents.on('will-navigate', function (event, newUrl) {
+console.log('got request')
+
+
+})
+login();
+});
+
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //Jquery stuff
 
@@ -1154,45 +1208,6 @@
     // set settings conditions fo trading from buttons
 
 
-    //Login
-    document.getElementById('userLogin').addEventListener('click', function (event) {
-
-        OauthLogin();
-    })
-
-function OauthLogin () {
-      authWindow = new BrowserWindow({
-    width: 650, 
-    height: 750, 
-    show: false, 
-    frame: false,
-   // parent: getCurrentWindow(),
-   // modal: true,
-    'node-integration': false,
-    'web-security': false
-  });
-  // This is just an example url - follow the guide for whatever service you are using
-  var authUrl = "https://oauth.deriv.app/oauth2/authorize?app_id=24239"
-  
-  authWindow.loadURL(authUrl);
-  authWindow.once('ready-to-show', () => {
-    authWindow.show();
-   
-  
-    
-  // 'will-navigate' is an event emitted when the window.location changes
-  // newUrl should contain the tokens you need
-  authWindow.webContents.on('will-navigate', function (event, newUrl) {
-    console.log('got request')
-   
-    login();
-})
-    // More complex code to handle tokens goes here
-  });
-  
- 
-  };
-  
 
     // top up virtual account
 
